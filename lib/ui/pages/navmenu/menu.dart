@@ -1,6 +1,10 @@
 import 'package:learncoding/theme/box_icons_icons.dart';
 import 'package:flutter/material.dart';
 
+import '../help.dart';
+import '../profile.dart';
+import '../setting.dart';
+
 class Menu extends StatelessWidget {
   final Animation<Offset>? slideAnimation;
   final Animation<double>? menuAnimation;
@@ -69,7 +73,15 @@ class Menu extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Row(
+                    GestureDetector(
+                    onTap: () {
+                    // Navigate to the Help page when the user taps the widget
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Profile()),
+                    );
+                    },
+                    child: Row(
                       children: <Widget>[
                         CircleAvatar(
                           radius: 30,
@@ -107,6 +119,7 @@ class Menu extends StatelessWidget {
                           ),
                         )
                       ],
+                    ),
                     ),
                     Spacer(
                       flex: 3,
@@ -234,7 +247,15 @@ class Menu extends StatelessWidget {
                       ),
                     ),
                     Spacer(flex: 2),
-                    Row(
+                        GestureDetector(
+                        onTap: () {
+                        // Navigate to the Help page when the user taps the widget
+                        Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Settings()),
+                        );
+                        },
+                        child: Row(
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.only(right: 20.0),
@@ -255,29 +276,39 @@ class Menu extends StatelessWidget {
                           ),
                         ),
                       ],
-                    ),
+                        ),
+                        ),
                     Spacer(flex: 2),
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(right: 20.0),
-                          child: Icon(
-                            BoxIcons.bx_help_circle,
-                            color: Colors.white,
+                    GestureDetector(
+                      onTap: () {
+                        // Navigate to the Help page when the user taps the widget
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Help()),
+                        );
+                      },
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(right: 20.0),
+                            child: Icon(
+                              BoxIcons.bx_help_circle,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                        Text(
-                          "Help",
-                          maxLines: 1,
-                          overflow: TextOverflow.fade,
-                          style: TextStyle(
-                            fontFamily: "Red Hat Display",
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 20,
+                          Text(
+                            "Help",
+                            maxLines: 1,
+                            overflow: TextOverflow.fade,
+                            style: TextStyle(
+                              fontFamily: "Red Hat Display",
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 20,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     Spacer(flex: 5),
                   ],

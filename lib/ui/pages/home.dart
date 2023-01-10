@@ -152,7 +152,7 @@ class HomePage extends StatelessWidget {
                     itemExtent: MediaQuery.of(context).size.height * 0.32),
                 SliverToBoxAdapter(
                   child: SectionHeader(
-                    text: 'Recommended Lectures',
+                    text: 'Next Lessons',
                     onPressed: () {},
                   ),
                 ),
@@ -171,7 +171,7 @@ class HomePage extends StatelessWidget {
                 ),
                 SliverToBoxAdapter(
                   child: SectionHeader(
-                    text: 'Revision Lectures',
+                    text: 'Recommended Courses',
                     onPressed: () {},
                   ),
                 ),

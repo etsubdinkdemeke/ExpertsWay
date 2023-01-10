@@ -1,93 +1,112 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-// import 'package:expand_widget/expand_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:learncoding/ui/widgets/header.dart';
+import 'package:learncoding/utils/color.dart';
 
-import '../widgets/card.dart';
-
-Widget _container(IconData icon, String title) {
-  return Container(
-    decoration: BoxDecoration(
-        color: Colors.white, borderRadius: BorderRadius.circular(15)),
-    height: 45,
-    // color: Colors.white,
-    child: Padding(
-      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-      child: Row(children: <Widget>[
-        Icon(
-          icon,
-          color: Colors.black,
-        ),
-        SizedBox(width: 20),
-        Text(title,
-            style: TextStyle(
-              color: Color(0xffADADAD),
-              fontSize: 25,
-            )),
-      ]),
-    ),
-  );
-}
-
-class Settings extends StatefulWidget {
-  @override
-  _SettingsState createState() => _SettingsState();
-}
-
-class _SettingsState extends State<Settings> {
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        trailing: CupertinoButton(
-            child: Icon(
-              Icons.search,
-              color: Colors.black,
+class Settings extends StatelessWidget {
+  const Settings({Key? key}) : super(key: key);
+  Widget _container(IconData leading, String title, IconData trailing) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        // borderRadius: BorderRadius.circular(10),
+        boxShadow: const [
+          BoxShadow(
+              blurRadius: 10,
+              offset: Offset(1, 1),
+              color: Color.fromARGB(54, 104, 104, 104))
+        ],
+        borderRadius: BorderRadius.circular(radius),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {},
+          highlightColor: Color.fromARGB(132, 135, 208, 245),
+          splashColor: Color.fromARGB(61, 231, 231, 231),
+          borderRadius: BorderRadius.circular(radius),
+          child: ListTile(
+            leading: Container(
+              width: 35,
+              height: 35,
+              decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 233, 233, 233),
+                  borderRadius: BorderRadius.circular(radius)),
+              child: Icon(
+                leading,
+                color: maincolor,
+                size: 18,
+              ),
             ),
-            onPressed: null),
-        backgroundColor: Colors.white,
-        leading: CupertinoButton(
-          child: Icon(
-            Icons.chevron_left,
-            color: Colors.black,
+            title: Text(
+              title,
+              style: TextStyle(
+                  color: Color.fromARGB(255, 137, 137, 137),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500),
+            ),
+            trailing: Icon(
+              trailing,
+              color: Colors.grey,
+              size: 17,
+            ),
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        middle: Text(
-          'Settings',
-          style: TextStyle(
-              color: Colors.black, fontFamily: 'Red Hat Display', fontSize: 24),
         ),
       ),
-      child: Container(
-        color: Color(0xffE5E5E5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            CupertinoButton(
-                child: _container(Icons.supervised_user_circle, 'Logout'),
-                onPressed: null),
-            CupertinoButton(
-                child: _container(Icons.supervised_user_circle, 'Clear Data'),
-                onPressed: null),
-            CupertinoButton(
-                child: _container(Icons.supervised_user_circle, 'ads '),
-                onPressed: null),
-            CupertinoButton(
-                child: _container(
-                    Icons.supervised_user_circle, 'How you earn coins ?'),
-                onPressed: null),
+    );
+  }
 
-            CupertinoButton(
-                child: _container(Icons.supervised_user_circle, 'Logout'),
-                onPressed: null),
-            // CupertinoButton(
-            //     child: _container(Icons.supervised_user_circle, 'Logout'),
-            //     onPressed: null),
-            // CupertinoButton(child: Text('hello'), onPressed: null),
-            // CupertinoButton(child: Text('hello'), onPressed: null),
-            // CardWidget(gradient: false, button: true, child: Text('LOG OUT')),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.only(top: 60.0),
+        child: Column(
+          children: [
+            Header(title: "Settings"),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 25),
+              child: Column(
+                children: [
+                  _container(
+                    Icons.cleaning_services,
+                    'Clear data',
+                    Icons.arrow_forward_ios,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  _container(
+                    FontAwesomeIcons.ad,
+                    'ad',
+                    Icons.arrow_forward_ios,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  _container(
+                    FontAwesomeIcons.coins,
+                    'How do you earn coin',
+                    Icons.arrow_forward_ios,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  _container(
+                    Icons.logout,
+                    'Logout',
+                    Icons.arrow_forward_ios,
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
