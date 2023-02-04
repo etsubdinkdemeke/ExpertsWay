@@ -1,11 +1,16 @@
 import 'package:learncoding/theme/box_icons_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:learncoding/ui/widgets/topBar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../help.dart';
 import '../profile.dart';
 import '../setting.dart';
+String? name;
+String? image;
 
-class Menu extends StatelessWidget {
+class Menu extends StatefulWidget {
   final Animation<Offset>? slideAnimation;
   final Animation<double>? menuAnimation;
   final int? selectedIndex;
@@ -18,8 +23,27 @@ class Menu extends StatelessWidget {
       this.slideAnimation,
       this.menuAnimation,
       this.selectedIndex,
-      required this.onMenuItemClicked})
+      required this.onMenuItemClicked,
+      })
       : super(key: key);
+
+  @override
+  State<Menu> createState() => _MenuState();
+}
+
+class _MenuState extends State<Menu> {
+   
+   void initState() {
+    super.initState();
+    getValue();
+  }
+
+  getValue() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return double
+    name = prefs.getString('name');
+    image = prefs.getString('image');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,13 +81,13 @@ class Menu extends StatelessWidget {
                   Icons.close,
                   color: Colors.white,
                 ),
-                onPressed: onMenuTap,
+                onPressed: widget.onMenuTap,
               ),
             )),
         SlideTransition(
-          position: slideAnimation!,
+          position: widget.slideAnimation!,
           child: ScaleTransition(
-            scale: menuAnimation!,
+            scale: widget.menuAnimation!,
             child: Padding(
               padding: const EdgeInsets.only(left: 20.0, top: 30),
               child: Align(
@@ -85,7 +109,7 @@ class Menu extends StatelessWidget {
                       children: <Widget>[
                         CircleAvatar(
                           radius: 30,
-                          backgroundImage: AssetImage('assets/images/user.png'),
+                           backgroundImage: NetworkImage(image!),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 16.0),
@@ -94,7 +118,7 @@ class Menu extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                "Akshay Maurya",
+                                name!,
                                 maxLines: 1,
                                 overflow: TextOverflow.fade,
                                 style: TextStyle(

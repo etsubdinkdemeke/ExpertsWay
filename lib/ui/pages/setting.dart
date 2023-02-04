@@ -1,15 +1,30 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:learncoding/api/shared_preference/shared_preference.dart';
+import 'package:learncoding/main.dart';
+import 'package:learncoding/ui/pages/onboarding1.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:learncoding/api/google_signin_api.dart';
 import 'package:learncoding/ui/widgets/header.dart';
 import 'package:learncoding/utils/color.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Settings extends StatelessWidget {
+String? title;
+
+class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
-  Widget _container(IconData leading, String title, IconData trailing) {
+
+  @override
+  State<Settings> createState() => _SettingsState();
+}
+
+class _SettingsState extends State<Settings> {
+  Widget _container(IconData leading, title, IconData trailing) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -25,7 +40,20 @@ class Settings extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {},
+          onTap: () async {
+            if (title == 'Logout') {
+              SharedPreferences pre = await SharedPreferences.getInstance();
+              await pre.remove('name');
+              await pre.remove('image');
+              pre.clear();
+              GoogleSignInApi.logout();
+
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => RestartWidget(child: (MyApp()))));
+            }
+
+            ;
+          },
           highlightColor: Color.fromARGB(132, 135, 208, 245),
           splashColor: Color.fromARGB(61, 231, 231, 231),
           borderRadius: BorderRadius.circular(radius),

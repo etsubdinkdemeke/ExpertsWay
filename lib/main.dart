@@ -1,5 +1,7 @@
+import 'package:learncoding/api/google_signin_api.dart';
 import 'package:learncoding/ui/pages/help.dart';
 import 'package:learncoding/ui/pages/navmenu/dashboard.dart';
+import 'package:learncoding/ui/pages/navmenu/menu_dashboard_layout.dart';
 import 'package:learncoding/ui/pages/onboarding1.dart';
 import 'package:learncoding/ui/pages/profile.dart';
 import 'package:learncoding/ui/pages/setting.dart';
@@ -12,9 +14,13 @@ import 'package:learncoding/global/globals.dart' as globals;
 import 'package:learncoding/routes/router.dart' as router;
 import 'package:shared_preferences/shared_preferences.dart';
 
+String? name;
+String? image;
 late SharedPreferences prefs;
+
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   // await Firebase.initializeApp();
   SharedPreferences.getInstance().then((prefs) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
@@ -33,15 +39,24 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   void getLoginStatus() async {
-    prefs = await SharedPreferences.getInstance();
+    WidgetsFlutterBinding.ensureInitialized();
+
     globals.gAuth.googleSignIn.isSignedIn().then((value) {
       prefs.setBool("isLoggedin", value);
     });
   }
 
+  getValue() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return double
+    name = prefs.getString('name');
+    image = prefs.getString('image');
+  }
+
   @override
   void initState() {
     getLoginStatus();
+    MenuDashboardLayout();
     super.initState();
   }
 
@@ -57,7 +72,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       // home: Settings(),
       // home: Profile(),
-      home: Onboarding(),
+      home: name == null ? Onboarding():MenuDashboardLayout(),
     );
   }
 }

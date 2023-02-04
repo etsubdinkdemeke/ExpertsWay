@@ -1,6 +1,10 @@
+import 'package:learncoding/api/shared_preference/shared_preference.dart';
 import 'package:learncoding/theme/box_icons_icons.dart';
 import 'package:learncoding/ui/pages/navmenu/menu_dashboard_layout.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:learncoding/api/google_signin_api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Onboarding extends StatefulWidget {
   @override
@@ -9,12 +13,14 @@ class Onboarding extends StatefulWidget {
 
 class _OnboardingState extends State<Onboarding> {
   final PageController controller = PageController(initialPage: 0);
+
   int? pageNumber;
   List widgets = [];
   @override
   void initState() {
     pageNumber = 0;
     super.initState();
+    // signin();
   }
 
   void createWidgets() {
@@ -101,15 +107,29 @@ class _OnboardingState extends State<Onboarding> {
                   ),
                 ],
               ),
-              onPressed: () {
-                Navigator.pushReplacement(
-                    context,
-                    CupertinoPageRoute(
-                        builder: (context) => MenuDashboardLayout()));
-              })
+              onPressed: signin)
         ],
       ),
     ]);
+  }
+
+  Future signin() async {
+  
+  try {
+      final user = await GoogleSignInApi.login();
+      String? name = user!.displayName;
+      String? image = user.photoUrl;
+
+      // SharedPreferences pref = await SharedPreferences.getInstance();
+      UserPreferences.setuser(image!, name!);
+
+   } catch (error) {
+   // console.error("Error during login: ", error);
+      UserPreferences.setuser("https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50", "testDisplayName");
+  }
+
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => (MenuDashboardLayout())));
   }
 
   @override
