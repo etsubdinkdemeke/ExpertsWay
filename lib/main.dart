@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:learncoding/global/globals.dart' as globals;
 import 'package:learncoding/routes/router.dart' as router;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
 
 String? name;
 String? image;
@@ -62,7 +63,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
+    return GetCupertinoApp(
       onGenerateRoute: router.generateRoute,
       onUnknownRoute: (settings) => CupertinoPageRoute(
           builder: (context) => UndefinedScreen(
@@ -72,7 +73,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       // home: Settings(),
       // home: Profile(),
-      home: name == null ? Onboarding():MenuDashboardLayout(),
+      home: name == null ? Onboarding() : MenuDashboardLayout(),
     );
   }
 }

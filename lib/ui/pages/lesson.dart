@@ -13,6 +13,7 @@ import 'package:learncoding/utils/lessonFinishMessage.dart';
 
 class LessonPage extends StatefulWidget {
   final List<LessonElement?> lessonData;
+  final List<LessonContent?> contents;
   final String section;
   final String lesson;
   const LessonPage({
@@ -20,6 +21,7 @@ class LessonPage extends StatefulWidget {
     required this.section,
     required this.lesson,
     required this.lessonData,
+    required this.contents,
   });
 
   @override
@@ -31,6 +33,16 @@ class _LessonState extends State<LessonPage> {
   void initState() {
     super.initState();
     init();
+    getLeContents();
+  }
+
+  final getContent = [];
+
+  getLeContents() {
+    for (var i = 0; i < widget.contents.length; i++) {
+      var val = widget.contents[i];
+      getContent.add(val!.content);
+    }
   }
 
   Future init() async {
@@ -97,11 +109,15 @@ class _LessonState extends State<LessonPage> {
 
   @override
   Widget build(BuildContext context) {
-    final lessonHtml =
-        lessonContent(widget.lessonData, widget.lesson, widget.section);
+    // We don't need lessonHtml any more: becouse we use getContent (which is data retrive from database)  
+
+    // final lessonHtml =
+    //     lessonContent(widget.lessonData, widget.lesson, widget.section);
     nextLesson(widget.lessonData, widget.lesson, widget.section);
-    String lesson = lessonHtml[index];
-    double progress = index / lessonHtml.length;
+    // String lesson = lessonHtml[index];
+    String lesson =  getContent[index];
+    // double progress = index / lessonHtml.length;
+    double progress = index / getContent.length;
     int remainingHearts = 3;
     return CupertinoPageScaffold(
       backgroundColor: config.Colors().secondColor(1),
@@ -167,7 +183,8 @@ class _LessonState extends State<LessonPage> {
             CupertinoButton(
                 child: const Text("Next lesson"),
                 onPressed: () {
-                  showFlushbar && index == lessonHtml.length - 1
+                  // showFlushbar && index == lessonHtml.length - 1
+                  showFlushbar && index == getContent.length - 1
                       ? Flushbar(
                           flushbarPosition: FlushbarPosition.BOTTOM,
                           margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),
@@ -180,7 +197,8 @@ class _LessonState extends State<LessonPage> {
                           duration: const Duration(seconds: 5),
                         ).show(context)
                       : Container();
-                  index < lessonHtml.length - 1
+                  // index < lessonHtml.length - 1
+                  index < getContent.length - 1
                       ? setState(() {
                           index++;
                         })

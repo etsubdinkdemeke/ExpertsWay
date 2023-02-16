@@ -9,6 +9,10 @@ import 'package:learncoding/theme/config.dart' as config;
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
+import '../../db/course_database.dart';
+import '../../models/lesson.dart';
+import '../../utils/color.dart';
+
 class CourseDetailPage extends StatefulWidget {
   final CourseElement courseData;
   const CourseDetailPage({
@@ -21,6 +25,10 @@ class CourseDetailPage extends StatefulWidget {
 }
 
 class _CoursePagePageState extends State<CourseDetailPage> {
+  late List<LessonElement> lessonData = [];
+  late List<LessonContent> lessoncontent = [];
+  bool isLoading = false;
+
   late YoutubePlayerController _controller;
   late PlayerState _playerState;
   late YoutubeMetaData _videoMetaData;
@@ -38,6 +46,17 @@ class _CoursePagePageState extends State<CourseDetailPage> {
         autoPlay: false,
       ),
     )..addListener(listener);
+    refreshLesson();
+  }
+
+  Future refreshLesson() async {
+    setState(() => isLoading = true);
+
+    lessonData =
+        await CourseDatabase.instance.readLesson(widget.courseData.slug);
+
+    print("....lesson length ...." + lessonData.length.toString());
+    setState(() => isLoading = false);
   }
 
   void listener() {
@@ -181,6 +200,16 @@ class _CoursePagePageState extends State<CourseDetailPage> {
         });
   }
 
+  List lessonListId(lessonData, section) {
+    var Id = [];
+    for (var lesson in lessonData) {
+      if (lesson.section == section) {
+        Id.add(lesson.lessonId);
+      }
+    }
+    return Id;
+  }
+
   Widget buildLessonList(lessonData, section) {
     return Material(
       color: config.Colors().secondColor(1),
@@ -246,16 +275,25 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                    builder: (context) => LessonPage(
+                              onTap: () async {
+                                List lessonIds =
+                                    lessonListId(lessonData, section);
+
+                                lessoncontent = await CourseDatabase.instance
+                                    .readLessonContets(lessonIds[index]);
+                                if (lessoncontent.isNotEmpty) {
+                                  Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                      builder: (context) => LessonPage(
                                         lessonData: lessonData,
+                                        contents: lessoncontent,
                                         section: section.toString(),
-                                        lesson: lessonTitle[index].toString()),
-                                  ),
-                                );
+                                        lesson: lessonTitle[index].toString(),
+                                      ),
+                                    ),
+                                  );
+                                }
                               },
                             )
                           ],
@@ -279,6 +317,31 @@ class _CoursePagePageState extends State<CourseDetailPage> {
         ),
       ),
     );
+  }
+
+  Widget buildLessonCard() {
+    List sections = sectionList(lessonData);
+
+    return ListView.builder(
+        shrinkWrap: true,
+        padding: EdgeInsets.all(0),
+        itemCount: sections.length,
+        itemBuilder: (context, index) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              buildLessonList(lessonData, sections[index]),
+              index < sections.length
+                  ? const Divider(
+                      color: Color.fromARGB(255, 215, 214, 214),
+                      thickness: 1,
+                      height: 1,
+                    )
+                  : Container()
+            ],
+          );
+        });
   }
 
   @override
@@ -392,7 +455,58 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                             ],
                           ),
                         ),
-                        buildlesson(),
+                        lessonData.isEmpty
+                            ? FutureBuilder<Lesson>(
+                                future: ApiProvider()
+                                    .retrieveLessons(widget.courseData.slug),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    {
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          color: maincolor,
+                                        ),
+                                      );
+                                    }
+                                  }
+                                  if (!snapshot.hasData) {
+                                    return const Center(
+                                        child: Text(
+                                      "There is no Course",
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              184, 138, 138, 138)),
+                                    ));
+                                  }
+                                  if (snapshot.hasError) {
+                                    return const Center(
+                                        child: Text(
+                                      "Unabel to get the data",
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              184, 138, 138, 138)),
+                                    ));
+                                  }
+                                  if (snapshot.hasData) {
+                                    for (var i = 0;
+                                        i < snapshot.data!.lessons.length;
+                                        i++) {
+                                      final lessonData =
+                                          snapshot.data!.lessons[i];
+                                      CourseDatabase.instance
+                                          .createLessons(lessonData!);
+                                    }
+
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                      refreshLesson();
+                                    });
+                                  }
+
+                                  return Container();
+                                })
+                            : buildLessonCard(),
                       ],
                     ),
                     Positioned(
