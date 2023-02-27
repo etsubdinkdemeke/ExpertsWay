@@ -29,6 +29,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  another_flushbar: ^1.12.29
   cloud_firestore: ^4.0.1
 
   # The following adds the Cupertino Icons font to your application.
@@ -42,17 +43,20 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_calendar_carousel: ^2.4.0
+  flutter_html: ^2.2.1
   font_awesome_flutter: ^10.3.0
   google_sign_in: ^5.4.2
   provider: ^6.0.4
   shared_preferences: ^2.0.15
+  youtube_player_flutter: ^8.1.2
+  cached_network_image: ^3.2.3
 
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
   sqflite: ^2.2.2
-
+  get: ^4.6.5
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.

@@ -1,5 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:learncoding/models/comments_data.dart';
 import 'package:learncoding/theme/box_icons_icons.dart';
-import 'package:learncoding/theme/config.dart';
+import 'package:learncoding/theme/config.dart' as Colorss;
+import 'package:learncoding/ui/pages/comment.dart';
 import 'package:learncoding/ui/widgets/card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as material;
@@ -10,10 +13,11 @@ class VideoPage extends StatefulWidget {
 }
 
 class _VideoPageState extends State<VideoPage> {
+  final comment = comments;
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: Colors().secondColor(1),
+      //backgroundColor: Colorss().secondColor(1),
       navigationBar: CupertinoNavigationBar(
         automaticallyImplyLeading: true,
         previousPageTitle: "Back",
@@ -115,15 +119,64 @@ class _VideoPageState extends State<VideoPage> {
                             ),
                           ),
                           Container(
-                              padding: EdgeInsets.all(8),
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              child: Text(
-                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut odio id urna ornare rhoncus. Fusce egestas tellus vitae elit pellentesque, sit amet gravida metus consectetur. Sed in hendrerit elit. Phasellus ullamcorper vulputate ex quis consequat. Aenean fringilla vulputate egestas. Aenean nec mattis turpis. Aenean a faucibus purus, in pulvinar velit. Nulla efficitur erat commodo.",
-                                style: TextStyle(
-                                    color: Color(0xFF343434),
-                                    fontFamily: 'Red Hat Display',
-                                    fontSize: 16),
-                              ))
+                            padding: EdgeInsets.all(8),
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            child: Text(
+                              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut odio id urna ornare rhoncus. Fusce egestas tellus vitae elit pellentesque, sit amet gravida metus consectetur. Sed in hendrerit elit. Phasellus ullamcorper vulputate ex quis consequat. Aenean fringilla vulputate egestas. Aenean nec mattis turpis. Aenean a faucibus purus, in pulvinar velit. Nulla efficitur erat commodo.",
+                              style: TextStyle(
+                                  color: Color(0xFF343434),
+                                  fontFamily: 'Red Hat Display',
+                                  fontSize: 16),
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            margin: EdgeInsetsDirectional.only(
+                              end: 170,
+                            ),
+                            // width: 200,
+                            // height: 60,
+                            // color: material.Colors.cyan,
+                            child: GestureDetector(
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CommentSection()),
+                              ),
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  Icon(
+                                    BoxIcons.bx_comment,
+                                    size: 22,
+                                  ),
+                                  Text(
+                                    "comments",
+                                    style: TextStyle(
+                                      fontSize: 19,
+                                      fontFamily: 'Red Hat Display',
+                                      fontWeight: FontWeight.w600,
+                                      color: Color.fromARGB(255, 80, 80, 80),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    comment.length.toString(),
+                                    style: TextStyle(
+                                      fontSize: 19,
+                                      fontFamily: 'Red Hat Display',
+                                      fontWeight: FontWeight.w600,
+                                      color: Color.fromARGB(255, 80, 80, 80),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),

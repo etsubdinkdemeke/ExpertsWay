@@ -4,4 +4,5 @@ class AppUrl {
   static var loginWith = 'google';
   static var baseUrl = 'https://dashencon.com/test/wp-json/ds_lc/v1';
   static var courseUrl = '$baseUrl/courses';
+  static var lessonUrl = '$baseUrl/lesson';
 }
