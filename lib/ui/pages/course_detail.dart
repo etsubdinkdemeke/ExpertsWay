@@ -552,26 +552,23 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                 ),
               )),
           Positioned(
-            bottom: 0,
-            left: 0,
+            bottom: 10,
+            left: MediaQuery.of(context).size.width * 0.125,
             child: CardWidget(
               button: true,
               gradient: true,
               height: 60,
-              width: MediaQuery.of(context).size.width,
+              width: MediaQuery.of(context).size.width * 0.75,
+              borderRadius: BorderRadius.circular(24),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const <Widget>[
                   Text(
-                    "Attempt Test",
+                    "Enroll",
                     style: TextStyle(
                         color: Colors.white,
                         fontFamily: 'Red Hat Display',
                         fontSize: 18),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(BoxIcons.bx_pencil, color: Colors.white),
                   ),
                 ],
               ),
