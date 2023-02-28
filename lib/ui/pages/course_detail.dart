@@ -3,6 +3,7 @@ import 'package:learncoding/models/lesson.dart' as lesson;
 import 'package:learncoding/ui/pages/lesson.dart';
 import 'package:learncoding/services/api_controller.dart';
 import 'package:learncoding/theme/box_icons_icons.dart';
+import 'package:learncoding/ui/pages/quiz.dart';
 import 'package:learncoding/ui/widgets/card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:learncoding/theme/config.dart' as config;
@@ -554,29 +555,37 @@ class _CoursePagePageState extends State<CourseDetailPage> {
           Positioned(
             bottom: 0,
             left: 0,
+              
             child: CardWidget(
-              button: true,
-              gradient: true,
-              height: 60,
-              width: MediaQuery.of(context).size.width,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const <Widget>[
-                  Text(
-                    "Attempt Test",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Red Hat Display',
-                        fontSize: 18),
+                button: true,
+                gradient: true,
+                height: 60,
+                width: MediaQuery.of(context).size.width,
+                child: InkWell(
+                  onTap: (){
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => quiz()));
+              },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const <Widget>[
+                      Text(
+                        "Attempt Test",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Red Hat Display',
+                            fontSize: 18),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Icon(BoxIcons.bx_pencil, color: Colors.white),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(BoxIcons.bx_pencil, color: Colors.white),
-                  ),
-                ],
+                ),
               ),
             ),
-          )
+          
         ],
       ),
     );
