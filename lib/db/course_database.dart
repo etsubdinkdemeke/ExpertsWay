@@ -14,6 +14,7 @@ final String courseElement = 'coursesElement';
 final String tablesections = 'sections';
 final String lessontable = 'lessons';
 final String lesson_contnent_table = 'lessonsContent';
+final String progress = 'progress';
 
 class CourseDatabase {
   static final CourseDatabase instance = CourseDatabase.init();
@@ -36,8 +37,8 @@ class CourseDatabase {
   }
 
   Future _createDB(Database db, int version) async {
-    final idType = 'INTEGER PRIMARY KEY ';
-    final idTextType = 'TEXT PRIMARY KEY ';
+    final idType = 'INTEGER PRIMARY KEY';
+    final idTextType = 'TEXT PRIMARY KEY';
     final textType = 'TEXT NOT NULL';
     final fk_course =
         'FOREIGN KEY (${LessonsElementFields.courseSlug}) REFERENCES $courseElement(${CourseElementFields.slug})';
@@ -51,7 +52,8 @@ class CourseDatabase {
     final intTypeNull = 'INTEGER';
     print("...createing table.....");
     // CREATEING TABLES
-// COURSE TABLE
+    // COURSE TABLE
+    
     await db.execute('''
 CREATE TABLE $courseElement (
       ${CourseElementFields.course_id} $idType,
@@ -88,6 +90,7 @@ CREATE TABLE $lessontable (
       ${LessonsElementFields.section} $textType,
       ${LessonsElementFields.courseSlug} $textType,
       ${LessonsElementFields.publishedDate} $textType,
+
       $fk_course
     )
     ''');
@@ -97,6 +100,17 @@ CREATE TABLE $lesson_contnent_table (
       ${LessonsContentFields.lessonId} $textTypeNull,
       ${LessonsContentFields.content} $textTypeNull,
       $fk_lesson
+    )
+    ''');
+
+    await db.execute('''
+CREATE TABLE $progress (
+      ${ProgressFields.progId} $idType,
+      ${ProgressFields.courseId} $textTypeNull,
+      ${ProgressFields.lessonId} $textTypeNull,
+      ${ProgressFields.contentId} $textTypeNull,
+      ${ProgressFields.pageNum} $intTypeNull,
+      ${ProgressFields.userProgress} $textTypeNull
     )
     ''');
   }
@@ -131,7 +145,7 @@ CREATE TABLE $lesson_contnent_table (
       final json = lessonElement.toJson();
       final columns =
           '${LessonsElementFields.lesson_id},${LessonsElementFields.slug},${LessonsElementFields.title},${LessonsElementFields.section},${LessonsElementFields.courseSlug},${LessonsElementFields.publishedDate}';
-    
+
       await db.rawInsert(
         'INSERT INTO $lessontable ($columns) VALUES (?,?,?,?,?,?)',
         [
@@ -194,6 +208,13 @@ CREATE TABLE $lesson_contnent_table (
     lescon.copy(id: id);
   }
 
+  Future<ProgressElement> createProgress(
+      ProgressElement progressElement) async {
+    final db = await instance.database;
+    final id = await db.insert(progress, progressElement.tojson());
+    return progressElement.copy(progId: id);
+  }
+
 // READ SINGLE COURSE DATA'
   Future<Course> readCourse(int id) async {
     final db = await instance.database;
@@ -220,7 +241,7 @@ CREATE TABLE $lesson_contnent_table (
         where: '${LessonsElementFields.courseSlug} = ?',
         whereArgs: [courseSlug],
       );
-        return result.map((json) => LessonElement.fromJson(json)).toList();
+      return result.map((json) => LessonElement.fromJson(json)).toList();
     } on DatabaseException catch (error) {
       Get.snackbar("", "",
           borderWidth: 2,
@@ -310,6 +331,35 @@ CREATE TABLE $lesson_contnent_table (
     final result = await db.query(lesson_contnent_table);
 
     return result.map((json) => LessonContent.fromJson(json)).toList();
+  }
+
+  Future<ProgressElement?> readProgress(String course, String id) async {
+    final db = await instance.database;
+    final maps = await db.query(
+      progress,
+      columns: ProgressFields.progressvalue,
+      where:
+          '${ProgressFields.courseId} = ? and ${ProgressFields.lessonId} = ? ',
+      whereArgs: [course, id],
+    );
+    if (maps.isNotEmpty) {
+      return ProgressElement.fromJson(maps.first);
+    } else {
+      return null;
+    }
+  }
+
+  Future updateProgress(ProgressElement progressElement) async {
+    final db = await instance.database;
+    await db.update(
+      progress,
+      progressElement.tojson(),
+      where: '${ProgressFields.courseId}= ? and ${ProgressFields.lessonId}= ?',
+      whereArgs: [
+        progressElement.courseId,
+        progressElement.lessonId,
+      ],
+    );
   }
 
   Future close() async {

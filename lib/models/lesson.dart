@@ -89,7 +89,6 @@ class LessonElement {
         publishedDate: publishedDate ?? publishedDate,
       );
 
-  
   factory LessonElement.fromJson(Map<String, dynamic> json) => LessonElement(
         lessonId: json[LessonsElementFields.lesson_id] as int,
         slug: json[LessonsElementFields.slug] as String? ?? '',
@@ -162,4 +161,76 @@ class LessonContent {
         LessonsContentFields.lessonId: lessonId,
         LessonsContentFields.content: content,
       };
+}
+
+
+
+class ProgressFields {
+  static List<String> progressvalue = [
+    progId,
+    courseId,
+    lessonId,
+    contentId,
+    pageNum,
+    userProgress,
+  ];
+  static final String progId = '_id';
+  static final String courseId = 'courseId';
+  static final String lessonId = 'lessonId';
+  static final String contentId = 'contentId';
+  static final String pageNum = 'pageNum';
+  static final String userProgress = 'userProgress';
+}
+
+class ProgressElement {
+  final int? progId;
+  final String courseId;
+  final String lessonId;
+  final String contentId;
+  final int pageNum;
+  final String userProgress;
+
+  ProgressElement({
+     this.progId,
+    required this.courseId,
+    required this.lessonId,
+    required this.contentId,
+    required this.pageNum,
+    required this.userProgress,
+  });
+
+  ProgressElement copy({
+    final int? progId,
+    final String? courseId,
+    final String? lessonId,
+    final String? contentId,
+    final int? pageNum,
+    final String? userProgress,
+  }) =>
+      ProgressElement(
+          progId: progId ?? this.progId,
+          courseId: courseId ?? this.courseId,
+          lessonId: lessonId ?? this.lessonId,
+          contentId: contentId ?? this.contentId,
+          pageNum: pageNum ?? this.pageNum,
+          userProgress: userProgress ?? this.userProgress);
+  
+  factory ProgressElement.fromJson(Map<String, dynamic> json) => ProgressElement(
+        progId: json[ProgressFields.progId] as int? ?? 0,
+        courseId: json[ProgressFields.courseId] as String? ?? '',
+        lessonId: json[ProgressFields.lessonId] as String? ?? '',
+        contentId: json[ProgressFields.contentId] as String? ?? '',
+        pageNum: json[ProgressFields.pageNum] as int? ?? 0,
+        userProgress: json[ProgressFields.userProgress] as String? ?? '',
+      );
+
+
+  Map<String, dynamic> tojson() => {
+    ProgressFields.progId:progId,
+    ProgressFields.courseId:courseId,
+    ProgressFields.lessonId:lessonId,
+    ProgressFields.contentId:contentId,
+    ProgressFields.pageNum:pageNum,
+    ProgressFields.userProgress:userProgress,
+  };
 }

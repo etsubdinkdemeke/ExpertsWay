@@ -3,11 +3,11 @@ import 'package:learncoding/models/lesson.dart' as lesson;
 import 'package:learncoding/ui/pages/lesson.dart';
 import 'package:learncoding/services/api_controller.dart';
 import 'package:learncoding/theme/box_icons_icons.dart';
+import 'package:learncoding/ui/pages/quiz.dart';
 import 'package:learncoding/ui/widgets/card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:learncoding/theme/config.dart' as config;
 import 'package:flutter/material.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../db/course_database.dart';
 import '../../models/lesson.dart';
@@ -245,6 +245,7 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                               onTap: () async {
                                 List lessonIds =
                                     lessonListId(lessonData, section);
+                                String lessonIndex =  (lessonIds[index]).toString() as String;
 
                                 lessoncontent = await CourseDatabase.instance
                                     .readLessonContets(lessonIds[index]);
@@ -256,7 +257,10 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                                         lessonData: lessonData,
                                         contents: lessoncontent,
                                         section: section.toString(),
+                                        lessonId: lessonIndex,
                                         lesson: lessonTitle[index].toString(),
+                                        courseId: widget.courseData.course_id
+                                            .toString(),
                                       ),
                                     ),
                                   );
