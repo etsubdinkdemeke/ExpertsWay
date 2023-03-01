@@ -278,6 +278,7 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                               onTap: () async {
                                 List lessonIds =
                                     lessonListId(lessonData, section);
+                                String lessonIndex =  (lessonIds[index]).toString() as String;
 
                                 lessoncontent = await CourseDatabase.instance
                                     .readLessonContets(lessonIds[index]);
@@ -289,7 +290,10 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                                         lessonData: lessonData,
                                         contents: lessoncontent,
                                         section: section.toString(),
+                                        lessonId: lessonIndex,
                                         lesson: lessonTitle[index].toString(),
+                                        courseId: widget.courseData.course_id
+                                            .toString(),
                                       ),
                                     ),
                                   );
