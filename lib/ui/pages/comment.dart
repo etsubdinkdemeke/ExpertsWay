@@ -127,7 +127,7 @@ class _CommentSectionState extends State<CommentSection> {
                                     height: 5,
                                   ),
 
-                  //----------------------like , dislike section
+                                  //----------------------like , dislike section
                                   Padding(
                                     padding: const EdgeInsets.only(left: 0),
                                     child: Row(
@@ -192,7 +192,7 @@ class _CommentSectionState extends State<CommentSection> {
                                       ],
                                     ),
                                   ),
-                      //--------------------end-----------------------------//
+                                  //--------------------end-----------------------------//
                                   SizedBox(
                                     height: 10,
                                   ),
@@ -202,7 +202,7 @@ class _CommentSectionState extends State<CommentSection> {
                           );
                         },
                       ),
-                     
+                      
                     ],
                   );
                 }
