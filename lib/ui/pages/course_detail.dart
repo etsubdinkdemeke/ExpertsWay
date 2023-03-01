@@ -29,54 +29,27 @@ class _CoursePagePageState extends State<CourseDetailPage> {
   late List<LessonContent> lessoncontent = [];
   bool isLoading = false;
 
-  late YoutubePlayerController _controller;
-  late PlayerState _playerState;
-  late YoutubeMetaData _videoMetaData;
-  bool _muted = false;
-  bool _isPlayerReady = false;
-
   @override
   void initState() {
     super.initState();
-    String url = widget.courseData.shortVideo;
-    _controller = YoutubePlayerController(
-      initialVideoId: YoutubePlayer.convertUrlToId(url)!,
-      flags: const YoutubePlayerFlags(
-        controlsVisibleAtStart: true,
-        autoPlay: false,
-      ),
-    )..addListener(listener);
     refreshLesson();
   }
 
   Future refreshLesson() async {
     setState(() => isLoading = true);
-
     lessonData =
         await CourseDatabase.instance.readLesson(widget.courseData.slug);
-
     print("....lesson length ...." + lessonData.length.toString());
     setState(() => isLoading = false);
   }
 
-  void listener() {
-    if (_isPlayerReady && mounted && !_controller.value.isFullScreen) {
-      setState(() {
-        _playerState = _controller.value.playerState;
-        _videoMetaData = _controller.metadata;
-      });
-    }
-  }
-
   @override
   void deactivate() {
-    _controller.pause();
     super.deactivate();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 
@@ -99,48 +72,42 @@ class _CoursePagePageState extends State<CourseDetailPage> {
     return seen;
   }
 
-  Widget buildVideoPlayer() {
-    return SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.4,
-        child: YoutubePlayerBuilder(
-          player: YoutubePlayer(
-            controlsTimeOut: const Duration(seconds: 3),
+  Widget buildCoverImage() {
+    // this mehtod builds the cover image and the texts 
+    // on it (displayed at the top of the course-detail screen)
+    return Stack(
+      // we use this stack to display the course name and chapters on top of the cover image.
+      children: <Widget>[
+        SizedBox(
+          width: MediaQuery.of(context).size.width,
+          // height: MediaQuery.of(context).size.height * 0.4,
+          child: Image.asset(
+              "assets/images/js_cover.png"), // TODO: replace this url with real course specific data
+        ),
+        Positioned(
+          bottom: 5,
+          child: SizedBox(
             width: MediaQuery.of(context).size.width,
-            controller: _controller,
-            showVideoProgressIndicator: true,
-            progressIndicatorColor: Colors.blueAccent,
-            bottomActions: [
-              IconButton(
-                icon: Icon(_muted ? Icons.volume_off : Icons.volume_up),
-                color: _muted ? Colors.grey : Colors.blue,
-                onPressed: _isPlayerReady
-                    ? () {
-                        _muted ? _controller.unMute() : _controller.mute();
-                        setState(() {
-                          _muted = !_muted;
-                        });
-                      }
-                    : null,
-              ),
-              FullScreenButton(
-                controller: _controller,
-                color: Colors.blueAccent,
-              ),
-            ],
-            onReady: () {
-              _isPlayerReady = true;
-              _controller.addListener(listener);
-            },
-            onEnded: (data) {},
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                const Text(
+                  "Course name",
+                  // TODO: consider color contrast issues here.
+                  style: TextStyle(color: Colors.white),
+                ),
+                Text(
+                  // we're considering the lessons to be the "chapters"
+                  "${lessonData.length} Chapters",
+                  // TODO: consider color contrast issues here.
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
+                )
+              ],
+            ),
           ),
-          builder: (BuildContext, player) {
-            return Scaffold(
-                body: Container(
-              child: player,
-            ));
-          },
-        ));
+        ),
+      ],
+    );
   }
 
   Widget buildlesson() {
@@ -368,7 +335,7 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                   children: <Widget>[
                     Column(
                       children: <Widget>[
-                        buildVideoPlayer(),
+                        buildCoverImage(),
                         SizedBox(
                           width: MediaQuery.of(context).size.width,
                           child: Column(
@@ -509,45 +476,6 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                             : buildLessonCard(),
                       ],
                     ),
-                    Positioned(
-                        right: 30,
-                        top: MediaQuery.of(context).size.height * 0.365,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [
-                                  Color(0xFFABDCFF),
-                                  Color(0xFF0396FF),
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                    blurRadius: 25,
-                                    color: const Color(0xFF03A9F4)
-                                        .withOpacity(0.4),
-                                    offset: const Offset(0, 4))
-                              ],
-                              borderRadius: BorderRadius.circular(500)),
-                          child: FloatingActionButton(
-                              heroTag: "video",
-                              elevation: 0,
-                              highlightElevation: 0,
-                              backgroundColor: Colors.transparent,
-                              child: Icon(
-                                  _controller.value.isPlaying
-                                      ? BoxIcons.bx_pause
-                                      : BoxIcons.bx_play,
-                                  size: 40),
-                              onPressed: () {
-                                setState(() {
-                                  _controller.value.isPlaying
-                                      ? _controller.pause()
-                                      : _controller.play();
-                                });
-                              }),
-                        )),
                   ],
                 ),
               )),
