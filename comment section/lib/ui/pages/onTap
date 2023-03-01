@@ -1,5 +1,0 @@
-onTap: () => Navigator.push(
-    context,
-    MaterialPageRoute(
-        builder: (context) => CommentSection()),
-)
