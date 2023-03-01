@@ -73,7 +73,7 @@ class _CoursePagePageState extends State<CourseDetailPage> {
   }
 
   Widget buildCoverImage() {
-    // this mehtod builds the cover image and the texts 
+    // this mehtod builds the cover image and the texts
     // on it (displayed at the top of the course-detail screen)
     return Stack(
       // we use this stack to display the course name and chapters on top of the cover image.
@@ -91,8 +91,8 @@ class _CoursePagePageState extends State<CourseDetailPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                const Text(
-                  "Course name",
+                Text(
+                  widget.courseData.name,
                   // TODO: consider color contrast issues here.
                   style: TextStyle(color: Colors.white),
                 ),
@@ -103,6 +103,24 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                   style: const TextStyle(color: Colors.white, fontSize: 14),
                 )
               ],
+            ),
+          ),
+        ),
+        SafeArea(
+          child: Container(
+            height: 40,
+            width: 40,
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: Material(
+                shape: const CircleBorder(),
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_new),
+                  iconSize: 14,
+                  constraints: BoxConstraints(maxHeight: 60, maxWidth: 60),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
             ),
           ),
         ),
@@ -245,7 +263,8 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                               onTap: () async {
                                 List lessonIds =
                                     lessonListId(lessonData, section);
-                                String lessonIndex =  (lessonIds[index]).toString() as String;
+                                String lessonIndex =
+                                    (lessonIds[index]).toString() as String;
 
                                 lessoncontent = await CourseDatabase.instance
                                     .readLessonContets(lessonIds[index]);
@@ -319,167 +338,158 @@ class _CoursePagePageState extends State<CourseDetailPage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       backgroundColor: config.Colors().secondColor(1),
-      navigationBar: CupertinoNavigationBar(
-        previousPageTitle: "Back",
-        backgroundColor: Colors.white,
-        trailing: CupertinoButton(
-          padding: const EdgeInsets.all(0),
-          child: const Icon(BoxIcons.bx_share_alt),
-          onPressed: () {},
-        ),
-      ),
+      // navigationBar: CupertinoNavigationBar(
+      //   previousPageTitle: "Back",
+      //   backgroundColor: Colors.white,
+      //   trailing: CupertinoButton(
+      //     padding: const EdgeInsets.all(0),
+      //     child: const Icon(BoxIcons.bx_share_alt),
+      //     onPressed: () {},
+      //   ),
+      // ),
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
           SizedBox(
               height: MediaQuery.of(context).size.height + 60,
               child: SingleChildScrollView(
-                child: Stack(
-                  alignment: Alignment.center,
+                child: Column(
                   children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        buildCoverImage(),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(24, 10, 8, 8.0),
-                                child: Row(
-                                  children: <Widget>[
-                                    Container(
-                                      width: 4,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(500),
-                                          color: const Color(0xFF343434)),
-                                      child: const Text(""),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Center(
-                                        child: Text(
-                                          widget.courseData.name,
-                                          style: const TextStyle(
-                                              color: Color(0xFF343434),
-                                              fontFamily: 'Red Hat Display',
-                                              fontSize: 24),
-                                        ),
-                                      ),
-                                    )
-                                  ],
+                    buildCoverImage(),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(24, 10, 8, 8.0),
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  width: 4,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(500),
+                                      color: const Color(0xFF343434)),
+                                  child: const Text(""),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
-                                child: Row(
-                                  children: const <Widget>[
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 8.0),
-                                      child: Icon(BoxIcons.bx_bar_chart_alt_2,
-                                          size: 20, color: Color(0xFFADADAD)),
-                                    ),
-                                    Text(
-                                      "Beginner",
-                                      style: TextStyle(
-                                          color: Color(0xFFADADAD),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Text(
+                                      widget.courseData.name,
+                                      style: const TextStyle(
+                                          color: Color(0xFF343434),
                                           fontFamily: 'Red Hat Display',
-                                          fontSize: 14),
+                                          fontSize: 24),
                                     ),
-                                    Spacer(),
-                                    Text(
-                                      "12 mins",
-                                      style: TextStyle(
-                                          color: Color(0xFFADADAD),
-                                          fontFamily: 'Red Hat Display',
-                                          fontSize: 14),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 8.0),
-                                      child: Icon(BoxIcons.bx_timer,
-                                          size: 20, color: Color(0xFFADADAD)),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                  margin: const EdgeInsets.all(8),
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.9,
-                                  child: Text(
-                                    widget.courseData.description,
-                                    textAlign: TextAlign.justify,
-                                    style: const TextStyle(
-                                      color: Color(0xFF343434),
-                                      fontFamily: 'Red Hat Display',
-                                      fontSize: 16,
-                                    ),
-                                  ))
-                            ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                        lessonData.isEmpty
-                            ? FutureBuilder<Lesson>(
-                                future: ApiProvider()
-                                    .retrieveLessons(widget.courseData.slug),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    {
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          color: maincolor,
-                                        ),
-                                      );
-                                    }
-                                  }
-                                  if (!snapshot.hasData) {
-                                    return const Center(
-                                        child: Text(
-                                      "There is no Course",
-                                      style: TextStyle(
-                                          color: Color.fromARGB(
-                                              184, 138, 138, 138)),
-                                    ));
-                                  }
-                                  if (snapshot.hasError) {
-                                    return const Center(
-                                        child: Text(
-                                      "Unabel to get the data",
-                                      style: TextStyle(
-                                          color: Color.fromARGB(
-                                              184, 138, 138, 138)),
-                                    ));
-                                  }
-                                  if (snapshot.hasData) {
-                                    for (var i = 0;
-                                        i < snapshot.data!.lessons.length;
-                                        i++) {
-                                      final lessonData =
-                                          snapshot.data!.lessons[i];
-                                      CourseDatabase.instance
-                                          .createLessons(lessonData!);
-                                    }
-
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
-                                      refreshLesson();
-                                    });
-                                  }
-
-                                  return Container();
-                                })
-                            : buildLessonCard(),
-                      ],
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Row(
+                              children: const <Widget>[
+                                Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: Icon(BoxIcons.bx_bar_chart_alt_2,
+                                      size: 20, color: Color(0xFFADADAD)),
+                                ),
+                                Text(
+                                  "Beginner",
+                                  style: TextStyle(
+                                      color: Color(0xFFADADAD),
+                                      fontFamily: 'Red Hat Display',
+                                      fontSize: 14),
+                                ),
+                                Spacer(),
+                                Text(
+                                  "12 mins",
+                                  style: TextStyle(
+                                      color: Color(0xFFADADAD),
+                                      fontFamily: 'Red Hat Display',
+                                      fontSize: 14),
+                                ),
+                                Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: Icon(BoxIcons.bx_timer,
+                                      size: 20, color: Color(0xFFADADAD)),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                              margin: const EdgeInsets.all(8),
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              child: Text(
+                                widget.courseData.description,
+                                textAlign: TextAlign.justify,
+                                style: const TextStyle(
+                                  color: Color(0xFF343434),
+                                  fontFamily: 'Red Hat Display',
+                                  fontSize: 16,
+                                ),
+                              ))
+                        ],
+                      ),
                     ),
+                    lessonData.isEmpty
+                        ? FutureBuilder<Lesson>(
+                            future: ApiProvider()
+                                .retrieveLessons(widget.courseData.slug),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                {
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      color: maincolor,
+                                    ),
+                                  );
+                                }
+                              }
+                              if (!snapshot.hasData) {
+                                return const Center(
+                                    child: Text(
+                                  "There is no Course",
+                                  style: TextStyle(
+                                      color:
+                                          Color.fromARGB(184, 138, 138, 138)),
+                                ));
+                              }
+                              if (snapshot.hasError) {
+                                return const Center(
+                                    child: Text(
+                                  "Unabel to get the data",
+                                  style: TextStyle(
+                                      color:
+                                          Color.fromARGB(184, 138, 138, 138)),
+                                ));
+                              }
+                              if (snapshot.hasData) {
+                                for (var i = 0;
+                                    i < snapshot.data!.lessons.length;
+                                    i++) {
+                                  final lessonData = snapshot.data!.lessons[i];
+                                  CourseDatabase.instance
+                                      .createLessons(lessonData!);
+                                }
+
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  refreshLesson();
+                                });
+                              }
+
+                              return Container();
+                            })
+                        : buildLessonCard(),
                   ],
                 ),
               )),
