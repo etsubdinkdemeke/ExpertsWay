@@ -71,6 +71,8 @@ flutter:
   assets:
     - assets/images/
     - assets/images/Capture.PNG
+    - assets/images/p1.jpg
+    - assets/images/p2.jpg
 
   fonts:
     - family: Red Hat Display

@@ -1,4 +1,5 @@
 import 'package:learncoding/api/google_signin_api.dart';
+import 'package:learncoding/models/comments_data.dart';
 import 'package:learncoding/ui/pages/help.dart';
 import 'package:learncoding/ui/pages/navmenu/dashboard.dart';
 import 'package:learncoding/ui/pages/navmenu/menu_dashboard_layout.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:learncoding/global/globals.dart' as globals;
 import 'package:learncoding/routes/router.dart' as router;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
@@ -30,7 +32,9 @@ Future main() async {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
         .then((value) => runApp(
               RestartWidget(
-                child: MyApp(),
+                child: ChangeNotifierProvider(
+                    create: (_) => Com(),
+                    child: MyApp()),
               ),
             ));
   });

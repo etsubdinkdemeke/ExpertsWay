@@ -9,59 +9,63 @@ import 'package:flutter/material.dart';
 class Comment {
   late final String date;
   late final String firstName;
+  late final String imageUrl;
   late final int like;
+  late final bool liked;
   late final int disLike;
-  late final String reply;
+  late final List<String> reply;
   late final String message;
 
   Comment({
     required this.date,
     required this.firstName,
+    required this.imageUrl,
     required this.like,
+    required this.liked,
     required this.disLike,
     required this.reply,
     required this.message,
   });
 
-  // Comment copyWith({
-  //   String? date,
-  //   String? firstName,
-  //   Bool? like,
-  //   Bool? disLike,
-  //   String? isReply,
-  //   String? message,
-  // }) {
-  //   return Comment(
-  //     date: date ?? this.date,
-  //     firstName: firstName ?? this.firstName,
-  //     like: like ?? this.like,
-  //     disLike: disLike ?? this.disLike,
-  //     isReply: isReply ?? this.isReply,
-  //     message: message ?? this.message,
-  //   );
-  // }
+// Comment copyWith({
+//   String? date,
+//   String? firstName,
+//   Bool? like,
+//   Bool? disLike,
+//   String? isReply,
+//   String? message,
+// }) {
+//   return Comment(
+//     date: date ?? this.date,
+//     firstName: firstName ?? this.firstName,
+//     like: like ?? this.like,
+//     disLike: disLike ?? this.disLike,
+//     isReply: isReply ?? this.isReply,
+//     message: message ?? this.message,
+//   );
+// }
 
-  // Map<String, dynamic> toMap() {
-  //   return <String, dynamic>{
-  //     'date': date.toMap(),
-  //     'firstName': firstName.toMap(),
-  //     'like': like.toMap(),
-  //     'disLike': disLike.toMap(),
-  //     'isReply': isReply.toMap(),
-  //     'message': message.toMap(),
-  //   };
-  // }
+// Map<String, dynamic> toMap() {
+//   return <String, dynamic>{
+//     'date': date.toMap(),
+//     'firstName': firstName.toMap(),
+//     'like': like.toMap(),
+//     'disLike': disLike.toMap(),
+//     'isReply': isReply.toMap(),
+//     'message': message.toMap(),
+//   };
+// }
 
-  // factory comment.fromMap(Map<String, dynamic> map) {
-  //   return comment(
-  //     date: late String.fromMap(map['date'] as Map<String,dynamic>),
-  //     firstName: late String.fromMap(map['firstName'] as Map<String,dynamic>),
-  //     like: late Bool.fromMap(map['like'] as Map<String,dynamic>),
-  //     disLike: late Bool.fromMap(map['disLike'] as Map<String,dynamic>),
-  //     isReply: late String.fromMap(map['isReply'] as Map<String,dynamic>),
-  //     message: late String.fromMap(map['message'] as Map<String,dynamic>),
-  //   );
-  // }
+// factory comment.fromMap(Map<String, dynamic> map) {
+//   return comment(
+//     date: late String.fromMap(map['date'] as Map<String,dynamic>),
+//     firstName: late String.fromMap(map['firstName'] as Map<String,dynamic>),
+//     like: late Bool.fromMap(map['like'] as Map<String,dynamic>),
+//     disLike: late Bool.fromMap(map['disLike'] as Map<String,dynamic>),
+//     isReply: late String.fromMap(map['isReply'] as Map<String,dynamic>),
+//     message: late String.fromMap(map['message'] as Map<String,dynamic>),
+//   );
+// }
 
 //   String toJson() => json.encode(toMap());
 
@@ -107,66 +111,173 @@ class Comment {
 // };
 
 //------------test data--------------------
+class Com extends ChangeNotifier {
+  List<Comment> comments = [
+    Comment(
+      date: "3",
+      firstName: "Naol Girma",
+      imageUrl: "assets/images/p1.jpg",
+      like: 5,
+      liked: true,
+      disLike: 7,
+      reply: [],
+      message:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
+    ),
+    Comment(
+      date: "7",
+      firstName: "Naol Girma",
+      imageUrl: "assets/images/p1.jpg",
+      like: 6,
+      liked: false,
+      disLike: 9,
+      reply: [],
+      message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis.",
+    ),
+    Comment(
+      date: "5",
+      firstName: "Naol Girma",
+      imageUrl: "assets/images/p1.jpg",
+      like: 7,
+      liked: true,
+      disLike: 0,
+      reply: [],
+      message:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
+    ),
+    Comment(
+      date: "8",
+      firstName: "Naol Girma",
+      imageUrl: "assets/images/p1.jpg",
+      like: 8,
+      liked: true,
+      disLike: 1,
+      reply: [],
+      message:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
+    ),
+    Comment(
+      date: "9",
+      firstName: "Naol Girma",
+      imageUrl: "assets/images/p1.jpg",
+      like: 6,
+      liked: false,
+      disLike: 9,
+      reply: [],
+      message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis.",
+    ),
+    Comment(
+      date: "2",
+      firstName: "Naol Girma",
+      imageUrl: "assets/images/p1.jpg",
+      like: 6,
+      liked: false,
+      disLike: 9,
+      reply: [],
+      message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis.",
+    ),
+    Comment(
+      date: "1",
+      firstName: "Naol Girma",
+      imageUrl: "assets/images/p1.jpg",
+      like: 1,
+      liked: true,
+      disLike: 3,
+      reply: [],
+      message:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
+    ),
+  ];
+
+  void addComment(Comment com) {
+    comments.insert(0, com);
+    notifyListeners();
+  }
+
+  void addReply(String reply, int index) {
+    comments[index].reply.add(reply);
+    notifyListeners();
+  }
+
+  void likeComment(int index) {
+    comments[index].liked = !comments[index].liked;
+    notifyListeners();
+  }
+}
 
 List<Comment> comments = [
   Comment(
-    date: "27/01/2022 at 04:30",
-    firstName: "Naol",
+    date: "3",
+    firstName: "Naol Girma",
+    imageUrl: "assets/images/p1.jpg",
     like: 5,
+    liked: true,
     disLike: 7,
-    reply: '5',
+    reply: [],
     message:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
   ),
   Comment(
-    date: "12/06/2020 at 12:30",
-    firstName: "Naol",
+    date: "7",
+    firstName: "Naol Girma",
+    imageUrl: "assets/images/p1.jpg",
     like: 6,
+    liked: false,
     disLike: 9,
-    reply: '5',
+    reply: [],
     message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis.",
   ),
   Comment(
-    date: "27/01/2022 at 04:30",
-    firstName: "Naol",
+    date: "5",
+    firstName: "Naol Girma",
+    imageUrl: "assets/images/p1.jpg",
     like: 7,
+    liked: true,
     disLike: 0,
-    reply: '5',
+    reply: [],
     message:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
   ),
   Comment(
-    date: "27/01/2022 at 04:30",
-    firstName: "Naol",
+    date: "8",
+    firstName: "Naol Girma",
+    imageUrl: "assets/images/p1.jpg",
     like: 8,
+    liked: true,
     disLike: 1,
-    reply: '5',
+    reply: [],
     message:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
   ),
   Comment(
-    date: "12/06/2020 at 12:30",
-    firstName: "Naol",
+    date: "9",
+    firstName: "Naol Girma",
+    imageUrl: "assets/images/p1.jpg",
     like: 6,
+    liked: false,
     disLike: 9,
-    reply: '5',
+    reply: [],
     message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis.",
   ),
   Comment(
-    date: "12/06/2020 at 12:30",
-    firstName: "Naol",
+    date: "2",
+    firstName: "Naol Girma",
+    imageUrl: "assets/images/p1.jpg",
     like: 6,
+    liked: false,
     disLike: 9,
-    reply: '5',
+    reply: [],
     message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis.",
   ),
   Comment(
-    date: "27/01/2022 at 04:30",
-    firstName: "Naol",
+    date: "1",
+    firstName: "Naol Girma",
+    imageUrl: "assets/images/p1.jpg",
     like: 1,
+    liked: true,
     disLike: 3,
-    reply: '5',
+    reply: [],
     message:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
   ),
 ];
