@@ -110,7 +110,11 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                   Text(
                     widget.courseData.name,
                     // TODO: consider color contrast issues here.
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15,
+                    ),
                   ),
                   Text(
                     // we're considering the lessons to be the "chapters"
@@ -162,10 +166,7 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: const Text(
                     "Lessons",
-                    style: TextStyle(
-                        color: Color(0xFF343434),
-                        fontFamily: 'Red Hat Display',
-                        fontSize: 24),
+                    style: TextStyle(color: Color(0xFF343434), fontSize: 24),
                   ),
                 ),
                 Container(
@@ -237,7 +238,6 @@ class _CoursePagePageState extends State<CourseDetailPage> {
             child: Text(
               section,
               style: const TextStyle(
-                fontFamily: 'Red Hat Display',
                 fontSize: 18.0,
                 fontWeight: FontWeight.w500,
                 color: Color.fromARGB(255, 121, 121, 123),
@@ -279,7 +279,6 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                                 lessonTitle[index],
                                 style: TextStyle(
                                   color: index == 2 ? Colors.blue : Colors.grey,
-                                  fontFamily: 'Red Hat Display',
                                   fontSize: 17.0,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -371,7 +370,12 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                 GestureDetector(
                   child: ListTile(
                     contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                    title: Text(lesson.title),
+                    title: Text(
+                      lesson.title,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                     // TODO: change the dummy subtitle with a real one (once we can get the lesson contents along with the lessons from the database)
                     subtitle: const Text(
                       "This is dummy content. It should be replaced with real content by the time we can get the contents along with the lessons.",
@@ -477,7 +481,6 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                                   "Description",
                                   style: TextStyle(
                                       color: Color.fromARGB(255, 138, 138, 138),
-                                      fontFamily: 'Red Hat Display',
                                       fontSize: 14),
                                 ),
                                 const Spacer(),
@@ -510,8 +513,6 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                                 textAlign: TextAlign.justify,
                                 style: const TextStyle(
                                   color: Color(0xFF343434),
-                                  fontFamily: 'Red Hat Display',
-                                  fontSize: 16,
                                 ),
                               )),
                           Padding(
@@ -524,9 +525,8 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                                 Text(
                                   "Select chapter",
                                   style: TextStyle(
-                                      color: Color.fromARGB(255, 138, 138, 138),
-                                      fontFamily: 'Red Hat Display',
-                                      fontSize: 14),
+                                    color: Color.fromARGB(255, 138, 138, 138),
+                                  ),
                                 ),
                               ],
                             ),
@@ -609,10 +609,7 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                   children: const <Widget>[
                     Text(
                       "Enroll",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Red Hat Display',
-                          fontSize: 18),
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ],
                 ),
