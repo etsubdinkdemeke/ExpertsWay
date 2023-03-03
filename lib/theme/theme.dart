@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:learncoding/theme/config.dart' as config;
 
+// IMPOTANT: We are not using this themeData anywhere in the app.
+// the theme to the cupertino app is provided in the main.dart file.
+
 var kLightTheme = ThemeData(
   canvasColor: Colors.transparent,
   primaryColor: Colors.white,

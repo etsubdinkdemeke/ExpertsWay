@@ -17,7 +17,6 @@ import 'package:get/get.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
-
 String? name;
 String? image;
 late SharedPreferences prefs;
@@ -67,18 +66,21 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return GetCupertinoApp(
-      onGenerateRoute: router.generateRoute,
-      onUnknownRoute: (settings) => CupertinoPageRoute(
-          builder: (context) => UndefinedScreen(
-                name: settings.name,
-              )),
-      // theme: Provider.of<ThemeModel>(context).currentTheme,
-      debugShowCheckedModeBanner: false,
-      // home: Settings(),
-      // home: Profile(),
-      // home: name == null ? Onboarding() : MenuDashboardLayout(),
-      home: SplashScreen()
-    );
+        onGenerateRoute: router.generateRoute,
+        onUnknownRoute: (settings) => CupertinoPageRoute(
+            builder: (context) => UndefinedScreen(
+                  name: settings.name,
+                )),
+        theme: const CupertinoThemeData(
+          textTheme: CupertinoTextThemeData(
+            textStyle: TextStyle(fontFamily: 'Poppins'),
+          ),
+        ),
+        debugShowCheckedModeBanner: false,
+        // home: Settings(),
+        // home: Profile(),
+        // home: name == null ? Onboarding() : MenuDashboardLayout(),
+        home: SplashScreen());
   }
 }
 
@@ -113,7 +115,6 @@ class _RestartWidgetState extends State<RestartWidget> {
   }
 }
 
-
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
@@ -124,7 +125,6 @@ class SplashScreen extends StatelessWidget {
         duration: 3000,
         splashIconSize: 350,
         splashTransition: SplashTransition.slideTransition,
-        
         animationDuration: Duration(milliseconds: 1500),
         backgroundColor: Color.fromARGB(255, 255, 255, 255),
         pageTransitionType: PageTransitionType.fade,
