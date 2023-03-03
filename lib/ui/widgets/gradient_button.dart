@@ -51,11 +51,13 @@ class GradientBtn extends StatelessWidget {
             Text(
               btnName,
               style: TextStyle(
-                  color: onPressed == null
-                      ? Colors.grey
-                      : whiteBtn
-                          ? Colors.black
-                          : Colors.white),
+                color: onPressed == null
+                    ? Colors.grey
+                    : whiteBtn
+                        ? Colors.black
+                        : Colors.white,
+                fontSize: defaultBtn ? 18 : null,
+              ),
             ),
           ],
         ),
