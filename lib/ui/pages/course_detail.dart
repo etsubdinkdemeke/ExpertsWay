@@ -567,7 +567,7 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                 width: MediaQuery.of(context).size.width,
                 child: InkWell(
                   onTap: (){
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                Navigator.push(context,MaterialPageRoute(
                   builder: (context) => quiz()));
               },
                   child: Row(
