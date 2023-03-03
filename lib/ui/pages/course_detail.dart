@@ -19,13 +19,6 @@ import '../../utils/color.dart';
 
 class CourseDetailPage extends StatefulWidget {
   final CourseElement courseData;
-  // we temporarily need a flag to indicate if a user is enrolled for the course or not
-  // this flag is only used to render the two states of the page (enrolled/not enrolled) temporarily
-  // there should be a mechanism to get whether the user is enrolled from the database or the API.
-  // once we have that functionality, we can pass such a flag to the constructor of this class whenever
-  // we push this page (screen).
-  bool userIsEnrolled = Random()
-      .nextBool(); // so here is the flag. for now, we're setting it randomly.
 
   CourseDetailPage({
     Key? key,
@@ -365,19 +358,24 @@ class _CoursePagePageState extends State<CourseDetailPage> {
       color: config.Colors().secondColor(1),
       child: Column(
         children: <Widget>[
-          for (var lesson in lessonData)
+          for (var index = 0; index < lessonData.length; index++)
             Column(
               children: [
                 GestureDetector(
                   child: ListTile(
                     contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                    title: Text(lesson.title),
+                    title: Text(lessonData[index].title),
                     // TODO: change the dummy subtitle with a real one (once we can get the lesson contents along with the lessons from the database)
                     subtitle: const Text(
                       "This is dummy content. It should be replaced with real content by the time we can get the contents along with the lessons.",
                       overflow: TextOverflow.ellipsis,
                     ),
-                    trailing: widget.userIsEnrolled
+                    trailing: index !=
+                            lessonData.length - 1 // we're making only the very
+                        // last lesson locked. (b/c, for now, we want to display what a locked
+                        // lesson looks like. we'll change this when we have data about the
+                        // progress of the user. the user progress will determine which lessons
+                        // are open and which are locked.)
                         ? Builder(builder: (_) {
                             // we're generating a lot of random booleans here for demonstration purposes
                             // all these boolean flags should be received from the database or API in the future.
@@ -419,20 +417,23 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                   ),
                   onTap: () async {
                     var lessonContents = await CourseDatabase.instance
-                        .readLessonContets(lesson.lessonId);
-                    if (lessonContents.isNotEmpty && widget.userIsEnrolled) {
+                        .readLessonContets(lessonData[index].lessonId);
+                    if (lessonContents.isNotEmpty &&
+                        index != lessonData.length - 1) {
+                      // again, we're making the very last lesson locked.
                       // ignore: use_build_context_synchronously
                       Navigator.push(
                         context,
                         CupertinoPageRoute(
                           builder: (context) => LessonPage(
                             lessonData: lessonData,
-                            lesson: lesson
+                            lesson: lessonData[index]
                                 .title, // please don't be mad with the namings ... X(
                             contents: lessonContents,
                             courseId: widget.courseData.course_id.toString(),
-                            lessonId: lesson.lessonId.toString() as String,
-                            section: lesson.section,
+                            lessonId:
+                                lessonData[index].lessonId.toString() as String,
+                            section: lessonData[index].section,
                           ),
                         ),
                       );
@@ -457,167 +458,143 @@ class _CoursePagePageState extends State<CourseDetailPage> {
         alignment: Alignment.center,
         children: <Widget>[
           SizedBox(
-              height: MediaQuery.of(context).size.height + 60,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    buildCoverImage(),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Row(
-                              children: <Widget>[
-                                const Text(
-                                  "Description",
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 138, 138, 138),
-                                      fontFamily: 'Red Hat Display',
-                                      fontSize: 14),
+            height: MediaQuery.of(context).size.height + 60,
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  buildCoverImage(),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: <Widget>[
+                              const Text(
+                                "Description",
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 138, 138, 138),
+                                    fontFamily: 'Red Hat Display',
+                                    fontSize: 14),
+                              ),
+                              const Spacer(),
+                              CupertinoButton(
+                                padding: const EdgeInsets.all(4),
+                                child: const Icon(
+                                  Icons.comment_outlined,
+                                  size: 20,
                                 ),
-                                const Spacer(),
-                                CupertinoButton(
-                                  padding: const EdgeInsets.all(4),
-                                  child: const Icon(
-                                    Icons.comment_outlined,
-                                    size: 20,
-                                  ),
-                                  onPressed:
-                                      () {}, // TODO: implement this method: showing comments for this course
+                                onPressed:
+                                    () {}, // TODO: implement this method: showing comments for this course
+                              ),
+                              CupertinoButton(
+                                padding: const EdgeInsets.all(4),
+                                child: const Icon(
+                                  Icons.bookmark_outline,
+                                  size: 20,
                                 ),
-                                CupertinoButton(
-                                  padding: const EdgeInsets.all(4),
-                                  child: const Icon(
-                                    Icons.bookmark_outline,
-                                    size: 20,
-                                  ),
-                                  onPressed:
-                                      () {}, // TODO: implement this method: bookmarking this course
-                                )
-                              ],
-                            ),
+                                onPressed:
+                                    () {}, // TODO: implement this method: bookmarking this course
+                              )
+                            ],
                           ),
-                          Container(
-                              margin: const EdgeInsets.all(8),
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              child: Text(
-                                widget.courseData.description,
-                                textAlign: TextAlign.justify,
-                                style: const TextStyle(
-                                  color: Color(0xFF343434),
-                                  fontFamily: 'Red Hat Display',
-                                  fontSize: 16,
-                                ),
-                              )),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0,
-                              vertical: 8.0,
-                            ),
-                            child: Row(
-                              children: const <Widget>[
-                                Text(
-                                  "Select chapter",
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 138, 138, 138),
-                                      fontFamily: 'Red Hat Display',
-                                      fontSize: 14),
-                                ),
-                              ],
-                            ),
+                        ),
+                        Container(
+                            margin: const EdgeInsets.all(8),
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            child: Text(
+                              widget.courseData.description,
+                              textAlign: TextAlign.justify,
+                              style: const TextStyle(
+                                color: Color(0xFF343434),
+                                fontFamily: 'Red Hat Display',
+                                fontSize: 16,
+                              ),
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 8.0,
                           ),
-                        ],
-                      ),
+                          child: Row(
+                            children: const <Widget>[
+                              Text(
+                                "Select chapter",
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 138, 138, 138),
+                                    fontFamily: 'Red Hat Display',
+                                    fontSize: 14),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Builder(builder: (context) {
-                        return lessonData.isEmpty
-                            ? FutureBuilder<Lesson>(
-                                future: ApiProvider()
-                                    .retrieveLessons(widget.courseData.slug),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    {
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          color: maincolor,
-                                        ),
-                                      );
-                                    }
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Builder(builder: (context) {
+                      return lessonData.isEmpty
+                          ? FutureBuilder<Lesson>(
+                              future: ApiProvider()
+                                  .retrieveLessons(widget.courseData.slug),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  {
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        color: maincolor,
+                                      ),
+                                    );
                                   }
-                                  if (!snapshot.hasData) {
-                                    return const Center(
-                                        child: Text(
-                                      "There is no Course",
-                                      style: TextStyle(
-                                          color: Color.fromARGB(
-                                              184, 138, 138, 138)),
-                                    ));
-                                  }
-                                  if (snapshot.hasError) {
-                                    return const Center(
-                                        child: Text(
-                                      "Unable to get the data",
-                                      style: TextStyle(
-                                          color: Color.fromARGB(
-                                              184, 138, 138, 138)),
-                                    ));
-                                  }
-                                  if (snapshot.hasData) {
-                                    for (var i = 0;
-                                        i < snapshot.data!.lessons.length;
-                                        i++) {
-                                      final lessonData =
-                                          snapshot.data!.lessons[i];
-                                      CourseDatabase.instance
-                                          .createLessons(lessonData!);
-                                    }
-
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
-                                      refreshLesson();
-                                    });
+                                }
+                                if (!snapshot.hasData) {
+                                  return const Center(
+                                      child: Text(
+                                    "There is no Course",
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromARGB(184, 138, 138, 138)),
+                                  ));
+                                }
+                                if (snapshot.hasError) {
+                                  return const Center(
+                                      child: Text(
+                                    "Unable to get the data",
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromARGB(184, 138, 138, 138)),
+                                  ));
+                                }
+                                if (snapshot.hasData) {
+                                  for (var i = 0;
+                                      i < snapshot.data!.lessons.length;
+                                      i++) {
+                                    final lessonData =
+                                        snapshot.data!.lessons[i];
+                                    CourseDatabase.instance
+                                        .createLessons(lessonData!);
                                   }
 
-                                  return Container();
-                                })
-                            : buildUniformLessonList();
-                      }),
-                    ),
-                  ],
-                ),
-              )),
-          if (!widget.userIsEnrolled)
-            Positioned(
-              bottom: 10,
-              left: MediaQuery.of(context).size.width * 0.125,
-              child: CardWidget(
-                button: true,
-                gradient: true,
-                height: 60,
-                width: MediaQuery.of(context).size.width * 0.75,
-                borderRadius: BorderRadius.circular(24),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const <Widget>[
-                    Text(
-                      "Enroll",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Red Hat Display',
-                          fontSize: 18),
-                    ),
-                  ],
-                ),
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    refreshLesson();
+                                  });
+                                }
+
+                                return Container();
+                              })
+                          : buildUniformLessonList();
+                    }),
+                  ),
+                ],
               ),
-            )
+            ),
+          ),
         ],
       ),
     );
