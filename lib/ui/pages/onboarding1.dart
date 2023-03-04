@@ -35,7 +35,6 @@ class _OnboardingState extends State<Onboarding> {
               "Easy access to video lectures, & reading materials.",
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontFamily: 'Red Hat Display',
                   fontSize: 14,
                   color: Color(0xFFFFFFFF)),
             ),
@@ -52,7 +51,6 @@ class _OnboardingState extends State<Onboarding> {
               "Ask questions, earn coins and dominate the global leaderboard.",
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontFamily: 'Red Hat Display',
                   fontSize: 14,
                   color: Color(0xFFFFFFFF)),
             ),
@@ -69,7 +67,6 @@ class _OnboardingState extends State<Onboarding> {
               "E-Learn",
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontFamily: 'Red Hat Display',
                   fontSize: 28,
                   color: Color(0xFFFFFFFF)),
             ),
@@ -83,7 +80,6 @@ class _OnboardingState extends State<Onboarding> {
               "The complete E-learning solution for students of all ages!\n\n\nJoin for FREE now!",
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontFamily: 'Red Hat Display',
                   fontSize: 14,
                   color: Color(0xFFFFFFFF)),
             ),
@@ -100,7 +96,6 @@ class _OnboardingState extends State<Onboarding> {
                   Text(
                     "Sign in with Google ➡",
                     style: TextStyle(
-                        fontFamily: 'Red Hat Display',
                         fontSize: 16,
                         color: Color(0xFF0083BE),
                         fontWeight: FontWeight.bold),

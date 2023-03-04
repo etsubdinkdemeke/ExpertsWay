@@ -64,7 +64,6 @@ class OverlayWidget extends StatelessWidget {
                     Text(
                       "Today",
                       style: TextStyle(
-                          fontFamily: 'Red Hat Display',
                           fontSize: 24,
                           color: Color(0xFF343434),
                           fontWeight: FontWeight.bold),
@@ -72,7 +71,6 @@ class OverlayWidget extends StatelessWidget {
                     Text(
                       getStrToday(),
                       style: TextStyle(
-                          fontFamily: 'Red Hat Display',
                           fontSize: 24,
                           color: Color(0xFF343434),
                           fontWeight: FontWeight.bold),
@@ -109,7 +107,6 @@ class OverlayWidget extends StatelessWidget {
                                   child: Text(
                                     "Add reminder",
                                     style: TextStyle(
-                                        fontFamily: 'Red Hat Display',
                                         fontSize: 18,
                                         color: Color(0xFFFFFFFF)),
                                   ),
@@ -137,7 +134,6 @@ class OverlayWidget extends StatelessWidget {
                                       child: Text(
                                         "${names[index]}.",
                                         style: TextStyle(
-                                            fontFamily: 'Red Hat Display',
                                             fontSize: 18,
                                             color: Color(0xFF585858)),
                                       ),
@@ -148,7 +144,6 @@ class OverlayWidget extends StatelessWidget {
                                       child: Text(
                                         "${times[index]}",
                                         style: TextStyle(
-                                            fontFamily: 'Red Hat Display',
                                             fontSize: 14,
                                             color: Color(0xFF585858)),
                                       ),

@@ -3,6 +3,7 @@ import 'package:learncoding/theme/config.dart' as config;
 
 // IMPOTANT: We are not using this themeData anywhere in the app.
 // the theme to the cupertino app is provided in the main.dart file.
+// and the font family 'Red Hat Display' is no longer suppoted in this codebase.
 
 var kLightTheme = ThemeData(
   canvasColor: Colors.transparent,
