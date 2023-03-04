@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class GradientBtn extends StatelessWidget {
   final VoidCallback? onPressed;
   final String btnName;
   String iconUrl;
-  bool whiteBtn;
+  bool isPcked;
   final bool defaultBtn;
   double height;
   double? width;
@@ -14,9 +15,9 @@ class GradientBtn extends StatelessWidget {
     required this.onPressed,
     required this.btnName,
     this.iconUrl = 'https://cdn-icons-png.flaticon.com/512/6062/6062646.png',
-    this.whiteBtn = true,
+    this.isPcked = true,
     required this.defaultBtn,
-    this.height = 44,
+    this.height = 35,
     this.width,
   }) : super(key: key);
 
@@ -29,8 +30,15 @@ class GradientBtn extends StatelessWidget {
         height: height,
         width: width,
         decoration: BoxDecoration(
-          color: whiteBtn ? Colors.white : null,
-          gradient: whiteBtn
+          boxShadow: [
+            BoxShadow(
+                color: Colors.grey.shade200,
+                spreadRadius: 1,
+                blurRadius: 6,
+                offset: const Offset(2, 8))
+          ],
+          color: isPcked ? Colors.white : null,
+          gradient: isPcked
               ? null
               : const LinearGradient(
                   colors: [Color(0xff2686FF), Color(0xff26B0FF)]),
@@ -53,7 +61,7 @@ class GradientBtn extends StatelessWidget {
               style: TextStyle(
                 color: onPressed == null
                     ? Colors.grey
-                    : whiteBtn
+                    : isPcked
                         ? Colors.black
                         : Colors.white,
                 fontSize: defaultBtn ? 18 : null,
