@@ -19,13 +19,6 @@ import '../../utils/color.dart';
 
 class CourseDetailPage extends StatefulWidget {
   final CourseElement courseData;
-  // we temporarily need a flag to indicate if a user is enrolled for the course or not
-  // this flag is only used to render the two states of the page (enrolled/not enrolled) temporarily
-  // there should be a mechanism to get whether the user is enrolled from the database or the API.
-  // once we have that functionality, we can pass such a flag to the constructor of this class whenever
-  // we push this page (screen).
-  bool userIsEnrolled = Random()
-      .nextBool(); // so here is the flag. for now, we're setting it randomly.
 
   CourseDetailPage({
     Key? key,
@@ -364,14 +357,14 @@ class _CoursePagePageState extends State<CourseDetailPage> {
       color: config.Colors().secondColor(1),
       child: Column(
         children: <Widget>[
-          for (var lesson in lessonData)
+          for (var index = 0; index < lessonData.length; index++)
             Column(
               children: [
                 GestureDetector(
                   child: ListTile(
                     contentPadding: EdgeInsets.symmetric(horizontal: 0),
                     title: Text(
-                      lesson.title,
+                      lessonData[index].title,
                       style: const TextStyle(
                         fontWeight: FontWeight.w500,
                       ),
@@ -381,7 +374,12 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                       "This is dummy content. It should be replaced with real content by the time we can get the contents along with the lessons.",
                       overflow: TextOverflow.ellipsis,
                     ),
-                    trailing: widget.userIsEnrolled
+                    trailing: index !=
+                            lessonData.length - 1 // we're making only the very
+                        // last lesson locked. (b/c, for now, we want to display what a locked
+                        // lesson looks like. we'll change this when we have data about the
+                        // progress of the user. the user progress will determine which lessons
+                        // are open and which are locked.)
                         ? Builder(builder: (_) {
                             // we're generating a lot of random booleans here for demonstration purposes
                             // all these boolean flags should be received from the database or API in the future.
@@ -423,20 +421,23 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                   ),
                   onTap: () async {
                     var lessonContents = await CourseDatabase.instance
-                        .readLessonContets(lesson.lessonId);
-                    if (lessonContents.isNotEmpty && widget.userIsEnrolled) {
+                        .readLessonContets(lessonData[index].lessonId);
+                    if (lessonContents.isNotEmpty &&
+                        index != lessonData.length - 1) {
+                      // again, we're making the very last lesson locked.
                       // ignore: use_build_context_synchronously
                       Navigator.push(
                         context,
                         CupertinoPageRoute(
                           builder: (context) => LessonPage(
                             lessonData: lessonData,
-                            lesson: lesson
+                            lesson: lessonData[index]
                                 .title, // please don't be mad with the namings ... X(
                             contents: lessonContents,
                             courseId: widget.courseData.course_id.toString(),
-                            lessonId: lesson.lessonId.toString() as String,
-                            section: lesson.section,
+                            lessonId:
+                                lessonData[index].lessonId.toString() as String,
+                            section: lessonData[index].section,
                           ),
                         ),
                       );
@@ -580,41 +581,21 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                                           .createLessons(lessonData!);
                                     }
 
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
-                                      refreshLesson();
-                                    });
-                                  }
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    refreshLesson();
+                                  });
+                                }
 
-                                  return Container();
-                                })
-                            : buildUniformLessonList();
-                      }),
-                    ),
-                  ],
-                ),
-              )),
-          if (!widget.userIsEnrolled)
-            Positioned(
-              bottom: 10,
-              left: MediaQuery.of(context).size.width * 0.125,
-              child: CardWidget(
-                button: true,
-                gradient: true,
-                height: 60,
-                width: MediaQuery.of(context).size.width * 0.75,
-                borderRadius: BorderRadius.circular(24),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const <Widget>[
-                    Text(
-                      "Enroll",
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                  ],
-                ),
+                                return Container();
+                              })
+                          : buildUniformLessonList();
+                    }),
+                  ),
+                ],
               ),
-            )
+            ),
+          ),
         ],
       ),
     );
