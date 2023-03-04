@@ -12,6 +12,7 @@ class CardWidget extends StatelessWidget {
   final Widget child;
   final int? duration;
   final Border? border;
+  final BorderRadius? borderRadius;
   final func;
   CardWidget({
     required this.gradient,
@@ -23,6 +24,7 @@ class CardWidget extends StatelessWidget {
     this.duration,
     this.func,
     this.border,
+    this.borderRadius,  // an optional field for setting the border-radius
   });
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,8 @@ class CardWidget extends StatelessWidget {
       child: ClipPath(
         clipper: ShapeBorderClipper(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            // if borderRadius is not passed to the constructor, we use a default value of 10
+            borderRadius: borderRadius ?? BorderRadius.circular(10),
           ),
         ),
         child: material.AnimatedContainer(
