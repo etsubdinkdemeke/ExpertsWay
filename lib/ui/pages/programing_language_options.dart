@@ -50,9 +50,9 @@ class _ProgrammingOptionsState extends State<ProgrammingOptions> {
                     defaultBtn: false,
                     onPressed: () {
                       setState(() {
-                        ProgrammingOptionsModels[index].whiteBtn =
-                            !ProgrammingOptionsModels[index].whiteBtn;
-                        !ProgrammingOptionsModels[index].whiteBtn
+                        ProgrammingOptionsModels[index].isPicked =
+                            !ProgrammingOptionsModels[index].isPicked;
+                        !ProgrammingOptionsModels[index].isPicked
                             ? pickedLanguages
                                 .add(ProgrammingOptionsModels[index])
                             : pickedLanguages
@@ -61,22 +61,24 @@ class _ProgrammingOptionsState extends State<ProgrammingOptions> {
                     },
                     btnName: ProgrammingOptionsModels[index].btnName,
                     iconUrl: ProgrammingOptionsModels[index].iconUrl,
-                    whiteBtn: ProgrammingOptionsModels[index].whiteBtn,
+                    isPcked: ProgrammingOptionsModels[index].isPicked,
                   ),
                 );
               }),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: GradientBtn(
-              onPressed: pickedLanguages.length > 2
-                  ? () {
-                      if (kDebugMode) print(pickedLanguages);
-                    }
-                  : null,
-              btnName: 'Get Started',
-              defaultBtn: true,
-              whiteBtn: false,
-              width: 200,
+            child: Opacity(
+              opacity: pickedLanguages.length > 2 ? 1 : 0.3,
+              child: GradientBtn(
+                onPressed: () {
+                  if (kDebugMode) print(pickedLanguages.map((e) => e.btnName));
+                },
+                btnName: 'Get Started',
+                defaultBtn: true,
+                isPcked: false,
+                width: 200,
+                height: 52,
+              ),
             ),
           )
         ],
