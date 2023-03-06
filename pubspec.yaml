@@ -76,26 +76,52 @@ flutter:
     - assets/images/p2.jpg
 
   fonts:
-    - family: Red Hat Display
+    - family: Poppins
       fonts:
-        - asset: assets/fonts/RedHatDisplay-Regular.ttf
-        - asset: assets/fonts/RedHatDisplay-Italic.ttf
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Italic.ttf
           style: italic
-        - asset: assets/fonts/RedHatDisplay-Bold.ttf
-          weight: 700
-        - asset: assets/fonts/RedHatDisplay-Black.ttf
-          weight: 900
-        - asset: assets/fonts/RedHatDisplay-BlackItalic.ttf
+        - asset: assets/fonts/Poppins-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Poppins-ThinItalic.ttf
+          weight: 100
           style: italic
-          weight: 900
-        - asset: assets/fonts/RedHatDisplay-BoldItalic.ttf
+        - asset: assets/fonts/Poppins-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/Poppins-ExtraLightItalic.ttf
+          weight: 200
           style: italic
-          weight: 700
-        - asset: assets/fonts/RedHatDisplay-Medium.ttf
+        - asset: assets/fonts/Poppins-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Poppins-LightItalic.ttf
+          weight: 300
+          style: italic
+          # weight 400 is the regular font.
+        - asset: assets/fonts/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Poppins-MediumItalic.ttf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/Poppins-SemiBold.ttf
           weight: 600
-        - asset: assets/fonts/RedHatDisplay-MediumItalic.ttf
-          style: italic
+        - asset: assets/fonts/Poppins-SemiBoldItalic.ttf
           weight: 600
+          style: italic
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Poppins-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/Poppins-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Poppins-ExtraBoldItalic.ttf
+          weight: 800
+          style: italic
+        - asset: assets/fonts/Poppins-Black.ttf
+          weight: 900
+        - asset: assets/fonts/Poppins-BlackItalic.ttf
+          weight: 900
+          style: italic
     - family: BoxIcons
       fonts:
         - asset: assets/fonts/BoxIcons.ttf

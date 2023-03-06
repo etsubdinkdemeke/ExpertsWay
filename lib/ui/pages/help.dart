@@ -47,7 +47,6 @@ class _HelpState extends State<Help> {
                     child: Text(
                       title,
                       style: const TextStyle(
-                        fontFamily: 'Red Hat Display',
                         fontSize: 16.0,
                         fontWeight: FontWeight.w500,
                         color: Color.fromARGB(255, 193, 193, 194), //cahnge?
@@ -64,7 +63,6 @@ class _HelpState extends State<Help> {
                     child: Text(
                       description,
                       style: const TextStyle(
-                        fontFamily: 'Red Hat Display',
                         color: Color.fromARGB(255, 193, 193, 194),
                       ),
                     ),
@@ -99,7 +97,7 @@ class _HelpState extends State<Help> {
         middle: Text(
           'Help',
           style: TextStyle(
-              color: Colors.black, fontFamily: 'Red Hat Display', fontSize: 24),
+              color: Colors.black, fontSize: 24),
         ),
       ),
       backgroundColor: config.Colors().secondColor(1),
@@ -121,7 +119,6 @@ class _HelpState extends State<Help> {
               Text(
                 "Success leaves clues.",
                 style: TextStyle(
-                  fontFamily: 'Red Hat Display',
                   color: Color.fromARGB(255, 193, 193, 194), //cahnge?
                 ),
               ),
@@ -129,7 +126,6 @@ class _HelpState extends State<Help> {
               Text(
                 "Study People you admire or want to be like.",
                 style: TextStyle(
-                  fontFamily: 'Red Hat Display',
                   color: Color.fromARGB(255, 193, 193, 194),
                 ),
               ),

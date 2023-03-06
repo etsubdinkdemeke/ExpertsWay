@@ -49,7 +49,6 @@ class _CommentSectionState extends State<CommentSection> {
                       'Comments',
                       style: TextStyle(
                         color: Color.fromARGB(255, 83, 83, 83),
-                        fontFamily: 'Red Hat Display',
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),

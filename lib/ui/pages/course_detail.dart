@@ -103,7 +103,11 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                   Text(
                     widget.courseData.name,
                     // TODO: consider color contrast issues here.
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15,
+                    ),
                   ),
                   Text(
                     // we're considering the lessons to be the "chapters"
@@ -155,10 +159,7 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: const Text(
                     "Lessons",
-                    style: TextStyle(
-                        color: Color(0xFF343434),
-                        fontFamily: 'Red Hat Display',
-                        fontSize: 24),
+                    style: TextStyle(color: Color(0xFF343434), fontSize: 24),
                   ),
                 ),
                 Container(
@@ -230,7 +231,6 @@ class _CoursePagePageState extends State<CourseDetailPage> {
             child: Text(
               section,
               style: const TextStyle(
-                fontFamily: 'Red Hat Display',
                 fontSize: 18.0,
                 fontWeight: FontWeight.w500,
                 color: Color.fromARGB(255, 121, 121, 123),
@@ -272,7 +272,6 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                                 lessonTitle[index],
                                 style: TextStyle(
                                   color: index == 2 ? Colors.blue : Colors.grey,
-                                  fontFamily: 'Red Hat Display',
                                   fontSize: 17.0,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -364,7 +363,12 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                 GestureDetector(
                   child: ListTile(
                     contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                    title: Text(lessonData[index].title),
+                    title: Text(
+                      lessonData[index].title,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                     // TODO: change the dummy subtitle with a real one (once we can get the lesson contents along with the lessons from the database)
                     subtitle: const Text(
                       "This is dummy content. It should be replaced with real content by the time we can get the contents along with the lessons.",
@@ -458,127 +462,124 @@ class _CoursePagePageState extends State<CourseDetailPage> {
         alignment: Alignment.center,
         children: <Widget>[
           SizedBox(
-            height: MediaQuery.of(context).size.height + 60,
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  buildCoverImage(),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Row(
-                            children: <Widget>[
-                              const Text(
-                                "Description",
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 138, 138, 138),
-                                    fontFamily: 'Red Hat Display',
-                                    fontSize: 14),
-                              ),
-                              const Spacer(),
-                              CupertinoButton(
-                                padding: const EdgeInsets.all(4),
-                                child: const Icon(
-                                  Icons.comment_outlined,
-                                  size: 20,
+              height: MediaQuery.of(context).size.height + 60,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    buildCoverImage(),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Row(
+                              children: <Widget>[
+                                const Text(
+                                  "Description",
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 138, 138, 138),
+                                      fontSize: 14),
                                 ),
-                                onPressed:
-                                    () {}, // TODO: implement this method: showing comments for this course
-                              ),
-                              CupertinoButton(
-                                padding: const EdgeInsets.all(4),
-                                child: const Icon(
-                                  Icons.bookmark_outline,
-                                  size: 20,
+                                const Spacer(),
+                                CupertinoButton(
+                                  padding: const EdgeInsets.all(4),
+                                  child: const Icon(
+                                    Icons.comment_outlined,
+                                    size: 20,
+                                  ),
+                                  onPressed:
+                                      () {}, // TODO: implement this method: showing comments for this course
                                 ),
-                                onPressed:
-                                    () {}, // TODO: implement this method: bookmarking this course
-                              )
-                            ],
+                                CupertinoButton(
+                                  padding: const EdgeInsets.all(4),
+                                  child: const Icon(
+                                    Icons.bookmark_outline,
+                                    size: 20,
+                                  ),
+                                  onPressed:
+                                      () {}, // TODO: implement this method: bookmarking this course
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                            margin: const EdgeInsets.all(8),
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            child: Text(
-                              widget.courseData.description,
-                              textAlign: TextAlign.justify,
-                              style: const TextStyle(
-                                color: Color(0xFF343434),
-                                fontFamily: 'Red Hat Display',
-                                fontSize: 16,
-                              ),
-                            )),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0,
-                            vertical: 8.0,
-                          ),
-                          child: Row(
-                            children: const <Widget>[
-                              Text(
-                                "Select chapter",
-                                style: TextStyle(
+                          Container(
+                              margin: const EdgeInsets.all(8),
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              child: Text(
+                                widget.courseData.description,
+                                textAlign: TextAlign.justify,
+                                style: const TextStyle(
+                                  color: Color(0xFF343434),
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 8.0,
+                            ),
+                            child: Row(
+                              children: const <Widget>[
+                                Text(
+                                  "Select chapter",
+                                  style: TextStyle(
                                     color: Color.fromARGB(255, 138, 138, 138),
-                                    fontFamily: 'Red Hat Display',
-                                    fontSize: 14),
-                              ),
-                            ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Builder(builder: (context) {
-                      return lessonData.isEmpty
-                          ? FutureBuilder<Lesson>(
-                              future: ApiProvider()
-                                  .retrieveLessons(widget.courseData.slug),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  {
-                                    return Center(
-                                      child: CircularProgressIndicator(
-                                        color: maincolor,
-                                      ),
-                                    );
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Builder(builder: (context) {
+                        return lessonData.isEmpty
+                            ? FutureBuilder<Lesson>(
+                                future: ApiProvider()
+                                    .retrieveLessons(widget.courseData.slug),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    {
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          color: maincolor,
+                                        ),
+                                      );
+                                    }
                                   }
-                                }
-                                if (!snapshot.hasData) {
-                                  return const Center(
-                                      child: Text(
-                                    "There is no Course",
-                                    style: TextStyle(
-                                        color:
-                                            Color.fromARGB(184, 138, 138, 138)),
-                                  ));
-                                }
-                                if (snapshot.hasError) {
-                                  return const Center(
-                                      child: Text(
-                                    "Unable to get the data",
-                                    style: TextStyle(
-                                        color:
-                                            Color.fromARGB(184, 138, 138, 138)),
-                                  ));
-                                }
-                                if (snapshot.hasData) {
-                                  for (var i = 0;
-                                      i < snapshot.data!.lessons.length;
-                                      i++) {
-                                    final lessonData =
-                                        snapshot.data!.lessons[i];
-                                    CourseDatabase.instance
-                                        .createLessons(lessonData!);
+                                  if (!snapshot.hasData) {
+                                    return const Center(
+                                        child: Text(
+                                      "There is no Course",
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              184, 138, 138, 138)),
+                                    ));
                                   }
+                                  if (snapshot.hasError) {
+                                    return const Center(
+                                        child: Text(
+                                      "Unable to get the data",
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              184, 138, 138, 138)),
+                                    ));
+                                  }
+                                  if (snapshot.hasData) {
+                                    for (var i = 0;
+                                        i < snapshot.data!.lessons.length;
+                                        i++) {
+                                      final lessonData =
+                                          snapshot.data!.lessons[i];
+                                      CourseDatabase.instance
+                                          .createLessons(lessonData!);
+                                    }
 
                                   WidgetsBinding.instance
                                       .addPostFrameCallback((_) {
