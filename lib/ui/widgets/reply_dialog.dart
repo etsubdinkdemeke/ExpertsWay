@@ -5,10 +5,8 @@ import 'package:provider/provider.dart';
 
 TextEditingController replyController = TextEditingController();
 
-Widget replyDialog({required int commentIndex}) {
-  return Consumer<Com>(
-      builder: (context, data, child) {
-      return Dialog(
+Widget replyDialog({required int commentIndex, required Com data, required BuildContext context}) {
+  return Dialog(
         child: SizedBox(
           height: 200,
           child: Padding(
@@ -43,6 +41,4 @@ Widget replyDialog({required int commentIndex}) {
           ),
         ),
       );
-    }
-  );
 }

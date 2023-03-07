@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:learncoding/models/comments_data.dart';
 import 'package:learncoding/ui/widgets/reply_dialog.dart';
 
-Widget commentBox({required Comment comm, required BuildContext context, required commentIndex}) {
+Widget commentBox({required Comment comm, required BuildContext context, required commentIndex, required Com data}) {
   return Container(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +44,7 @@ Widget commentBox({required Comment comm, required BuildContext context, require
                   GestureDetector(
                       onTap: (){
                         showCupertinoDialog(context: context, builder: (BuildContext context) {
-                          return replyDialog(commentIndex: commentIndex);
+                          return replyDialog(commentIndex: commentIndex, data: data, context: context);
                         });
                       },
                       child: Text("Reply")),
