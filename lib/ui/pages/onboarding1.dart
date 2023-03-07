@@ -15,11 +15,11 @@ class Onboarding extends StatefulWidget {
 class _OnboardingState extends State<Onboarding> {
   final PageController controller = PageController(initialPage: 0);
 
-  int counter = 0;    // a counter to track which "page" we're at
-  List<Widget> pictures = [];   // list of the 3 pictures on the 3 "pages"
-  List<Widget> messages = [];   // list of the 3 messages on the 3 "pages"
-  List<Widget> buttons = [];    // list of the TWO buttons on the 3 "pages"
-  late Widget displayedPicture;   // the image currently displayed
+  int counter = 0; // a counter to track which "page" we're at
+  List<Widget> pictures = []; // list of the 3 pictures on the 3 "pages"
+  List<Widget> messages = []; // list of the 3 messages on the 3 "pages"
+  List<Widget> buttons = []; // list of the TWO buttons on the 3 "pages"
+  late Widget displayedPicture; // the image currently displayed
   late Widget displayedMessage;
   late Widget displayedButton;
 
@@ -119,14 +119,14 @@ class _OnboardingState extends State<Onboarding> {
   Widget buildButton(String label, VoidCallback onTap) {
     return SizedBox(
       key: UniqueKey(),
-      width: 200,
+      width: 240,
       height: 50,
       child: GestureDetector(
         onTap: onTap,
         child: Container(
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [Color(0xFF0396FF), Color.fromARGB(255, 133, 204, 255)],
+              colors: [Color(0xFF0396FF), Color.fromARGB(255, 110, 195, 255)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -165,8 +165,9 @@ class _OnboardingState extends State<Onboarding> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: CircleAvatar(
-              radius: 4,
-              backgroundColor: index == currentPageNumber ? Colors.blue : Colors.blue[100],
+              radius: 5,
+              backgroundColor:
+                  index == currentPageNumber ? Colors.blue : Colors.blue[100],
             ),
           )
       ],
@@ -200,7 +201,7 @@ class _OnboardingState extends State<Onboarding> {
     return CupertinoPageScaffold(
       child: Column(
         children: <Widget>[
-          const Spacer(),
+          const Spacer(flex: 3),
           AnimatedSwitcher(
             duration: const Duration(seconds: 1),
             child: displayedPicture,
@@ -215,12 +216,16 @@ class _OnboardingState extends State<Onboarding> {
             duration: const Duration(seconds: 1),
             child: buildPageControlDots(counter),
           ),
-          const Spacer(),
+          const Spacer(
+            flex: 2,
+          ),
           AnimatedSwitcher(
             duration: const Duration(seconds: 1),
             child: displayedButton,
           ),
-          const Spacer(),
+          const Spacer(
+            flex: 2,
+          ),
         ],
       ),
     );
