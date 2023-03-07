@@ -15,27 +15,28 @@ class Onboarding extends StatefulWidget {
 class _OnboardingState extends State<Onboarding> {
   final PageController controller = PageController(initialPage: 0);
 
-  int counter = 0;
-  List<Widget> pictures = [];
-  List<Widget> messages = [];
-  List<Widget> buttons = [];
-  late Widget displayedPicture;
+  int counter = 0;    // a counter to track which "page" we're at
+  List<Widget> pictures = [];   // list of the 3 pictures on the 3 "pages"
+  List<Widget> messages = [];   // list of the 3 messages on the 3 "pages"
+  List<Widget> buttons = [];    // list of the TWO buttons on the 3 "pages"
+  late Widget displayedPicture;   // the image currently displayed
   late Widget displayedMessage;
   late Widget displayedButton;
 
   @override
   void initState() {
     super.initState();
-    // signin();
   }
 
   void createWidgets() {
+    // this method populates the lists of widgets we use on the 3 pages
+    // populating the pictures list
     pictures.addAll([
       buildSvgPicture('assets/images/freelancer.svg'),
       buildSvgPicture('assets/images/recess.svg'),
       buildSvgPicture('assets/images/knowledge.svg'),
     ]);
-
+    // populating the buttons list
     Widget button;
     button = buildButton("Next", () {
       counter++;
@@ -58,7 +59,8 @@ class _OnboardingState extends State<Onboarding> {
     buttons.add(
       buildButton("Get started", signin),
     );
-
+    // populating the messages list
+    // TODO: replace the following dummy messeges with real ones
     messages.addAll([
       buildMessage(
         "Learn anytime, and anywhere",
@@ -75,7 +77,7 @@ class _OnboardingState extends State<Onboarding> {
           "Lorem ipsum dolor sit amet consectetur"
               " adipiscing elit Ut et massa mi. Aliquam in hendrerit.")
     ]);
-
+    // at the start, we show the first elements from each list
     displayedPicture = pictures[counter];
     displayedMessage = messages[counter];
     displayedButton = buttons[counter];
@@ -114,7 +116,7 @@ class _OnboardingState extends State<Onboarding> {
     );
   }
 
-  SizedBox buildButton(String label, VoidCallback onTap) {
+  Widget buildButton(String label, VoidCallback onTap) {
     return SizedBox(
       key: UniqueKey(),
       width: 200,
@@ -192,6 +194,8 @@ class _OnboardingState extends State<Onboarding> {
 
   @override
   Widget build(BuildContext context) {
+    // we will maintain the same layout-forming column but switch the
+    // contained widgets in order to show the 3 different "pages"
     createWidgets();
     return CupertinoPageScaffold(
       child: Column(
