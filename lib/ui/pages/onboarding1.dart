@@ -203,24 +203,24 @@ class _OnboardingState extends State<Onboarding> {
         children: <Widget>[
           const Spacer(flex: 3),
           AnimatedSwitcher(
-            duration: const Duration(seconds: 1),
+            duration: const Duration(milliseconds: 500),
             child: displayedPicture,
           ),
           const Spacer(),
           AnimatedSwitcher(
-            duration: const Duration(seconds: 1),
+            duration: const Duration(milliseconds: 500),
             child: displayedMessage,
           ),
           const Spacer(),
           AnimatedSwitcher(
-            duration: const Duration(seconds: 1),
+            duration: const Duration(milliseconds: 500),
             child: buildPageControlDots(counter),
           ),
           const Spacer(
             flex: 2,
           ),
           AnimatedSwitcher(
-            duration: const Duration(seconds: 1),
+            duration: const Duration(milliseconds: 500),
             child: displayedButton,
           ),
           const Spacer(
