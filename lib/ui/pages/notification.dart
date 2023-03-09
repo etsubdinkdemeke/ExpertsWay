@@ -39,50 +39,54 @@ class _NotificationState extends State<Notification> {
 
   void loadData() {
     List<dynamic>? listString = sharedPreferences.getStringList('list');
+    additems(); //fortesting
     if (listString != null) {
-      list =
-          listString.map((item) => NotificationElement.fromJson(item)).toList();
+      list = listString.map((item) => notificationFromJson(item)).toList();
       getNotifs();
     }
   }
 
   onNotifDismissed(NotificationElement item) {
     list.remove(item);
-    List<String> stringList = list.map((item) => json.encode(item)).toList();
+    List<String> stringList =
+        list.map((item) => notificationToJson(item)).toList();
     sharedPreferences.setStringList('list', stringList);
     getNotifs();
   }
 
-  List<NotificationElement> today = [], thiss = [], older = [];
+  List<NotificationElement> today = [], thisWeek = [], older = [];
 
   getNotifs() {
     today = [];
-    thiss = [];
+    thisWeek = [];
     older = [];
+    var now = new DateTime.now();
+    var now_1d = now.subtract(Duration(days: 1));
+    var now_1w = now.subtract(Duration(days: 7));
     for (final e in list) {
       if (allNotifs) {
-        if (e.completeDate == "Today") {
+        if (now_1d.isBefore(e.completeDate)) {
           today.add(e);
-        } else if (e.completeDate == "Last Week") {
-          thiss.add(e);
-        } else if (e.completeDate == "Older") {
+        } else if (now_1w.isBefore(e.completeDate)) {
+          thisWeek.add(e);
+        } else {
           older.add(e);
         }
       } else {
         if (readNotifs) {
-          if (e.completeDate == "Today" && e.isComplete == true) {
+          if (now_1d.isBefore(e.completeDate) && e.isComplete == true) {
             today.add(e);
-          } else if (e.completeDate == "Last Week" && e.isComplete == true) {
-            thiss.add(e);
-          } else if (e.completeDate == "Older" && e.isComplete == true) {
+          } else if (now_1w.isBefore(e.completeDate) && e.isComplete == true) {
+            thisWeek.add(e);
+          } else if (e.isComplete == true) {
             older.add(e);
           }
         } else {
-          if (e.completeDate == "Today" && e.isComplete == false) {
+          if (now_1d.isBefore(e.completeDate) && e.isComplete == false) {
             today.add(e);
-          } else if (e.completeDate == "Last Week" && e.isComplete == false) {
-            thiss.add(e);
-          } else if (e.completeDate == "Older" && e.isComplete == false) {
+          } else if (now_1w.isBefore(e.completeDate) && e.isComplete == false) {
+            thisWeek.add(e);
+          } else if (e.isComplete == false) {
             older.add(e);
           }
         }
@@ -141,10 +145,10 @@ class _NotificationState extends State<Notification> {
                           text: "You have ",
                           style: TextStyle(color: Colors.grey, fontSize: 15)),
                       readNotifs
-                          ? today.length + thiss.length + older.length > 1
+                          ? today.length + thisWeek.length + older.length > 0
                               ? TextSpan(
                                   text:
-                                      '${today.length + thiss.length + older.length} read ',
+                                      '${today.length + thisWeek.length + older.length} read ',
                                   style: const TextStyle(
                                       color: Color.fromARGB(255, 99, 187, 249),
                                       fontWeight: FontWeight.w500,
@@ -153,10 +157,10 @@ class _NotificationState extends State<Notification> {
                                   text: 'no read ',
                                   style: TextStyle(
                                       color: Colors.grey, fontSize: 15))
-                          : today.length + thiss.length + older.length > 1
+                          : today.length + thisWeek.length + older.length > 0
                               ? TextSpan(
                                   text:
-                                      '${today.length + thiss.length + older.length} new ',
+                                      '${today.length + thisWeek.length + older.length} new ',
                                   style: const TextStyle(
                                       color: Color.fromARGB(255, 99, 187, 249),
                                       fontWeight: FontWeight.w500,
@@ -169,7 +173,7 @@ class _NotificationState extends State<Notification> {
                           text: "notifications",
                           style: TextStyle(color: Colors.grey, fontSize: 15)),
                     ])),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.36),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.34),
                 PopupMenuButton<_MenuValues>(
                   initialValue: _MenuValues.All,
                   position: PopupMenuPosition.under,
@@ -216,34 +220,42 @@ class _NotificationState extends State<Notification> {
               ]),
             ),
             Expanded(
-                child: Column(
-              children: [
-                today.length > 0
-                    ? Column(
-                        children: [
-                          titleText("Today"),
-                          buildNotif(today.length, today),
-                        ],
-                      )
-                    : Container(),
-                thiss.length > 0
-                    ? Column(
-                        children: [
-                          titleText("Last "),
-                          buildNotif(thiss.length, thiss),
-                        ],
-                      )
-                    : Container(),
-                older.length > 0
-                    ? Column(
-                        children: [
-                          titleText("Older"),
-                          buildNotif(older.length, older),
-                        ],
-                      )
-                    : Container()
-              ],
-            )),
+              child: SingleChildScrollView(
+                  child: Column(
+                children: [
+                  today.length > 0
+                      ? Column(
+                          children: [
+                            titleText("Today"),
+                            buildNotif(today.length, today),
+                            SizedBox(
+                              height: 10,
+                            ),
+                          ],
+                        )
+                      : Container(),
+                  thisWeek.length > 0
+                      ? Column(
+                          children: [
+                            titleText("This week"),
+                            buildNotif(thisWeek.length, thisWeek),
+                            SizedBox(
+                              height: 10,
+                            ),
+                          ],
+                        )
+                      : Container(),
+                  older.length > 0
+                      ? Column(
+                          children: [
+                            titleText("Older"),
+                            buildNotif(older.length, older),
+                          ],
+                        )
+                      : Container()
+                ],
+              )),
+            ),
           ],
         ));
   }
@@ -272,7 +284,7 @@ class _NotificationState extends State<Notification> {
 
   Widget titleText(String title) {
     return Container(
-      margin: const EdgeInsets.only(left: 20, bottom: 10),
+      margin: const EdgeInsets.only(left: 20, bottom: 20),
       alignment: Alignment.topLeft,
       child: Text(
         title,
@@ -351,28 +363,53 @@ class _NotificationState extends State<Notification> {
 
   void addItem(NotificationElement item) {
     list.insert(0, item);
-    List<String> stringList = list.map((item) => json.encode(item)).toList();
+    List<String> stringList =
+        list.map((item) => notificationToJson(item)).toList();
     sharedPreferences.setStringList('list', stringList);
+    getNotifs();
   }
 
 //testing
-  // additems() {
-  // addItem(NotificationElement());
-  // addItem(notification(
-  //     date: "Today", message: notifMessages[1].message, read: false));
-  // addItem(notification(
-  //     date: "Today", message: notifMessages[2].message, read: true));
-  // addItem(notification(date: "Older", message: "older", read: false));
-  // addItem(notification(date: "Older", message: "older", read: true));
+  additems() {
+    addItem(NotificationElement(
+        completeDate: DateTime.parse("2023-03-09 18:45:45.201920"),
+        imgUrl: 'dkski',
+        isComplete: false,
+        courseId: '33',
+        userProgress: notifMessages[0].message));
+    addItem(NotificationElement(
+        completeDate: DateTime.parse("2023-03-09 18:45:45.201920"),
+        imgUrl: 'dkski',
+        isComplete: false,
+        courseId: '33',
+        userProgress: notifMessages[1].message));
+    addItem(NotificationElement(
+        completeDate: DateTime.parse("2023-03-09 18:45:45.201920"),
+        imgUrl: 'dkski',
+        isComplete: false,
+        courseId: '33',
+        userProgress: notifMessages[2].message));
+    addItem(NotificationElement(
+        completeDate: DateTime.parse("2023-03-07 18:45:45.201920"),
+        imgUrl: 'dkski',
+        isComplete: false,
+        courseId: '33',
+        userProgress: notifMessages[0].message));
+    addItem(NotificationElement(
+        completeDate: DateTime.parse("2023-03-01 18:45:45.201920"),
+        imgUrl: 'dkski',
+        isComplete: true,
+        courseId: '33',
+        userProgress: notifMessages[1].message));
 
-  //printlength
-  // print(list.length);
+    // printlengthfortesting
+    // print(list.length);
 
-  //deleteitems
-  // for (var e in list) {
-  //   // if (e.date == date && e.message == message) {
-  //   list.remove(e);
-  //   // }
-  // }
+    //deleteitemsfortesting
+    // for (var e in list) {
+    //   // if (e.date == date && e.message == message) {
+    //   list.remove(e);
+    //   // }
+  }
   // }
 }

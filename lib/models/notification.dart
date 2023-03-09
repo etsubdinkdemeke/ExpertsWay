@@ -1,5 +1,7 @@
+import 'dart:convert';
+
 class NotificationFields {
-  static List<String> value = [
+  static List<dynamic> value = [
     id,
     courseId,
     userProgress,
@@ -14,6 +16,12 @@ class NotificationFields {
   static final String isComplete = 'isComplete';
   static final String completeDate = 'completeDate';
 }
+
+NotificationElement notificationFromJson(dynamic str) =>
+    NotificationElement.fromJson(str);
+
+String notificationToJson(NotificationElement data) =>
+    json.encode(data.tojson());
 
 class NotificationElement {
   final int? id;
@@ -48,7 +56,7 @@ class NotificationElement {
         completeDate: completeDate ?? this.completeDate,
       );
 
-  static NotificationElement fromJson(Map<String, dynamic> json) =>
+  factory NotificationElement.fromJson(Map<String, dynamic> json) =>
       NotificationElement(
         id: json[NotificationFields.id] as int,
         courseId: json[NotificationFields.courseId] as String,
@@ -60,11 +68,11 @@ class NotificationElement {
       );
 
   Map<String, dynamic?> tojson() => {
-        NotificationFields.id: id,
-        NotificationFields.courseId: courseId,
-        NotificationFields.userProgress: userProgress,
-        NotificationFields.imgUrl: imgUrl,
-        NotificationFields.isComplete: isComplete ? 1 : 0,
-        NotificationFields.completeDate: completeDate.toIso8601String(),
+        "id": id,
+        "courseId": courseId,
+        "userProgress": userProgress,
+        "imgUrl": imgUrl,
+        "isComplete": isComplete ? 1 : 0,
+        "completeDate": completeDate.toIso8601String(),
       };
 }

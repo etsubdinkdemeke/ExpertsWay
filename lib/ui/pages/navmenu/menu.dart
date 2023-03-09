@@ -7,6 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../help.dart';
 import '../profile.dart';
 import '../setting.dart';
+import '../notification.dart'as n;
+
 String? name;
 String? image;
 
@@ -17,23 +19,21 @@ class Menu extends StatefulWidget {
   final Function onMenuItemClicked;
   final onMenuTap;
 
-  const Menu(
-      {Key? key,
-      required this.onMenuTap,
-      this.slideAnimation,
-      this.menuAnimation,
-      this.selectedIndex,
-      required this.onMenuItemClicked,
-      })
-      : super(key: key);
+  const Menu({
+    Key? key,
+    required this.onMenuTap,
+    this.slideAnimation,
+    this.menuAnimation,
+    this.selectedIndex,
+    required this.onMenuItemClicked,
+  }) : super(key: key);
 
   @override
   State<Menu> createState() => _MenuState();
 }
 
 class _MenuState extends State<Menu> {
-   
-   void initState() {
+  void initState() {
     super.initState();
     getValue();
   }
@@ -98,50 +98,50 @@ class _MenuState extends State<Menu> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     GestureDetector(
-                    onTap: () {
-                    // Navigate to the Help page when the user taps the widget
-                    Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Profile()),
-                    );
-                    },
-                    child: Row(
-                      children: <Widget>[
-                        CircleAvatar(
-                          radius: 30,
-                           backgroundImage: NetworkImage(image!),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                name!,
-                                maxLines: 1,
-                                overflow: TextOverflow.fade,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 24,
-                                ),
-                              ),
-                              Text(
-                                "Student",
-                                maxLines: 1,
-                                overflow: TextOverflow.fade,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
+                      onTap: () {
+                        // Navigate to the Help page when the user taps the widget
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Profile()),
+                        );
+                      },
+                      child: Row(
+                        children: <Widget>[
+                          CircleAvatar(
+                            radius: 30,
+                            backgroundImage: NetworkImage(image!),
                           ),
-                        )
-                      ],
-                    ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  name!,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.fade,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 24,
+                                  ),
+                                ),
+                                Text(
+                                  "Student",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.fade,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                     Spacer(
                       flex: 3,
@@ -264,43 +264,44 @@ class _MenuState extends State<Menu> {
                       ),
                     ),
                     Spacer(flex: 2),
-                        GestureDetector(
-                        onTap: () {
+                    GestureDetector(
+                      onTap: () {
                         // Navigate to the Help page when the user taps the widget
                         Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Settings()),
+                          context,
+                          MaterialPageRoute(builder: (context) => Settings()),
                         );
-                        },
-                        child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(right: 20.0),
-                          child: Icon(
-                            BoxIcons.bx_cog,
-                            color: Colors.white,
+                      },
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(right: 20.0),
+                            child: Icon(
+                              BoxIcons.bx_cog,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                        Text(
-                          "Settings",
-                          maxLines: 1,
-                          overflow: TextOverflow.fade,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 20,
+                          Text(
+                            "Settings",
+                            maxLines: 1,
+                            overflow: TextOverflow.fade,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 20,
+                            ),
                           ),
-                        ),
-                      ],
-                        ),
-                        ),
+                        ],
+                      ),
+                    ),
                     Spacer(flex: 2),
                     GestureDetector(
                       onTap: () {
                         // Navigate to the Help page when the user taps the widget
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Help()),
+                          MaterialPageRoute(
+                              builder: (context) => n.Notification()),
                         );
                       },
                       child: Row(
