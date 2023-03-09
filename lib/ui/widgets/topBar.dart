@@ -85,7 +85,6 @@ Future refreshCourse() async {
                     style: TextStyle(
                         color: Color(0xFF343434),
                         fontSize: 24,
-                        fontFamily: 'Red Hat Display',
                         fontWeight: material.FontWeight.w600),
                   ),
                 ),
@@ -118,7 +117,7 @@ Future refreshCourse() async {
               style: TextStyle(
                   color: Color(0xFF343434),
                   fontSize: 18,
-                  fontFamily: 'Red Hat Display'),
+                  ),
               enableInteractiveSelection: true,
               controller: widget.controller,
               expands: false,
@@ -139,7 +138,7 @@ Future refreshCourse() async {
               placeholderStyle: TextStyle(
                   color: Color(0xFFADADAD),
                   fontSize: 18,
-                  fontFamily: 'Red Hat Display'),
+                  ),
             ),
           ),
           widget.expanded

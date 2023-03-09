@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:learncoding/models/course.dart';
 import 'package:learncoding/models/lesson.dart' as lesson;
 import 'package:learncoding/ui/pages/lesson.dart';
@@ -8,7 +11,7 @@ import 'package:learncoding/ui/widgets/card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:learncoding/theme/config.dart' as config;
 import 'package:flutter/material.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../../db/course_database.dart';
 import '../../models/lesson.dart';
@@ -16,7 +19,8 @@ import '../../utils/color.dart';
 
 class CourseDetailPage extends StatefulWidget {
   final CourseElement courseData;
-  const CourseDetailPage({
+
+  CourseDetailPage({
     Key? key,
     required this.courseData,
   }) : super(key: key);
@@ -30,54 +34,27 @@ class _CoursePagePageState extends State<CourseDetailPage> {
   late List<LessonContent> lessoncontent = [];
   bool isLoading = false;
 
-  late YoutubePlayerController _controller;
-  late PlayerState _playerState;
-  late YoutubeMetaData _videoMetaData;
-  bool _muted = false;
-  bool _isPlayerReady = false;
-
   @override
   void initState() {
     super.initState();
-    String url = widget.courseData.shortVideo;
-    _controller = YoutubePlayerController(
-      initialVideoId: YoutubePlayer.convertUrlToId(url)!,
-      flags: const YoutubePlayerFlags(
-        controlsVisibleAtStart: true,
-        autoPlay: false,
-      ),
-    )..addListener(listener);
     refreshLesson();
   }
 
   Future refreshLesson() async {
     setState(() => isLoading = true);
-
     lessonData =
         await CourseDatabase.instance.readLesson(widget.courseData.slug);
-
     print("....lesson length ...." + lessonData.length.toString());
     setState(() => isLoading = false);
   }
 
-  void listener() {
-    if (_isPlayerReady && mounted && !_controller.value.isFullScreen) {
-      setState(() {
-        _playerState = _controller.value.playerState;
-        _videoMetaData = _controller.metadata;
-      });
-    }
-  }
-
   @override
   void deactivate() {
-    _controller.pause();
     super.deactivate();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 
@@ -100,51 +77,75 @@ class _CoursePagePageState extends State<CourseDetailPage> {
     return seen;
   }
 
-  Widget buildVideoPlayer() {
-    return SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.4,
-        child: YoutubePlayerBuilder(
-          player: YoutubePlayer(
-            controlsTimeOut: const Duration(seconds: 3),
+  Widget buildCoverImage() {
+    // this mehtod builds the cover image and the texts
+    // on it (displayed at the top of the course-detail screen)
+    return Stack(
+      // we use this stack to display the course name and chapters on top of the cover image.
+      children: <Widget>[
+        SizedBox(
+          width: MediaQuery.of(context).size.width,
+          // height: MediaQuery.of(context).size.height * 0.4,
+          child: Image.asset(
+            "assets/images/js_cover.png",
+            fit: BoxFit.cover,
+          ), // TODO: replace this url with real course specific data
+        ),
+        Positioned(
+          bottom: 5,
+          child: SizedBox(
             width: MediaQuery.of(context).size.width,
-            controller: _controller,
-            showVideoProgressIndicator: true,
-            progressIndicatorColor: Colors.blueAccent,
-            bottomActions: [
-              IconButton(
-                icon: Icon(_muted ? Icons.volume_off : Icons.volume_up),
-                color: _muted ? Colors.grey : Colors.blue,
-                onPressed: _isPlayerReady
-                    ? () {
-                        _muted ? _controller.unMute() : _controller.mute();
-                        setState(() {
-                          _muted = !_muted;
-                        });
-                      }
-                    : null,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    widget.courseData.name,
+                    // TODO: consider color contrast issues here.
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15,
+                    ),
+                  ),
+                  Text(
+                    // we're considering the lessons to be the "chapters"
+                    "${lessonData.length} Chapters",
+                    // TODO: consider color contrast issues here.
+                    style: const TextStyle(color: Colors.white, fontSize: 14),
+                  )
+                ],
               ),
-              FullScreenButton(
-                controller: _controller,
-                color: Colors.blueAccent,
-              ),
-            ],
-            onReady: () {
-              _isPlayerReady = true;
-              _controller.addListener(listener);
-            },
-            onEnded: (data) {},
+            ),
           ),
-          builder: (BuildContext, player) {
-            return Scaffold(
-                body: Container(
-              child: player,
-            ));
-          },
-        ));
+        ),
+        SafeArea(
+          child: Container(
+            height: 40,
+            width: 40,
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: Material(
+                shape: const CircleBorder(),
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_new),
+                  iconSize: 14,
+                  constraints:
+                      const BoxConstraints(maxHeight: 60, maxWidth: 60),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget buildlesson() {
+    // Currently, this method is not used. But I didn't want to remove it 'cause
+    // there's a lot of effort put in making this. I chose to keep it just in case ...
     return FutureBuilder<lesson.Lesson>(
         future: ApiProvider().retrieveLessons(widget.courseData.slug),
         builder: (context, snapshot) {
@@ -158,10 +159,7 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: const Text(
                     "Lessons",
-                    style: TextStyle(
-                        color: Color(0xFF343434),
-                        fontFamily: 'Red Hat Display',
-                        fontSize: 24),
+                    style: TextStyle(color: Color(0xFF343434), fontSize: 24),
                   ),
                 ),
                 Container(
@@ -202,6 +200,8 @@ class _CoursePagePageState extends State<CourseDetailPage> {
   }
 
   List lessonListId(lessonData, section) {
+    // Currently, this method is not used. But I didn't want to remove it 'cause
+    // there's a lot of effort put in making this. I chose to keep it just in case ...
     var Id = [];
     for (var lesson in lessonData) {
       if (lesson.section == section) {
@@ -212,6 +212,8 @@ class _CoursePagePageState extends State<CourseDetailPage> {
   }
 
   Widget buildLessonList(lessonData, section) {
+    // Currently, this method is not used. But I didn't want to remove it 'cause
+    // there's a lot of effort put in making this. I chose to keep it just in case ...
     return Material(
       color: config.Colors().secondColor(1),
       child: Theme(
@@ -229,7 +231,6 @@ class _CoursePagePageState extends State<CourseDetailPage> {
             child: Text(
               section,
               style: const TextStyle(
-                fontFamily: 'Red Hat Display',
                 fontSize: 18.0,
                 fontWeight: FontWeight.w500,
                 color: Color.fromARGB(255, 121, 121, 123),
@@ -271,7 +272,6 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                                 lessonTitle[index],
                                 style: TextStyle(
                                   color: index == 2 ? Colors.blue : Colors.grey,
-                                  fontFamily: 'Red Hat Display',
                                   fontSize: 17.0,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -279,7 +279,8 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                               onTap: () async {
                                 List lessonIds =
                                     lessonListId(lessonData, section);
-                                String lessonIndex =  (lessonIds[index]).toString() as String;
+                                String lessonIndex =
+                                    (lessonIds[index]).toString() as String;
 
                                 lessoncontent = await CourseDatabase.instance
                                     .readLessonContets(lessonIds[index]);
@@ -325,6 +326,8 @@ class _CoursePagePageState extends State<CourseDetailPage> {
   }
 
   Widget buildLessonCard() {
+    // Currently, this method is not used. But I didn't want to remove it 'cause
+    // there's a lot of effort put in making this. I chose to keep it just in case ...
     List sections = sectionList(lessonData);
 
     return ListView.builder(
@@ -349,118 +352,193 @@ class _CoursePagePageState extends State<CourseDetailPage> {
         });
   }
 
+  Widget buildUniformLessonList() {
+    return Material(
+      color: config.Colors().secondColor(1),
+      child: Column(
+        children: <Widget>[
+          for (var index = 0; index < lessonData.length; index++)
+            Column(
+              children: [
+                GestureDetector(
+                  child: ListTile(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                    title: Text(
+                      lessonData[index].title,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    // TODO: change the dummy subtitle with a real one (once we can get the lesson contents along with the lessons from the database)
+                    subtitle: const Text(
+                      "This is dummy content. It should be replaced with real content by the time we can get the contents along with the lessons.",
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    trailing: index !=
+                            lessonData.length - 1 // we're making only the very
+                        // last lesson locked. (b/c, for now, we want to display what a locked
+                        // lesson looks like. we'll change this when we have data about the
+                        // progress of the user. the user progress will determine which lessons
+                        // are open and which are locked.)
+                        ? Builder(builder: (_) {
+                            // we're generating a lot of random booleans here for demonstration purposes
+                            // all these boolean flags should be received from the database or API in the future.
+                            // TODO: change the following code to make it work with real data
+                            var isLessonCompleted = Random().nextBool();
+                            if (isLessonCompleted) {
+                              var testResult = Random().nextInt(101);
+                              return CircleAvatar(
+                                radius: 20,
+                                foregroundColor: Colors.white,
+                                backgroundColor: testResult > 60
+                                    ? Colors.green[300]
+                                    : (testResult > 30
+                                        ? Colors.yellow[400]
+                                        : Colors.red[300]),
+                                child: Text(testResult.toString()),
+                              );
+                            } else {
+                              var progress = Random()
+                                  .nextDouble(); // how much the user has progressed with the lesson
+                              // the widget below is from a 3rd party package named 'percent indicator'. check it out on 'pub.dev'
+                              return CircularPercentIndicator(
+                                radius: 20,
+                                lineWidth: 3,
+                                percent: progress,
+                                progressColor: Colors.blue,
+                              );
+                            }
+                          })
+                        : CircleAvatar(
+                            radius: 16,
+                            backgroundColor: Colors.blue[50],
+                            child: const Icon(
+                              Icons.lock_outline,
+                              color: Colors.blue,
+                              size: 18,
+                            ),
+                          ),
+                  ),
+                  onTap: () async {
+                    var lessonContents = await CourseDatabase.instance
+                        .readLessonContets(lessonData[index].lessonId);
+                    if (lessonContents.isNotEmpty &&
+                        index != lessonData.length - 1) {
+                      // again, we're making the very last lesson locked.
+                      // ignore: use_build_context_synchronously
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => LessonPage(
+                            lessonData: lessonData,
+                            lesson: lessonData[index]
+                                .title, // please don't be mad with the namings ... X(
+                            contents: lessonContents,
+                            courseId: widget.courseData.course_id.toString(),
+                            lessonId:
+                                lessonData[index].lessonId.toString() as String,
+                            section: lessonData[index].section,
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                ),
+                Divider(
+                  color: Colors.grey[400],
+                )
+              ],
+            )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       backgroundColor: config.Colors().secondColor(1),
-      navigationBar: CupertinoNavigationBar(
-        previousPageTitle: "Back",
-        backgroundColor: Colors.white,
-        trailing: CupertinoButton(
-          padding: const EdgeInsets.all(0),
-          child: const Icon(BoxIcons.bx_share_alt),
-          onPressed: () {},
-        ),
-      ),
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
           SizedBox(
               height: MediaQuery.of(context).size.height + 60,
               child: SingleChildScrollView(
-                child: Stack(
-                  alignment: Alignment.center,
+                child: Column(
                   children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        buildVideoPlayer(),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(24, 10, 8, 8.0),
-                                child: Row(
-                                  children: <Widget>[
-                                    Container(
-                                      width: 4,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(500),
-                                          color: const Color(0xFF343434)),
-                                      child: const Text(""),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Center(
-                                        child: Text(
-                                          widget.courseData.name,
-                                          style: const TextStyle(
-                                              color: Color(0xFF343434),
-                                              fontFamily: 'Red Hat Display',
-                                              fontSize: 24),
-                                        ),
-                                      ),
-                                    )
-                                  ],
+                    buildCoverImage(),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Row(
+                              children: <Widget>[
+                                const Text(
+                                  "Description",
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 138, 138, 138),
+                                      fontSize: 14),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
-                                child: Row(
-                                  children: const <Widget>[
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 8.0),
-                                      child: Icon(BoxIcons.bx_bar_chart_alt_2,
-                                          size: 20, color: Color(0xFFADADAD)),
-                                    ),
-                                    Text(
-                                      "Beginner",
-                                      style: TextStyle(
-                                          color: Color(0xFFADADAD),
-                                          fontFamily: 'Red Hat Display',
-                                          fontSize: 14),
-                                    ),
-                                    Spacer(),
-                                    Text(
-                                      "12 mins",
-                                      style: TextStyle(
-                                          color: Color(0xFFADADAD),
-                                          fontFamily: 'Red Hat Display',
-                                          fontSize: 14),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 8.0),
-                                      child: Icon(BoxIcons.bx_timer,
-                                          size: 20, color: Color(0xFFADADAD)),
-                                    ),
-                                  ],
+                                const Spacer(),
+                                CupertinoButton(
+                                  padding: const EdgeInsets.all(4),
+                                  child: const Icon(
+                                    Icons.comment_outlined,
+                                    size: 20,
+                                  ),
+                                  onPressed:
+                                      () {}, // TODO: implement this method: showing comments for this course
                                 ),
-                              ),
-                              Container(
-                                  margin: const EdgeInsets.all(8),
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.9,
-                                  child: Text(
-                                    widget.courseData.description,
-                                    textAlign: TextAlign.justify,
-                                    style: const TextStyle(
-                                      color: Color(0xFF343434),
-                                      fontFamily: 'Red Hat Display',
-                                      fontSize: 16,
-                                    ),
-                                  ))
-                            ],
+                                CupertinoButton(
+                                  padding: const EdgeInsets.all(4),
+                                  child: const Icon(
+                                    Icons.bookmark_outline,
+                                    size: 20,
+                                  ),
+                                  onPressed:
+                                      () {}, // TODO: implement this method: bookmarking this course
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                        lessonData.isEmpty
+                          Container(
+                              margin: const EdgeInsets.all(8),
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              child: Text(
+                                widget.courseData.description,
+                                textAlign: TextAlign.justify,
+                                style: const TextStyle(
+                                  color: Color(0xFF343434),
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 8.0,
+                            ),
+                            child: Row(
+                              children: const <Widget>[
+                                Text(
+                                  "Select chapter",
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 138, 138, 138),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Builder(builder: (context) {
+                        return lessonData.isEmpty
                             ? FutureBuilder<Lesson>(
                                 future: ApiProvider()
                                     .retrieveLessons(widget.courseData.slug),
@@ -487,7 +565,7 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                                   if (snapshot.hasError) {
                                     return const Center(
                                         child: Text(
-                                      "Unabel to get the data",
+                                      "Unable to get the data",
                                       style: TextStyle(
                                           color: Color.fromARGB(
                                               184, 138, 138, 138)),
@@ -503,93 +581,21 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                                           .createLessons(lessonData!);
                                     }
 
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
-                                      refreshLesson();
-                                    });
-                                  }
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    refreshLesson();
+                                  });
+                                }
 
-                                  return Container();
-                                })
-                            : buildLessonCard(),
-                      ],
-                    ),
-                    Positioned(
-                        right: 30,
-                        top: MediaQuery.of(context).size.height * 0.365,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [
-                                  Color(0xFFABDCFF),
-                                  Color(0xFF0396FF),
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                    blurRadius: 25,
-                                    color: const Color(0xFF03A9F4)
-                                        .withOpacity(0.4),
-                                    offset: const Offset(0, 4))
-                              ],
-                              borderRadius: BorderRadius.circular(500)),
-                          child: FloatingActionButton(
-                              heroTag: "video",
-                              elevation: 0,
-                              highlightElevation: 0,
-                              backgroundColor: Colors.transparent,
-                              child: Icon(
-                                  _controller.value.isPlaying
-                                      ? BoxIcons.bx_pause
-                                      : BoxIcons.bx_play,
-                                  size: 40),
-                              onPressed: () {
-                                setState(() {
-                                  _controller.value.isPlaying
-                                      ? _controller.pause()
-                                      : _controller.play();
-                                });
-                              }),
-                        )),
-                  ],
-                ),
-              )),
-          Positioned(
-            bottom: 0,
-            left: 0,
-              
-            child: CardWidget(
-                button: true,
-                gradient: true,
-                height: 60,
-                width: MediaQuery.of(context).size.width,
-                child: InkWell(
-                  onTap: (){
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => quiz()));
-              },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const <Widget>[
-                      Text(
-                        "Attempt Test",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Red Hat Display',
-                            fontSize: 18),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(BoxIcons.bx_pencil, color: Colors.white),
-                      ),
-                    ],
+                                return Container();
+                              })
+                          : buildUniformLessonList();
+                    }),
                   ),
-                ),
+                ],
               ),
             ),
-          
+          ),
         ],
       ),
     );

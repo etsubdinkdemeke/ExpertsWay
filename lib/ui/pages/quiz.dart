@@ -51,6 +51,21 @@ class _quizState extends State<quiz> {
             margin: EdgeInsets.only(top: 80),
             child: Column(
               children: [
+              Container(
+          margin: EdgeInsets.symmetric(vertical: 20),
+          width: 230,
+          height: 15,
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            child: LinearProgressIndicator(
+              value: 0.7,
+              valueColor: AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 42, 135, 240)),
+              backgroundColor: Color(0xffD6D6D6),
+            ),
+          ),
+              ),
+        
+
                 Stack(
                   children: [
                     Positioned(

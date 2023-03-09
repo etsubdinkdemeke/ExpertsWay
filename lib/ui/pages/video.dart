@@ -76,7 +76,6 @@ class _VideoPageState extends State<VideoPage> {
                                     "Revision - Kinematics",
                                     style: TextStyle(
                                         color: Color(0xFF343434),
-                                        fontFamily: 'Red Hat Display',
                                         fontSize: 24),
                                   ),
                                 )
@@ -98,7 +97,6 @@ class _VideoPageState extends State<VideoPage> {
                                   "Beginner",
                                   style: TextStyle(
                                       color: Color(0xFFADADAD),
-                                      fontFamily: 'Red Hat Display',
                                       fontSize: 14),
                                 ),
                                 Spacer(),
@@ -106,7 +104,6 @@ class _VideoPageState extends State<VideoPage> {
                                   "12 mins",
                                   style: TextStyle(
                                       color: Color(0xFFADADAD),
-                                      fontFamily: 'Red Hat Display',
                                       fontSize: 14),
                                 ),
                                 Padding(
@@ -125,7 +122,6 @@ class _VideoPageState extends State<VideoPage> {
                               "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut odio id urna ornare rhoncus. Fusce egestas tellus vitae elit pellentesque, sit amet gravida metus consectetur. Sed in hendrerit elit. Phasellus ullamcorper vulputate ex quis consequat. Aenean fringilla vulputate egestas. Aenean nec mattis turpis. Aenean a faucibus purus, in pulvinar velit. Nulla efficitur erat commodo.",
                               style: TextStyle(
                                   color: Color(0xFF343434),
-                                  fontFamily: 'Red Hat Display',
                                   fontSize: 16),
                             ),
                           ),
@@ -156,7 +152,6 @@ class _VideoPageState extends State<VideoPage> {
                                     "comments",
                                     style: TextStyle(
                                       fontSize: 19,
-                                      fontFamily: 'Red Hat Display',
                                       fontWeight: FontWeight.w600,
                                       color: Color.fromARGB(255, 80, 80, 80),
                                     ),
@@ -168,7 +163,6 @@ class _VideoPageState extends State<VideoPage> {
                                     comment.length.toString(),
                                     style: TextStyle(
                                       fontSize: 19,
-                                      fontFamily: 'Red Hat Display',
                                       fontWeight: FontWeight.w600,
                                       color: Color.fromARGB(255, 80, 80, 80),
                                     ),
@@ -228,7 +222,6 @@ class _VideoPageState extends State<VideoPage> {
                     "Attempt Test",
                     style: TextStyle(
                         color: material.Colors.white,
-                        fontFamily: 'Red Hat Display',
                         fontSize: 18),
                   ),
                   Padding(

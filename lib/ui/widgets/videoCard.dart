@@ -45,7 +45,6 @@ class VideoCard extends material.StatelessWidget {
                 maxLines: 2,
                 style: material.TextStyle(
                     color: material.Color(0xFF535353),
-                    fontFamily: 'Red Hat Display',
                     fontSize: 16),
               ),
             ),
@@ -58,7 +57,6 @@ class VideoCard extends material.StatelessWidget {
                     "Beginner",
                     style: material.TextStyle(
                         color: material.Color(0xFFADADAD),
-                        fontFamily: 'Red Hat Display',
                         fontSize: 10),
                   ),
                   material.Spacer(),
@@ -66,7 +64,6 @@ class VideoCard extends material.StatelessWidget {
                     "12 mins",
                     style: material.TextStyle(
                         color: material.Color(0xFFADADAD),
-                        fontFamily: 'Red Hat Display',
                         fontSize: 10),
                   ),
                   material.Icon(BoxIcons.bx_timer, size: 16),
@@ -89,7 +86,6 @@ class VideoCard extends material.StatelessWidget {
                         "Watch Lecture",
                         style: material.TextStyle(
                             color: material.Colors.white,
-                            fontFamily: 'Red Hat Display',
                             fontSize: 18),
                       )
                     ],

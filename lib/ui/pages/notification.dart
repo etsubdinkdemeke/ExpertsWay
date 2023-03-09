@@ -20,7 +20,7 @@ class Notification extends StatefulWidget {
 enum _MenuValues { All, Unread, Read }
 
 class _NotificationState extends State<Notification> {
-  List<notification> list = [];
+  List<NotificationElement> list = [];
   late SharedPreferences sharedPreferences;
   late bool allNotifs;
   late bool readNotifs;
@@ -38,24 +38,22 @@ class _NotificationState extends State<Notification> {
   }
 
   void loadData() {
-    List<String>? listString = sharedPreferences.getStringList('list');
+    List<dynamic>? listString = sharedPreferences.getStringList('list');
     if (listString != null) {
-      list = listString
-          .map((item) => notification.fromMap(json.decode(item)))
-          .toList();
+      list =
+          listString.map((item) => NotificationElement.fromJson(item)).toList();
       getNotifs();
     }
   }
 
-  onNotifDismissed(notification item) {
+  onNotifDismissed(NotificationElement item) {
     list.remove(item);
-    List<String> stringList =
-        list.map((item) => json.encode(item.toMap())).toList();
+    List<String> stringList = list.map((item) => json.encode(item)).toList();
     sharedPreferences.setStringList('list', stringList);
     getNotifs();
   }
 
-  List<notification> today = [], thiss = [], older = [];
+  List<NotificationElement> today = [], thiss = [], older = [];
 
   getNotifs() {
     today = [];
@@ -63,28 +61,28 @@ class _NotificationState extends State<Notification> {
     older = [];
     for (final e in list) {
       if (allNotifs) {
-        if (e.date == "Today") {
+        if (e.completeDate == "Today") {
           today.add(e);
-        } else if (e.date == "This") {
+        } else if (e.completeDate == "Last Week") {
           thiss.add(e);
-        } else if (e.date == "Older") {
+        } else if (e.completeDate == "Older") {
           older.add(e);
         }
       } else {
         if (readNotifs) {
-          if (e.date == "Today" && e.read == true) {
+          if (e.completeDate == "Today" && e.isComplete == true) {
             today.add(e);
-          } else if (e.date == "This" && e.read == true) {
+          } else if (e.completeDate == "Last Week" && e.isComplete == true) {
             thiss.add(e);
-          } else if (e.date == "Older" && e.read == true) {
+          } else if (e.completeDate == "Older" && e.isComplete == true) {
             older.add(e);
           }
         } else {
-          if (e.date == "Today" && e.read == false) {
+          if (e.completeDate == "Today" && e.isComplete == false) {
             today.add(e);
-          } else if (e.date == "This" && e.read == false) {
+          } else if (e.completeDate == "Last Week" && e.isComplete == false) {
             thiss.add(e);
-          } else if (e.date == "Older" && e.read == false) {
+          } else if (e.completeDate == "Older" && e.isComplete == false) {
             older.add(e);
           }
         }
@@ -287,7 +285,7 @@ class _NotificationState extends State<Notification> {
     );
   }
 
-  Widget buildTile(notification item) {
+  Widget buildTile(NotificationElement item) {
     return Container(
         alignment: Alignment.topLeft,
         padding: const EdgeInsets.only(left: 20),
@@ -307,7 +305,7 @@ class _NotificationState extends State<Notification> {
               decoration: const BoxDecoration(color: Colors.white),
               child: Row(children: [
                 Container(
-                    child: item.read
+                    child: item.isComplete
                         ? const SizedBox(
                             width: 7,
                           )
@@ -332,7 +330,7 @@ class _NotificationState extends State<Notification> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Expanded(
-                          child: Text(item.message.toString(),
+                          child: Text(item.userProgress.toString(),
                               style: const TextStyle(
                                   color: Color.fromARGB(136, 31, 31, 31))),
                         ),
@@ -351,18 +349,15 @@ class _NotificationState extends State<Notification> {
         ));
   }
 
-  void addItem(notification item) {
+  void addItem(NotificationElement item) {
     list.insert(0, item);
-    List<String> stringList =
-        list.map((item) => json.encode(item.toMap())).toList();
+    List<String> stringList = list.map((item) => json.encode(item)).toList();
     sharedPreferences.setStringList('list', stringList);
   }
 
 //testing
   // additems() {
-  //additems
-  // addItem(notification(
-  //     date: "Today", message: notifMessages[0].message, read: false));
+  // addItem(NotificationElement());
   // addItem(notification(
   //     date: "Today", message: notifMessages[1].message, read: false));
   // addItem(notification(
