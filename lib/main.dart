@@ -76,11 +76,7 @@ class _MyAppState extends State<MyApp> {
             builder: (context) => UndefinedScreen(
                   name: settings.name,
                 )),
-        theme: const CupertinoThemeData(
-          textTheme: CupertinoTextThemeData(
-            textStyle: TextStyle(fontFamily: 'Poppins'),
-          ),
-        ),
+        // theme: Provider.of<ThemeModel>(context).currentTheme,
         debugShowCheckedModeBanner: false,
         // home: Settings(),
         // home: Profile(),
