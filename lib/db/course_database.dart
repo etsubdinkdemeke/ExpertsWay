@@ -9,12 +9,16 @@ import 'dart:convert';
 import '../models/course.dart';
 import '../models/lesson.dart';
 import 'package:get/get.dart';
+import '../models/notification.dart';
+
 
 final String courseElement = 'coursesElement';
 final String tablesections = 'sections';
 final String lessontable = 'lessons';
 final String lesson_contnent_table = 'lessonsContent';
 final String progress = 'progress';
+final String notification = 'notification';
+
 
 class CourseDatabase {
   static final CourseDatabase instance = CourseDatabase.init();
@@ -52,8 +56,8 @@ class CourseDatabase {
     final intTypeNull = 'INTEGER';
     print("...createing table.....");
     // CREATEING TABLES
-    // COURSE TABLE
-    
+
+// COURSE TABLE
     await db.execute('''
 CREATE TABLE $courseElement (
       ${CourseElementFields.course_id} $idType,
@@ -70,17 +74,6 @@ CREATE TABLE $courseElement (
        )
     ''');
 
-// SECTION TABLE
-//     await db.execute('''
-// CREATE TABLE $tablesections (
-//       ${SectionFields.sec_id} $idType,
-//       ${SectionFields.course_id} $textTypeNull,
-//       ${SectionFields.sections} $textTypeNull,
-//       ${SectionFields.level} $textTypeNull,
-
-//     )
-//     ''');
-
 // LESSON TABLE
     await db.execute('''
 CREATE TABLE $lessontable (
@@ -94,6 +87,8 @@ CREATE TABLE $lessontable (
       $fk_course
     )
     ''');
+
+// LESSON CONTENT TABLE
     await db.execute('''
 CREATE TABLE $lesson_contnent_table (
       ${LessonsContentFields.id} $idType,
@@ -103,6 +98,7 @@ CREATE TABLE $lesson_contnent_table (
     )
     ''');
 
+// PROGRESS TABLE
     await db.execute('''
 CREATE TABLE $progress (
       ${ProgressFields.progId} $idType,
@@ -113,19 +109,21 @@ CREATE TABLE $progress (
       ${ProgressFields.userProgress} $textTypeNull
     )
     ''');
-  }
 
-  // Future<Section> createSection(Section courseSec, String courseid) async {
-  //   final db = await instance.database;
-  //   final json = courseSec.toJson();
-  //   final columns =
-  //       '${SectionFields.sec_id},${SectionFields.course_id},${SectionFields.sections},${SectionFields.level}';
-  //   final values =
-  //       '${json[SectionFields.sec_id]},$courseid,${SectionFields.sections},${json[SectionFields.level]}';
-  //   final id = await db.rawInsert(
-  //       'INSERT INTO $tablesections ($columns) VALUES(?,?,?,?)', [values]);
-  //   return courseSec.copy(sec_id: id.toString());
-  // }
+// NOTIFICATION TABLE
+    await db.execute('''
+CREATE TABLE $notification (
+      ${NotificationFields.id} $idType,
+      ${NotificationFields.courseId} $textTypeNull,
+      ${NotificationFields.imgUrl} $textTypeNull,
+      ${NotificationFields.userProgress} $textTypeNull,
+      ${NotificationFields.isComplete} $boolType,
+      ${NotificationFields.completeDate} $textTypeNull
+    )
+    ''');
+
+
+  }
 
   Future<CourseElement> createCourses(CourseElement courseElem) async {
     final db = await instance.database;
@@ -215,7 +213,21 @@ CREATE TABLE $progress (
     return progressElement.copy(progId: id);
   }
 
-// READ SINGLE COURSE DATA'
+  Future<void> createNotification(
+      NotificationElement notificationElement) async {
+    final db = await instance.database;
+    try {
+      final id = await db.insert(notification, notificationElement.tojson());
+
+       notificationElement.copy(id: id);
+    } catch (e) {
+
+    }
+  }
+
+ 
+
+// READ COURSE DATA'
   Future<Course> readCourse(int id) async {
     final db = await instance.database;
 
@@ -291,21 +303,6 @@ CREATE TABLE $progress (
     final result = await db.query(courseElement, orderBy: orderby);
     return result.map((json) => CourseElement.fromJson(json)).toList();
   }
-// Future<List<Section>> readAllSection() async {
-//     final db = await instance.database;
-//     final result = await db.query(tablesections);
-//     return result.map((json) => Section.fromJson(json)).toList();
-//   }
-
-  // Future<List<LessonElement>> readAllLesson() async {
-  //   final db = await instance.database;
-
-  //   final result = await db.query(lessontable);
-  //   if (result.isNotEmpty) {
-  //     return result.map((json) => LessonElement.fromJson(json)).toList();
-  //   } else
-  //     return [];
-  // }
 
   Future<List<LessonContent>> readLessonContets(int lessonId) async {
     final db = await instance.database;
@@ -349,6 +346,18 @@ CREATE TABLE $progress (
     }
   }
 
+  Future<List<NotificationElement>> readNotification() async {
+    final db = await instance.database;
+
+    final result = await db.query(notification);
+
+    return result.map((json) => NotificationElement.fromJson(json)).toList();
+  }
+
+
+
+
+// UPDATE DATA'
   Future updateProgress(ProgressElement progressElement) async {
     final db = await instance.database;
     await db.update(
@@ -367,3 +376,44 @@ CREATE TABLE $progress (
     db.close();
   }
 }
+
+// SECTION TABLE
+//     await db.execute('''
+// CREATE TABLE $tablesections (
+//       ${SectionFields.sec_id} $idType,
+//       ${SectionFields.course_id} $textTypeNull,
+//       ${SectionFields.sections} $textTypeNull,
+//       ${SectionFields.level} $textTypeNull,
+
+//     )
+//     ''');
+
+// Future<Section> createSection(Section courseSec, String courseid) async {
+//   final db = await instance.database;
+//   final json = courseSec.toJson();
+//   final columns =
+//       '${SectionFields.sec_id},${SectionFields.course_id},${SectionFields.sections},${SectionFields.level}';
+//   final values =
+//       '${json[SectionFields.sec_id]},$courseid,${SectionFields.sections},${json[SectionFields.level]}';
+//   final id = await db.rawInsert(
+//       'INSERT INTO $tablesections ($columns) VALUES(?,?,?,?)', [values]);
+//   return courseSec.copy(sec_id: id.toString());
+// }
+
+/********* */
+
+// Future<List<Section>> readAllSection() async {
+//     final db = await instance.database;
+//     final result = await db.query(tablesections);
+//     return result.map((json) => Section.fromJson(json)).toList();
+//   }
+
+// Future<List<LessonElement>> readAllLesson() async {
+//   final db = await instance.database;
+
+//   final result = await db.query(lessontable);
+//   if (result.isNotEmpty) {
+//     return result.map((json) => LessonElement.fromJson(json)).toList();
+//   } else
+//     return [];
+// }
