@@ -5,7 +5,6 @@ import 'package:learncoding/ui/widgets/topBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../help.dart';
-import '../notification.dart' as n;
 import '../profile.dart';
 import '../setting.dart';
 
@@ -122,7 +121,6 @@ class _MenuState extends State<Menu> {
                                   maxLines: 1,
                                   overflow: TextOverflow.fade,
                                   style: TextStyle(
-                                    fontFamily: "Red Hat Display",
                                     color: Colors.white,
                                     fontWeight: FontWeight.w600,
                                     fontSize: 24,
@@ -133,7 +131,6 @@ class _MenuState extends State<Menu> {
                                   maxLines: 1,
                                   overflow: TextOverflow.fade,
                                   style: TextStyle(
-                                    fontFamily: "Red Hat Display",
                                     color: Colors.white,
                                     fontWeight: FontWeight.w400,
                                     fontSize: 14,
@@ -162,7 +159,6 @@ class _MenuState extends State<Menu> {
                           maxLines: 1,
                           overflow: TextOverflow.fade,
                           style: TextStyle(
-                            fontFamily: "Red Hat Display",
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
@@ -185,7 +181,6 @@ class _MenuState extends State<Menu> {
                           maxLines: 1,
                           overflow: TextOverflow.fade,
                           style: TextStyle(
-                            fontFamily: "Red Hat Display",
                             color: Colors.white,
                             fontWeight: FontWeight.normal,
                             fontSize: 20,
@@ -208,7 +203,6 @@ class _MenuState extends State<Menu> {
                           maxLines: 1,
                           overflow: TextOverflow.fade,
                           style: TextStyle(
-                            fontFamily: "Red Hat Display",
                             color: Colors.white,
                             fontWeight: FontWeight.normal,
                             fontSize: 20,
@@ -231,7 +225,6 @@ class _MenuState extends State<Menu> {
                           maxLines: 1,
                           overflow: TextOverflow.fade,
                           style: TextStyle(
-                            fontFamily: "Red Hat Display",
                             color: Colors.white,
                             fontWeight: FontWeight.normal,
                             fontSize: 20,
@@ -254,7 +247,6 @@ class _MenuState extends State<Menu> {
                           maxLines: 1,
                           overflow: TextOverflow.fade,
                           style: TextStyle(
-                            fontFamily: "Red Hat Display",
                             color: Colors.white,
                             fontWeight: FontWeight.normal,
                             fontSize: 20,
@@ -293,7 +285,6 @@ class _MenuState extends State<Menu> {
                             maxLines: 1,
                             overflow: TextOverflow.fade,
                             style: TextStyle(
-                              fontFamily: "Red Hat Display",
                               color: Colors.white,
                               fontWeight: FontWeight.normal,
                               fontSize: 20,
@@ -308,8 +299,7 @@ class _MenuState extends State<Menu> {
                         // Navigate to the Help page when the user taps the widget
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => n.Notification()),
+                          MaterialPageRoute(builder: (context) => Help()),
                         );
                       },
                       child: Row(
@@ -326,7 +316,6 @@ class _MenuState extends State<Menu> {
                             maxLines: 1,
                             overflow: TextOverflow.fade,
                             style: TextStyle(
-                              fontFamily: "Red Hat Display",
                               color: Colors.white,
                               fontWeight: FontWeight.normal,
                               fontSize: 20,
