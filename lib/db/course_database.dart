@@ -11,14 +11,12 @@ import '../models/lesson.dart';
 import 'package:get/get.dart';
 import '../models/notification.dart';
 
-
 final String courseElement = 'coursesElement';
 final String tablesections = 'sections';
 final String lessontable = 'lessons';
 final String lesson_contnent_table = 'lessonsContent';
 final String progress = 'progress';
 final String notification = 'notification';
-
 
 class CourseDatabase {
   static final CourseDatabase instance = CourseDatabase.init();
@@ -121,8 +119,6 @@ CREATE TABLE $notification (
       ${NotificationFields.completeDate} $textTypeNull
     )
     ''');
-
-
   }
 
   Future<CourseElement> createCourses(CourseElement courseElem) async {
@@ -209,7 +205,22 @@ CREATE TABLE $notification (
   Future<ProgressElement> createProgress(
       ProgressElement progressElement) async {
     final db = await instance.database;
-    final id = await db.insert(progress, progressElement.tojson());
+    final json = progressElement.tojson();
+    final columns =
+        '${ProgressFields.progId},${ProgressFields.courseId},${ProgressFields.lessonId},${ProgressFields.contentId},${ProgressFields.pageNum},${ProgressFields.userProgress}';
+
+    // final id = await db.insert(progress, progressElement.tojson());
+    int id = await db.rawInsert(
+      'INSERT INTO $progress ($columns) VALUES (?,?,?,?,?,?)',
+      [
+        json[ProgressFields.progId],
+        json[ProgressFields.courseId],
+        json[ProgressFields.lessonId],
+        json[ProgressFields.contentId],
+        json[ProgressFields.pageNum],
+        json[ProgressFields.userProgress],
+      ],
+    );
     return progressElement.copy(progId: id);
   }
 
@@ -219,13 +230,9 @@ CREATE TABLE $notification (
     try {
       final id = await db.insert(notification, notificationElement.tojson());
 
-       notificationElement.copy(id: id);
-    } catch (e) {
-
-    }
+      notificationElement.copy(id: id);
+    } catch (e) {}
   }
-
- 
 
 // READ COURSE DATA'
   Future<Course> readCourse(int id) async {
@@ -353,9 +360,6 @@ CREATE TABLE $notification (
 
     return result.map((json) => NotificationElement.fromJson(json)).toList();
   }
-
-
-
 
 // UPDATE DATA'
   Future updateProgress(ProgressElement progressElement) async {

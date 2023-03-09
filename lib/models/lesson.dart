@@ -163,8 +163,6 @@ class LessonContent {
       };
 }
 
-
-
 class ProgressFields {
   static List<String> progressvalue = [
     progId,
@@ -191,7 +189,7 @@ class ProgressElement {
   final String userProgress;
 
   ProgressElement({
-     this.progId,
+    this.progId,
     required this.courseId,
     required this.lessonId,
     required this.contentId,
@@ -214,9 +212,10 @@ class ProgressElement {
           contentId: contentId ?? this.contentId,
           pageNum: pageNum ?? this.pageNum,
           userProgress: userProgress ?? this.userProgress);
-  
-  factory ProgressElement.fromJson(Map<String, dynamic> json) => ProgressElement(
-        progId: json[ProgressFields.progId] as int? ?? 0,
+
+  factory ProgressElement.fromJson(Map<String, dynamic> json) =>
+      ProgressElement(
+        progId: json[ProgressFields.progId] as int?,
         courseId: json[ProgressFields.courseId] as String? ?? '',
         lessonId: json[ProgressFields.lessonId] as String? ?? '',
         contentId: json[ProgressFields.contentId] as String? ?? '',
@@ -224,13 +223,12 @@ class ProgressElement {
         userProgress: json[ProgressFields.userProgress] as String? ?? '',
       );
 
-
   Map<String, dynamic> tojson() => {
-    ProgressFields.progId:progId,
-    ProgressFields.courseId:courseId,
-    ProgressFields.lessonId:lessonId,
-    ProgressFields.contentId:contentId,
-    ProgressFields.pageNum:pageNum,
-    ProgressFields.userProgress:userProgress,
-  };
+        ProgressFields.progId: progId,
+        ProgressFields.courseId: courseId,
+        ProgressFields.lessonId: lessonId,
+        ProgressFields.contentId: contentId,
+        ProgressFields.pageNum: pageNum,
+        ProgressFields.userProgress: userProgress,
+      };
 }
