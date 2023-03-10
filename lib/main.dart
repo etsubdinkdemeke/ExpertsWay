@@ -66,16 +66,17 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return GetCupertinoApp(
+        localizationsDelegates: [
+          DefaultMaterialLocalizations.delegate,
+          DefaultCupertinoLocalizations.delegate,
+          DefaultWidgetsLocalizations.delegate,
+        ],
         onGenerateRoute: router.generateRoute,
         onUnknownRoute: (settings) => CupertinoPageRoute(
             builder: (context) => UndefinedScreen(
                   name: settings.name,
                 )),
-        theme: const CupertinoThemeData(
-          textTheme: CupertinoTextThemeData(
-            textStyle: TextStyle(fontFamily: 'Poppins'),
-          ),
-        ),
+        // theme: Provider.of<ThemeModel>(context).currentTheme,
         debugShowCheckedModeBanner: false,
         // home: Settings(),
         // home: Profile(),

@@ -4,8 +4,7 @@ Course courseFromJson(dynamic str) => Course.fromJson(str);
 
 String courseToJson(Course data) => json.encode(data.toJson());
 
-
-class CourseFields {
+class CourseFilds {
   static final List<dynamic> values = [
     // add all fileds
     code,
@@ -71,12 +70,11 @@ class CourseElement {
     required this.description,
     required this.color,
     required this.icon,
-    
     required this.shortVideo,
     required this.lastUpdated,
     required this.enabled,
-     this.seenCounter,
-     this.isLastSeen,
+    this.seenCounter,
+    this.isLastSeen,
   });
 
   CourseElement copy({
@@ -142,8 +140,8 @@ class CourseElement {
         CourseElementFields.shortVideo: shortVideo,
         CourseElementFields.lastUpdated: lastUpdated.toIso8601String(),
         CourseElementFields.eneabled: enabled ? 1 : 0,
-        CourseElementFields.isLastSeen: isLastSeen ,
-        CourseElementFields.seenCounter: seenCounter ,
+        CourseElementFields.isLastSeen: isLastSeen,
+        CourseElementFields.seenCounter: seenCounter,
       };
 }
 
