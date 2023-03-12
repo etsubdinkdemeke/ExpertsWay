@@ -1,20 +1,25 @@
 import 'dart:convert';
 
+// course finished
+
+// replay
+
+// quiz
+
+// new course
 class NotificationFields {
   static List<dynamic> value = [
     id,
-    courseId,
-    userProgress,
-    imgUrl,
-    isComplete,
-    completeDate,
+    heighlightText,
+    type,
+    imgUrl, 
+    createdDate,
   ];
   static final String id = '_id';
-  static final String courseId = 'courseId';
-  static final String userProgress = 'userProgress';
+  static final String heighlightText = 'heighlightText';
+  static final String type = 'type';
   static final String imgUrl = 'imgUrl';
-  static final String isComplete = 'isComplete';
-  static final String completeDate = 'completeDate';
+  static final String createdDate = 'createdDate';
 }
 
 NotificationElement notificationFromJson(dynamic str) =>
@@ -25,54 +30,48 @@ String notificationToJson(NotificationElement data) =>
 
 class NotificationElement {
   final int? id;
-  final String courseId;
-  final String userProgress;
-  final String imgUrl;
-  final bool isComplete;
-  final DateTime completeDate;
+  final String heighlightText;
+  final String type;
+  final String? imgUrl;
+  final DateTime createdDate;
   NotificationElement({
     this.id,
-    required this.courseId,
-    required this.userProgress,
+    required this.heighlightText,
+    required this.type,
     required this.imgUrl,
-    required this.isComplete,
-    required this.completeDate,
+    required this.createdDate,
   });
 
   NotificationElement copy({
     final int? id,
-    final String? courseId,
-    final String? userProgress,
+    final String? heighlightText,
+    final String? type,
     final String? imgUrl,
-    final bool? isComplete,
-    final DateTime? completeDate,
+    final DateTime? createdDate,
   }) =>
       NotificationElement(
         id: id ?? this.id,
-        courseId: courseId ?? this.courseId,
-        userProgress: userProgress ?? this.userProgress,
+        heighlightText: heighlightText ?? this.heighlightText,
+        type: type ?? this.type,
         imgUrl: imgUrl ?? this.imgUrl,
-        isComplete: isComplete ?? this.isComplete,
-        completeDate: completeDate ?? this.completeDate,
+        createdDate: createdDate ?? this.createdDate,
       );
 
   factory NotificationElement.fromJson(Map<String, dynamic> json) =>
       NotificationElement(
         id: json[NotificationFields.id] as int,
-        courseId: json[NotificationFields.courseId] as String,
-        userProgress: json[NotificationFields.userProgress] as String,
+        heighlightText: json[NotificationFields.heighlightText] as String,
+        type: json[NotificationFields.type] as String,
         imgUrl: json[NotificationFields.imgUrl] as String,
-        isComplete: json[NotificationFields.isComplete] == 0,
-        completeDate:
-            DateTime.parse(json[NotificationFields.completeDate] as String),
+        createdDate:
+            DateTime.parse(json[NotificationFields.createdDate] as String),
       );
 
-  Map<String, dynamic?> tojson() => {
-        "id": id,
-        "courseId": courseId,
-        "userProgress": userProgress,
-        "imgUrl": imgUrl,
-        "isComplete": isComplete ? 1 : 0,
-        "completeDate": completeDate.toIso8601String(),
+  Map<String, dynamic> tojson() => {
+        NotificationFields.id: id,
+        NotificationFields.heighlightText: heighlightText,
+        NotificationFields.type: type,
+        NotificationFields.imgUrl: imgUrl,
+        NotificationFields.createdDate: createdDate.toIso8601String(),
       };
 }

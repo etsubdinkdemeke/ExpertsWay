@@ -1,14 +1,18 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learncoding/theme/config.dart' as config;
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:learncoding/utils/color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../db/course_database.dart';
 import '../../models/notification.dart';
 import '../../theme/box_icons_icons.dart';
 import '../../utils/notificationMessage.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class Notification extends StatefulWidget {
   const Notification({super.key});
@@ -24,33 +28,66 @@ class _NotificationState extends State<Notification> {
   late SharedPreferences sharedPreferences;
   late bool allNotifs;
   late bool readNotifs;
+  bool isLoading = false;
+
   @override
   void initState() {
-    loadSharedPreferencesAndData();
+    // loadSharedPreferencesAndData();
     allNotifs = true;
     readNotifs = false;
+    // addItem();
+    refershNotification();
+
     super.initState();
   }
 
-  void loadSharedPreferencesAndData() async {
+  void sharedPref() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    loadData();
+    // String finishedCourse = "Congratualtions, You have finished"; // 0
+    // String questionReply = "has replied to your question on the forum"; // 1
+    // String quiz = "You have a quiz on"; // 2
+    // String newCourse = "New course has been launched"; // 3
+
+    // sharedPreferences.setString("finishedCourse", finishedCourse);
+    // sharedPreferences.setString("questionReply", questionReply);
+    // sharedPreferences.setString("quiz", quiz);
+    // sharedPreferences.setString("newCourse", newCourse);
   }
 
-  void loadData() {
-    List<dynamic>? listString = sharedPreferences.getStringList('list');
-    additems(); //fortesting
-    if (listString != null) {
-      list = listString.map((item) => notificationFromJson(item)).toList();
+  Future refershNotification() async {
+    setState(() => isLoading = true);
+    list = await CourseDatabase.instance.readAllNotification();
+    if (list.isNotEmpty) {
+      setState(() {
+        allNotifs = true;
+        readNotifs = false;
+      });
       getNotifs();
-    }
+    } else {}
+    setState(() => isLoading = false);
   }
 
-  onNotifDismissed(NotificationElement item) {
-    list.remove(item);
-    List<String> stringList =
-        list.map((item) => notificationToJson(item)).toList();
-    sharedPreferences.setStringList('list', stringList);
+  // void loadSharedPreferencesAndData() async {
+  //   // sharedPreferences = await SharedPreferences.getInstance();
+  //   loadData();
+  // }
+
+  // void loadData() {
+  //   // List<dynamic>? listString = sharedPreferences.getStringList('list');
+  //   additems(); //fortesting
+  //   if (list != null) {
+  //     list = listString.map((item) => notificationFromJson(item)).toList();
+  //     getNotifs();
+  //   }
+  // }
+
+  onNotifDismissed(int item) async {
+    await CourseDatabase.instance.deleteNotification(item);
+    // list.remove(item);
+    // List<String> stringList =
+    //     list.map((item) => notificationToJson(item)).toList();
+    // sharedPreferences.setStringList('list', stringList);
+    refershNotification();
     getNotifs();
   }
 
@@ -60,33 +97,33 @@ class _NotificationState extends State<Notification> {
     today = [];
     thisWeek = [];
     older = [];
-    var now = new DateTime.now();
-    var now_1d = now.subtract(Duration(days: 1));
-    var now_1w = now.subtract(Duration(days: 7));
+    var now = DateTime.now();
+    var now_1d = now.subtract(const Duration(days: 1));
+    var now_1w = now.subtract(const Duration(days: 7));
     for (final e in list) {
       if (allNotifs) {
-        if (now_1d.isBefore(e.completeDate)) {
+        if (now_1d.isBefore(e.createdDate)) {
           today.add(e);
-        } else if (now_1w.isBefore(e.completeDate)) {
+        } else if (now_1w.isBefore(e.createdDate)) {
           thisWeek.add(e);
         } else {
           older.add(e);
         }
       } else {
         if (readNotifs) {
-          if (now_1d.isBefore(e.completeDate) && e.isComplete == true) {
+          if (now_1d.isBefore(e.createdDate)) {
             today.add(e);
-          } else if (now_1w.isBefore(e.completeDate) && e.isComplete == true) {
+          } else if (now_1w.isBefore(e.createdDate)) {
             thisWeek.add(e);
-          } else if (e.isComplete == true) {
+          } else {
             older.add(e);
           }
         } else {
-          if (now_1d.isBefore(e.completeDate) && e.isComplete == false) {
+          if (now_1d.isBefore(e.createdDate)) {
             today.add(e);
-          } else if (now_1w.isBefore(e.completeDate) && e.isComplete == false) {
+          } else if (now_1w.isBefore(e.createdDate)) {
             thisWeek.add(e);
-          } else if (e.isComplete == false) {
+          } else {
             older.add(e);
           }
         }
@@ -148,7 +185,8 @@ class _NotificationState extends State<Notification> {
                           ? today.length + thisWeek.length + older.length > 0
                               ? TextSpan(
                                   text:
-                                      '${today.length + thisWeek.length + older.length} read ',
+                                      // '${today.length + thisWeek.length + older.length} read ',
+                                      '${list.length.toString()} read ',
                                   style: const TextStyle(
                                       color: Color.fromARGB(255, 99, 187, 249),
                                       fontWeight: FontWeight.w500,
@@ -160,7 +198,8 @@ class _NotificationState extends State<Notification> {
                           : today.length + thisWeek.length + older.length > 0
                               ? TextSpan(
                                   text:
-                                      '${today.length + thisWeek.length + older.length} new ',
+                                      // '${today.length + thisWeek.length + older.length} new ',
+                                      '${list.length.toString()} new ',
                                   style: const TextStyle(
                                       color: Color.fromARGB(255, 99, 187, 249),
                                       fontWeight: FontWeight.w500,
@@ -310,21 +349,23 @@ class _NotificationState extends State<Notification> {
                   foregroundColor: Colors.red,
                   padding: const EdgeInsets.only(left: 10),
                   icon: BoxIcons.bxs_trash,
-                  onPressed: ((context) => onNotifDismissed(item)),
+                  onPressed: ((context) => onNotifDismissed(item.id!)),
                 )
               ]),
           child: Container(
               decoration: const BoxDecoration(color: Colors.white),
               child: Row(children: [
                 Container(
-                    child: item.isComplete
-                        ? const SizedBox(
-                            width: 7,
-                          )
-                        : const CircleAvatar(
-                            backgroundColor: Color.fromARGB(255, 7, 141, 251),
-                            radius: 3,
-                          )),
+                    child:
+                        // item.
+                        //     ? const SizedBox(
+                        //         width: 7,
+                        //       )
+                        // :
+                        const CircleAvatar(
+                  backgroundColor: Color.fromARGB(255, 7, 141, 251),
+                  radius: 3,
+                )),
                 Container(
                   margin: const EdgeInsets.only(
                     left: 10,
@@ -342,14 +383,17 @@ class _NotificationState extends State<Notification> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Expanded(
-                          child: Text(item.userProgress.toString(),
-                              style: const TextStyle(
-                                  color: Color.fromARGB(136, 31, 31, 31))),
+                          child: getContent(item.type, item.heighlightText),
+                          // Text(
+
+                          //     style: const TextStyle(
+                          //         color: Color.fromARGB(136, 31, 31, 31))),
                         ),
-                        const Padding(
+                        Padding(
                             padding: EdgeInsets.only(right: 10),
                             child: Text(
-                              "2 hours ago",
+                              timeago.format(
+                                  DateTime.parse(item.createdDate.toString())),
                               style: TextStyle(
                                   color: Color.fromARGB(136, 31, 31, 31)),
                             )),
@@ -361,55 +405,71 @@ class _NotificationState extends State<Notification> {
         ));
   }
 
-  void addItem(NotificationElement item) {
-    list.insert(0, item);
-    List<String> stringList =
-        list.map((item) => notificationToJson(item)).toList();
-    sharedPreferences.setStringList('list', stringList);
-    getNotifs();
+  void addItem() async {
+    NotificationElement notElem = NotificationElement(
+      heighlightText: 'Object Oriented Course',
+      imgUrl:
+          'https://cdn.pixabay.com/photo/2014/04/03/11/08/tea-311845__340.png',
+      type: 'quiz',
+      createdDate: DateTime.parse("2023-03-06 18:45:45.201920"),
+    );
+    await CourseDatabase.instance.createNotification(notElem);
   }
 
-//testing
-  additems() {
-    addItem(NotificationElement(
-        completeDate: DateTime.parse("2023-03-09 18:45:45.201920"),
-        imgUrl: 'dkski',
-        isComplete: false,
-        courseId: '33',
-        userProgress: notifMessages[0].message));
-    addItem(NotificationElement(
-        completeDate: DateTime.parse("2023-03-09 18:45:45.201920"),
-        imgUrl: 'dkski',
-        isComplete: false,
-        courseId: '33',
-        userProgress: notifMessages[1].message));
-    addItem(NotificationElement(
-        completeDate: DateTime.parse("2023-03-09 18:45:45.201920"),
-        imgUrl: 'dkski',
-        isComplete: false,
-        courseId: '33',
-        userProgress: notifMessages[2].message));
-    addItem(NotificationElement(
-        completeDate: DateTime.parse("2023-03-07 18:45:45.201920"),
-        imgUrl: 'dkski',
-        isComplete: false,
-        courseId: '33',
-        userProgress: notifMessages[0].message));
-    addItem(NotificationElement(
-        completeDate: DateTime.parse("2023-03-01 18:45:45.201920"),
-        imgUrl: 'dkski',
-        isComplete: true,
-        courseId: '33',
-        userProgress: notifMessages[1].message));
-
-    // printlengthfortesting
-    // print(list.length);
-
-    //deleteitemsfortesting
-    // for (var e in list) {
-    //   // if (e.date == date && e.message == message) {
-    //   list.remove(e);
-    //   // }
+  getContent(String type, String heighlightText) {
+    if (type == 'finishedCourse') {
+      return RichText(
+          text: TextSpan(children: [
+        TextSpan(
+            text: ' ${notifMessages[0].message}',
+            style: TextStyle(color: Color.fromARGB(136, 31, 31, 31))),
+        TextSpan(
+            text: ' $heighlightText',
+            style: TextStyle(color: maincolor, fontWeight: FontWeight.w600)),
+      ]));
+    }
+    if (type == 'replay') {
+      return RichText(
+          text: TextSpan(children: [
+        TextSpan(
+            text: ' $heighlightText',
+            style: TextStyle(color: maincolor, fontWeight: FontWeight.w600)),
+        TextSpan(
+            text: ' ${notifMessages[1].message}',
+            style: TextStyle(color: Color.fromARGB(136, 31, 31, 31))),
+      ]));
+    }
+    if (type == 'quiz') {
+      return RichText(
+          text: TextSpan(children: [
+        TextSpan(
+            text: ' ${notifMessages[2].message}',
+            style: const TextStyle(color: Color.fromARGB(136, 31, 31, 31))),
+        TextSpan(
+            text: ' $heighlightText',
+            style: TextStyle(color: maincolor, fontWeight: FontWeight.w600)),
+        TextSpan(
+            text: ' today',
+            style: TextStyle(color: Color.fromARGB(136, 31, 31, 31))),
+      ]));
+    }
+    if (type == 'newCourse') {
+      return RichText(
+          text: TextSpan(children: [
+        TextSpan(
+            text: ' ${notifMessages[3].message}',
+            style: TextStyle(color: Color.fromARGB(136, 31, 31, 31))),
+        TextSpan(
+            text: ' $heighlightText',
+            style: TextStyle(color: maincolor, fontWeight: FontWeight.w600)),
+      ]));
+    } else {
+      return RichText(
+          text: TextSpan(children: [
+        TextSpan(
+            text: '', style: TextStyle(color: Color.fromARGB(136, 31, 31, 31))),
+        TextSpan(text: '', style: TextStyle(color: maincolor)),
+      ]));
+    }
   }
-  // }
 }

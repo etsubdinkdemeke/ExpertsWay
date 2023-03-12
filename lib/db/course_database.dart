@@ -112,11 +112,10 @@ CREATE TABLE $progress (
     await db.execute('''
 CREATE TABLE $notification (
       ${NotificationFields.id} $idType,
-      ${NotificationFields.courseId} $textTypeNull,
+      ${NotificationFields.heighlightText} $textTypeNull,
+      ${NotificationFields.type} $textTypeNull,
       ${NotificationFields.imgUrl} $textTypeNull,
-      ${NotificationFields.userProgress} $textTypeNull,
-      ${NotificationFields.isComplete} $boolType,
-      ${NotificationFields.completeDate} $textTypeNull
+      ${NotificationFields.createdDate} $textTypeNull
     )
     ''');
   }
@@ -231,8 +230,44 @@ CREATE TABLE $notification (
       final id = await db.insert(notification, notificationElement.tojson());
 
       notificationElement.copy(id: id);
-    } catch (e) {}
-  }
+    } on DatabaseException catch (error) {
+      Get.snackbar("", "",
+          borderWidth: 2,
+          borderColor: maincolor,
+          dismissDirection: DismissDirection.horizontal,
+          duration: Duration(seconds: 4),
+          backgroundColor: Color.fromRGBO(255, 255, 255, 0.885),
+          titleText: Text(
+            'Error',
+            style: TextStyle(
+                color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          messageText: Text(
+            '$error',
+            style: TextStyle(
+                color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
+          ),
+          margin: EdgeInsets.only(top: 12));
+    } catch (e) {
+      Get.snackbar("", "",
+          borderWidth: 2,
+          borderColor: maincolor,
+          dismissDirection: DismissDirection.horizontal,
+          duration: Duration(seconds: 4),
+          backgroundColor: Color.fromRGBO(255, 255, 255, 0.885),
+          titleText: Text(
+            'Error',
+            style: TextStyle(
+                color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          messageText: Text(
+            '${e}',
+            style: TextStyle(
+                color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
+          ),
+          margin: EdgeInsets.only(top: 12));
+    }
+   }
 
 // READ COURSE DATA'
   Future<Course> readCourse(int id) async {
@@ -353,7 +388,7 @@ CREATE TABLE $notification (
     }
   }
 
-  Future<List<NotificationElement>> readNotification() async {
+  Future<List<NotificationElement>> readAllNotification() async {
     final db = await instance.database;
 
     final result = await db.query(notification);
@@ -375,6 +410,18 @@ CREATE TABLE $notification (
     );
   }
 
+// DELETE DATA
+   Future<int> deleteNotification(int id) async {
+    final db = await instance.database;
+
+    return await db.delete(
+      notification,
+      where: '${NotificationFields.id}=?',
+      whereArgs: [id],
+    );
+  }
+
+// close DATABASE
   Future close() async {
     final db = await instance.database;
     db.close();

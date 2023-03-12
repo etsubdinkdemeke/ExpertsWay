@@ -6,10 +6,6 @@ class Message {
   Message({required this.name, required this.message});
 }
 
-String finishedCourse = "Congratualtions, You have finished";
-String questionReply = "has replied to your question on the forum";
-String quiz = "You have a quiz on";
-String newCourse = "New course has been launched";
 
 List<Message> notifMessages = [
   Message(
