@@ -370,10 +370,24 @@ class _NotificationState extends State<Notification> {
                   margin: const EdgeInsets.only(
                     left: 10,
                   ),
-                  child: const CircleAvatar(
-                    radius: 18,
-                    backgroundImage: AssetImage("assets/images/logo.png"),
-                  ),
+                  child: item.imgUrl != null
+                      ? CircleAvatar(
+                          radius: 19,
+                          backgroundColor: maincolor,
+                          child: CircleAvatar(
+                            radius: 18,
+                            backgroundColor: Colors.white,
+                            child: Image.network(
+                              item.imgUrl!,
+                              width: 25,
+                              // fit: BoxFit.contain,
+                            ),
+                          ),
+                        )
+                      : const CircleAvatar(
+                          radius: 18,
+                          backgroundImage: AssetImage("assets/images/logo.png"),
+                        ),
                 ),
                 Flexible(
                   child: Container(

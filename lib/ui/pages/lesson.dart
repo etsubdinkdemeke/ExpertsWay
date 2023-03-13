@@ -13,6 +13,8 @@ import 'package:learncoding/utils/color.dart';
 import 'package:learncoding/utils/lessonFinishMessage.dart';
 import 'package:get/get.dart';
 import '../../db/course_database.dart';
+import '../../models/course.dart';
+import '../../models/notification.dart';
 
 class LessonPage extends StatefulWidget {
   final List<LessonElement?> lessonData;
@@ -37,6 +39,7 @@ class LessonPage extends StatefulWidget {
 
 class _LessonState extends State<LessonPage> {
   static ProgressElement? progressElement;
+  static CourseElement? courseElement;
   bool isLoading = false;
 
   @override
@@ -45,9 +48,25 @@ class _LessonState extends State<LessonPage> {
     init();
     getLeContents();
     getContentsId();
-
+    getCourseNameandIcon();
     refreshProgress();
-  
+  }
+
+  Future<void> getCourseNameandIcon() async {
+    courseElement = await CourseDatabase.instance
+        .readCourseNameandIcon(int.parse(widget.courseId));
+  }
+
+  Future addNotification() async {
+    await getCourseNameandIcon();
+
+    NotificationElement notElem = NotificationElement(
+      heighlightText: courseElement!.name,
+      imgUrl: courseElement!.icon,
+      type: 'finishedCourse',
+      createdDate: DateTime.now(),
+    );
+    await CourseDatabase.instance.createNotification(notElem);
   }
 
   static int getPageNum() {
@@ -96,7 +115,7 @@ class _LessonState extends State<LessonPage> {
       });
     } else {
       setState(() {
-      index = 0;
+        index = 0;
       });
     }
     setState(() => isLoading = false);
@@ -135,7 +154,6 @@ class _LessonState extends State<LessonPage> {
   }
 
   lessonFinished() {
-    
     Random random = Random();
     int randomNo1 = random.nextInt(greeting.length);
     int randomNo2 = random.nextInt(completed.length);
@@ -268,6 +286,7 @@ class _LessonState extends State<LessonPage> {
                 onPressed: () async {
                   // showFlushbar && index == lessonHtml.length - 1
                   if (showFlushbar && index == getContent.length - 1) {
+                    await addNotification();
                     Flushbar(
                       flushbarPosition: FlushbarPosition.BOTTOM,
                       margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),
@@ -279,19 +298,16 @@ class _LessonState extends State<LessonPage> {
                       message: lessonFinished()[1].toString(),
                       duration: const Duration(seconds: 5),
                     ).show(context);
+                  } else {
+                    index < getContent.length - 1
+                        ? setState(() {
+                            index++;
+                          })
+                        : setState(() {
+                            finishLesson = true;
+                            showFlushbar = false;
+                          });
 
-                    
-                  } else
-                    Container();
-                  index < getContent.length - 1
-                      ? setState(() {
-                          index++;
-                        })
-                      : setState(() {
-                          finishLesson = true;
-                          showFlushbar = false;
-                        });
-                  if (index < getContent.length - 1) {
                     await addOrupdateProgress();
                     refreshProgress();
                   }
