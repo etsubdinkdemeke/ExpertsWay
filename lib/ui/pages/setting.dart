@@ -40,8 +40,9 @@ class _SettingsState extends State<Settings> {
 
   getValue() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    name = prefs.getString('name');
-    image = prefs.getString('image');
+    name = prefs.getString('name')!;
+    image = prefs.getString('image')!;
+    setState(() {});
   }
 
   logout() async {
@@ -70,7 +71,7 @@ class _SettingsState extends State<Settings> {
                   padding: EdgeInsets.all(0),
                   child: Icon(
                     Icons.chevron_left,
-                    color: icon.color,
+                    color: Colors.grey,
                     size: 35,
                   ),
                   onPressed: () {
@@ -81,7 +82,11 @@ class _SettingsState extends State<Settings> {
                   child: Text(
                     'Settings',
                     textAlign: TextAlign.end,
-                    style: textTheme.headline3,
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: "Red Hat Display",
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black),
                   ),
                 ),
                 Container(
@@ -125,12 +130,22 @@ class _SettingsState extends State<Settings> {
               children: [
                 Text(
                   name ?? "John Doe",
-                  style: textTheme.bodyText2,
+                  style: TextStyle(
+                    fontFamily: 'Red Hat Display',
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 5),
-                  child: Text(name ?? "JohnDoe@gmail.com",
-                      style: textTheme.bodyText2),
+                  child: Text("${name}@gmail.com", //tobechanged
+                      style: TextStyle(
+                        fontFamily: 'Red Hat Display',
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      )),
                 ),
               ],
             ),
@@ -165,7 +180,12 @@ class _SettingsState extends State<Settings> {
                             margin: EdgeInsets.only(right: 10),
                             child: Text(
                               "English(US)",
-                              style: textTheme.bodyText2,
+                              style: TextStyle(
+                                fontFamily: 'Red Hat Display',
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.grey[900],
+                              ),
                             )),
                         Icons.arrow_forward_ios,
                         true, () {
@@ -173,14 +193,14 @@ class _SettingsState extends State<Settings> {
                     }),
                     _container(
                         Icons.cleaning_services,
-                        !lightmode ? 'Dark Mode' : 'Light Mode',
+                        lightmode ? 'Dark Mode' : 'Light Mode',
                         Transform.scale(
                           scale: 0.8,
                           child: CupertinoSwitch(
-                            trackColor: Color.fromARGB(255, 217, 238, 247),
-                            activeColor: Color.fromARGB(0, 76, 185, 22),
+                            trackColor: Color.fromARGB(255, 86, 85, 85),
+                            activeColor: Color.fromARGB(255, 197, 232, 247),
                             thumbColor:
-                                !lightmode ? Colors.blue : Colors.grey[900],
+                                lightmode ? Colors.blue : Colors.grey[900],
                             value: lightmode,
                             onChanged: (bool value) {
                               setState(() {
@@ -219,14 +239,11 @@ class _SettingsState extends State<Settings> {
 
   Widget _container(IconData leading, title, Widget? info, IconData? trailing,
       bool splash, VoidCallback tapped) {
-    TextTheme textTheme = Theme.of(context).textTheme;
-    Color secondbackgroundColor = Theme.of(context).backgroundColor;
-    IconThemeData icon = Theme.of(context).iconTheme;
     return Column(
       children: [
         Container(
           decoration: BoxDecoration(
-            color: secondbackgroundColor,
+            color: Colors.white,
             boxShadow: const [
               BoxShadow(
                   blurRadius: 10,
@@ -269,7 +286,15 @@ class _SettingsState extends State<Settings> {
                       SizedBox(
                         width: 20,
                       ),
-                      Text(title, style: textTheme.bodyText2), //15
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontFamily: 'Red Hat Display',
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey[900],
+                        ),
+                      ) //15
                     ],
                   ),
                   Row(
@@ -284,7 +309,7 @@ class _SettingsState extends State<Settings> {
                               margin: EdgeInsets.only(right: 15),
                               child: Icon(
                                 trailing,
-                                color: icon.color,
+                                color: Colors.grey[900],
                                 size: 20,
                               ),
                             )
