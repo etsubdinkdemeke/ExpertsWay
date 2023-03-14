@@ -285,6 +285,21 @@ CREATE TABLE $notification (
       throw Exception('ID $id not found');
     }
   }
+   Future<CourseElement> readCourseNameandIcon(int id) async {
+    final db = await instance.database;
+
+    final maps = await db.query(
+      courseElement,
+      columns: CourseElementFields.values,
+      where: '${CourseElementFields.course_id} = ?',
+      whereArgs: [id],
+    );
+    if (maps.isNotEmpty) {
+      return CourseElement.fromJson(maps.first);
+    } else {
+      throw Exception('ID $id not found');
+    }
+  }
 
   Future<List<LessonElement>> readLesson(String courseSlug) async {
     final db = await instance.database;
