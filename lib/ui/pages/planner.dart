@@ -3,9 +3,8 @@ import 'package:learncoding/ui/widgets/card.dart';
 import 'package:learncoding/ui/widgets/section_header.dart';
 import 'package:learncoding/ui/widgets/top_bar.dart';
 import 'package:learncoding/ui/widgets/video_card.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
-import 'package:flutter/material.dart' as material;
+import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class PlannerPage extends StatelessWidget {
@@ -18,9 +17,9 @@ class PlannerPage extends StatelessWidget {
   TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
+    return Scaffold(
       backgroundColor: config.Colors().secondColor(1),
-      child: Stack(
+      body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
           SafeArea(
@@ -61,10 +60,10 @@ class PlannerPage extends StatelessWidget {
                     child: CardWidget(
                       button: false,
                       gradient: false,
-                      child: material.Material(
+                      child: Material(
                         child: CalendarCarousel(
                           isScrollable: false,
-                          todayButtonColor: material.Colors.lightBlue,
+                          todayButtonColor: Colors.lightBlue,
                         ),
                       ),
                     ),

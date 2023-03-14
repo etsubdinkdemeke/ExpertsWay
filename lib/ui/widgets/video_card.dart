@@ -1,103 +1,89 @@
+import 'package:get/get.dart';
+import 'package:learncoding/routes/routing_constants.dart';
 import 'package:learncoding/theme/box_icons_icons.dart';
-import 'package:learncoding/theme/config.dart';
-import 'package:learncoding/ui/pages/video.dart';
+import 'package:learncoding/theme/config.dart' as config;
 import 'package:learncoding/ui/widgets/card.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' as material;
+import 'package:flutter/material.dart';
 
-class VideoCard extends material.StatelessWidget {
+class VideoCard extends StatelessWidget {
   final bool long;
   const VideoCard({
     required this.long,
-    material.Key? key,
+    Key? key,
   }) : super(key: key);
 
   @override
-  material.Widget build(material.BuildContext context) {
-    return material.Padding(
-      padding: const material.EdgeInsets.all(10.0),
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
       child: CardWidget(
         gradient: false,
         button: true,
         width: long ? 360 : 180,
-        child: material.Column(
-          mainAxisAlignment: material.MainAxisAlignment.start,
-          children: <material.Widget>[
-            material.Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Container(
               width: long ? 360 : 180,
               height: 87,
-              decoration: material.BoxDecoration(
-                image: material.DecorationImage(
-                    image: material.AssetImage('assets/images/video.jpg'),
-                    fit: material.BoxFit.cover),
-                borderRadius: material.BorderRadius.only(
-                  topLeft: material.Radius.circular(10),
-                  topRight: material.Radius.circular(10),
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('assets/images/video.jpg'),
+                    fit: BoxFit.cover),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
                 ),
               ),
-              child: material.Text(""),
+              child: const Text(""),
             ),
-            material.Padding(
-              padding: const material.EdgeInsets.all(8.0),
-              child: material.Text(
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
                 "Stars - What are they made up of ?",
-                overflow: material.TextOverflow.ellipsis,
+                overflow: TextOverflow.ellipsis,
                 maxLines: 2,
-                style: material.TextStyle(
-                    color: material.Color(0xFF535353),
-                    fontSize: 16),
+                style: TextStyle(color: Color(0xFF535353), fontSize: 16),
               ),
             ),
-            material.Padding(
-              padding: const material.EdgeInsets.symmetric(horizontal: 8.0),
-              child: material.Row(
-                children: <material.Widget>[
-                  material.Icon(BoxIcons.bx_bar_chart_alt_2, size: 16),
-                  material.Text(
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                children: const <Widget>[
+                  Icon(BoxIcons.bx_bar_chart_alt_2, size: 16),
+                  Text(
                     "Beginner",
-                    style: material.TextStyle(
-                        color: material.Color(0xFFADADAD),
-                        fontSize: 10),
+                    style: TextStyle(color: Color(0xFFADADAD), fontSize: 10),
                   ),
-                  material.Spacer(),
-                  material.Text(
+                  Spacer(),
+                  Text(
                     "12 mins",
-                    style: material.TextStyle(
-                        color: material.Color(0xFFADADAD),
-                        fontSize: 10),
+                    style: TextStyle(color: Color(0xFFADADAD), fontSize: 10),
                   ),
-                  material.Icon(BoxIcons.bx_timer, size: 16),
+                  Icon(BoxIcons.bx_timer, size: 16),
                 ],
               ),
             ),
-            material.Spacer(),
-            material.Padding(
-              padding: const material.EdgeInsets.only(top: 6.0),
-              child: material.GestureDetector(
-                child: material.Container(
-                  padding: material.EdgeInsets.fromLTRB(0, 14, 0, 14),
-                  decoration: material.BoxDecoration(gradient: Colors().waves),
-                  child: material.Row(
-                    mainAxisAlignment: material.MainAxisAlignment.spaceEvenly,
-                    children: <material.Widget>[
-                      material.Icon(BoxIcons.bx_play_circle,
-                          color: material.Colors.white),
-                      material.Text(
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(top: 6.0),
+              child: GestureDetector(
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(0, 14, 0, 14),
+                  decoration: BoxDecoration(gradient: config.Colors().waves),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: const <Widget>[
+                      Icon(BoxIcons.bx_play_circle, color: Colors.white),
+                      Text(
                         "Watch Lecture",
-                        style: material.TextStyle(
-                            color: material.Colors.white,
-                            fontSize: 18),
+                        style: TextStyle(color: Colors.white, fontSize: 14),
                       )
                     ],
                   ),
                 ),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (context) => VideoPage(),
-                    ),
-                  );
+                  Get.toNamed(AppRoute.videoPage);
                 },
               ),
             ),

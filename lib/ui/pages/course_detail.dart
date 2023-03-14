@@ -455,9 +455,9 @@ class CoursePagePageState extends State<CourseDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
+    return Scaffold(
       backgroundColor: config.Colors().secondColor(1),
-      child: Stack(
+      body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
           SizedBox(
@@ -483,23 +483,29 @@ class CoursePagePageState extends State<CourseDetailPage> {
                                     fontSize: 14),
                               ),
                               const Spacer(),
-                              CupertinoButton(
-                                padding: const EdgeInsets.all(4),
-                                child: const Icon(
-                                  Icons.comment_outlined,
-                                  size: 20,
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: InkWell(
+                                  child: const Icon(
+                                    Icons.comment_outlined,
+                                    size: 20,
+                                    color: Colors.blue,
+                                  ),
+                                  onTap:
+                                      () {}, // TODO: implement this method: showing comments for this course
                                 ),
-                                onPressed:
-                                    () {}, // TODO: implement this method: showing comments for this course
                               ),
-                              CupertinoButton(
-                                padding: const EdgeInsets.all(4),
-                                child: const Icon(
-                                  Icons.bookmark_outline,
-                                  size: 20,
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: InkWell(
+                                  child: const Icon(
+                                    Icons.bookmark,
+                                    size: 20,
+                                    color: Colors.blue,
+                                  ),
+                                  onTap:
+                                      () {}, // TODO: implement this method: bookmarking this course
                                 ),
-                                onPressed:
-                                    () {}, // TODO: implement this method: bookmarking this course
                               )
                             ],
                           ),
@@ -544,7 +550,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
                                   {
-                                    return Center(
+                                    return const Center(
                                       child: CircularProgressIndicator(
                                         color: maincolor,
                                       ),

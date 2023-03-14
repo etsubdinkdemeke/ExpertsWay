@@ -8,12 +8,12 @@ import 'package:learncoding/analytics/analytics_service.dart';
 List<String> navStack = ["Home"];
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
-    case homeRoute:
+    case AppRoute.homeRoute:
       navStack.add("Splash");
       if (kDebugMode) {
         print(navStack);
       }
-      analytics.setCurrentScreen(screenName: homeRoute);
+      analytics.setCurrentScreen(screenName: AppRoute.homeRoute);
       return CupertinoPageRoute(builder: (context) => const Home());
     // case SearchRoute:
     //   navStack.add("Search");

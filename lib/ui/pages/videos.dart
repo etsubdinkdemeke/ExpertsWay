@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:learncoding/theme/config.dart' as config;
 import 'package:learncoding/ui/widgets/section_header.dart';
 import 'package:learncoding/ui/widgets/top_bar.dart';
 import 'package:learncoding/ui/widgets/video_card.dart';
-import 'package:flutter/cupertino.dart';
 
 // ignore: must_be_immutable
 class VideosPage extends StatelessWidget {
@@ -15,9 +15,9 @@ class VideosPage extends StatelessWidget {
   TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
+    return Scaffold(
       backgroundColor: config.Colors().secondColor(1),
-      child: Stack(
+      body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
           SafeArea(

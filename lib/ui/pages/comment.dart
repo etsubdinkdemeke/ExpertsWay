@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learncoding/models/comments_data.dart';
 import 'package:learncoding/ui/widgets/add_comment_textformfield.dart';
@@ -29,10 +28,11 @@ class _CommentSectionState extends State<CommentSection> {
       create: (_) => Com(),
       child: Scaffold(
         body: Consumer<Com>(builder: (context, data, child) {
-          return CupertinoPageScaffold(
-            navigationBar: const CupertinoNavigationBar(
+          return Scaffold(
+            appBar: AppBar(
+              elevation: 0,
               backgroundColor: Colors.white,
-              // leading: CupertinoButton(
+              // leading: TextButton(
               //   child: const Icon(
               //     Icons.arrow_back_ios_new_outlined,
               //     color: Color.fromARGB(255, 83, 83, 83),
@@ -41,19 +41,17 @@ class _CommentSectionState extends State<CommentSection> {
               //     Navigator.pop(context);
               //   },
               // ),
-              leading: Padding(
-                padding: EdgeInsets.only(top: 8.0),
-                child: Text(
-                  'Comments',
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 83, 83, 83),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
+              centerTitle: true,
+              title: const Text(
+                'Comments',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 83, 83, 83),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
                 ),
               ),
             ),
-            child: SingleChildScrollView(
+            body: SingleChildScrollView(
               child: SizedBox(
                 height: MediaQuery.of(context).size.height - 80,
                 child: Column(

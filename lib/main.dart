@@ -1,3 +1,4 @@
+import 'package:learncoding/routes/page.dart';
 import 'package:learncoding/ui/pages/navmenu/menu_dashboard_layout.dart';
 import 'package:learncoding/ui/pages/onboarding1.dart';
 import 'package:learncoding/ui/pages/undefined_screen.dart';
@@ -61,20 +62,23 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return GetCupertinoApp(
-        localizationsDelegates: const [
-          DefaultMaterialLocalizations.delegate,
-          DefaultCupertinoLocalizations.delegate,
-          DefaultWidgetsLocalizations.delegate,
-        ],
-        onGenerateRoute: router.generateRoute,
-        onUnknownRoute: (settings) => CupertinoPageRoute(
-            builder: (context) => UndefinedScreen(
-                  name: settings.name,
-                )),
-        // theme: Provider.of<ThemeModel>(context).currentTheme,
-        debugShowCheckedModeBanner: false,
-        home: const SplashScreen());
+    return GetMaterialApp(
+      localizationsDelegates: const [
+        DefaultMaterialLocalizations.delegate,
+        DefaultCupertinoLocalizations.delegate,
+        DefaultWidgetsLocalizations.delegate,
+      ],
+      theme: ThemeData(fontFamily: 'Poppins'),
+      onGenerateRoute: router.generateRoute,
+      onUnknownRoute: (settings) => CupertinoPageRoute(
+          builder: (context) => UndefinedScreen(
+                name: settings.name,
+              )),
+      // theme: Provider.of<ThemeModel>(context).currentTheme,
+      debugShowCheckedModeBanner: false,
+      getPages: pages,
+      home: const SplashScreen(),
+    );
   }
 }
 

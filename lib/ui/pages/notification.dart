@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:learncoding/utils/color.dart';
@@ -140,7 +139,7 @@ class _NotificationState extends State<Notification> {
               margin: const EdgeInsets.only(top: 30),
               child: Row(
                 children: [
-                  CupertinoButton(
+                  TextButton(
                     child: const Icon(
                       Icons.chevron_left,
                       color: Colors.black,

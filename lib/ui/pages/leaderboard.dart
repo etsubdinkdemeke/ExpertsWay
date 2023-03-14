@@ -3,8 +3,7 @@ import 'package:learncoding/ui/widgets/card.dart';
 import 'package:learncoding/ui/widgets/section_header.dart';
 import 'package:learncoding/ui/widgets/stats_card.dart';
 import 'package:learncoding/ui/widgets/top_bar.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' as material;
+import 'package:flutter/material.dart';
 
 class LeaderboardPage extends StatefulWidget {
   const LeaderboardPage({
@@ -66,9 +65,9 @@ class LeaderboardPageState extends State<LeaderboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
+    return Scaffold(
       backgroundColor: config.Colors().secondColor(1),
-      child: Stack(
+      body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
           SafeArea(
@@ -140,7 +139,7 @@ class LeaderboardPageState extends State<LeaderboardPage> {
                                                                 10, 50)),
                                                 gradient: LinearGradient(
                                                     colors: [
-                                                      material.Colors.white,
+                                                      Colors.white,
                                                       colors[index]
                                                     ],
                                                     begin: Alignment.topLeft,
@@ -265,7 +264,7 @@ class LeaderboardPageState extends State<LeaderboardPage> {
                                                                 10, 50)),
                                                 gradient: LinearGradient(
                                                     colors: [
-                                                      material.Colors.white,
+                                                      Colors.white,
                                                       colors[index]
                                                     ],
                                                     begin: Alignment.topLeft,
@@ -326,11 +325,11 @@ class LeaderboardPageState extends State<LeaderboardPage> {
                     Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height * 0.07,
-                      color: material.Colors.white,
+                      color: Colors.white,
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            CupertinoButton(
+                            TextButton(
                               onPressed: () {
                                 setState(() {
                                   local = true;
@@ -341,10 +340,10 @@ class LeaderboardPageState extends State<LeaderboardPage> {
                                 style: TextStyle(
                                     color: Color(0xFF343434),
                                     fontSize: 20,
-                                    fontWeight: material.FontWeight.w600),
+                                    fontWeight: FontWeight.w600),
                               ),
                             ),
-                            CupertinoButton(
+                            TextButton(
                               onPressed: () {
                                 setState(() {
                                   local = false;
@@ -355,7 +354,7 @@ class LeaderboardPageState extends State<LeaderboardPage> {
                                 style: TextStyle(
                                     color: Color(0xFF343434),
                                     fontSize: 20,
-                                    fontWeight: material.FontWeight.w600),
+                                    fontWeight: FontWeight.w600),
                               ),
                             )
                           ]),

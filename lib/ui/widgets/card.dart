@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
-
-import 'package:learncoding/theme/config.dart';
-import 'package:flutter/material.dart' as material;
+import 'package:flutter/material.dart';
+import 'package:learncoding/theme/config.dart' as config;
 
 class CardWidget extends StatelessWidget {
   final bool gradient;
@@ -30,7 +28,7 @@ class CardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const material.BoxDecoration(
+      decoration: const BoxDecoration(
         boxShadow: [
           BoxShadow(
             blurRadius: 25,
@@ -46,30 +44,30 @@ class CardWidget extends StatelessWidget {
             borderRadius: borderRadius ?? BorderRadius.circular(10),
           ),
         ),
-        child: material.AnimatedContainer(
+        child: AnimatedContainer(
           duration: Duration(milliseconds: duration ?? 500),
           width: width,
           height: height,
           decoration: BoxDecoration(
             border: border ??
                 Border.all(
-                  color: material.Colors.white,
+                  color: Colors.white,
                   width: 0,
                 ),
             // borderRadius: BorderRadius.circular(10),
-            color: color ?? Colors().mainColor(1),
+            color: color ?? config.Colors().mainColor(1),
             gradient: gradient
-                ? Colors().waves
+                ? config.Colors().waves
                 : LinearGradient(colors: [
-                    color ?? Colors().mainColor(1),
-                    color ?? Colors().mainColor(1)
+                    color ?? config.Colors().mainColor(1),
+                    color ?? config.Colors().mainColor(1)
                   ]),
           ),
           child: button
               ? ClipRRect(
-                  borderRadius: material.BorderRadius.circular(10),
-                  child: material.MaterialButton(
-                    padding: material.EdgeInsets.zero,
+                  borderRadius: BorderRadius.circular(10),
+                  child: MaterialButton(
+                    padding: EdgeInsets.zero,
                     elevation: 0,
                     onPressed: func,
                     child: child,

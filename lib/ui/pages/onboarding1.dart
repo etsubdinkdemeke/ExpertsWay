@@ -1,6 +1,5 @@
 import 'package:learncoding/api/shared_preference/shared_preference.dart';
 import 'package:learncoding/ui/pages/navmenu/menu_dashboard_layout.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learncoding/api/google_signin_api.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -95,7 +94,7 @@ class OnboardingState extends State<Onboarding> {
               mainMessage,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 20,
+                fontSize: 24,
                 fontWeight: FontWeight.w600,
                 color: Colors.black,
               ),
@@ -107,7 +106,7 @@ class OnboardingState extends State<Onboarding> {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.black,
-                fontSize: 13,
+                fontSize: 14,
               ),
             ),
           ],
@@ -135,9 +134,7 @@ class OnboardingState extends State<Onboarding> {
           child: Center(
             child: Text(
               label,
-              style: const TextStyle(
-                color: Colors.white,
-              ),
+              style: const TextStyle(color: Colors.white, fontSize: 18),
             ),
           ),
         ),
@@ -199,8 +196,8 @@ class OnboardingState extends State<Onboarding> {
     // we will maintain the same layout-forming column but switch the
     // contained widgets in order to show the 3 different "pages"
     createWidgets();
-    return CupertinoPageScaffold(
-      child: Column(
+    return Scaffold(
+      body: Column(
         children: <Widget>[
           const Spacer(flex: 3),
           AnimatedSwitcher(

@@ -1,10 +1,10 @@
 import 'dart:math';
 import 'package:another_flushbar/flushbar.dart';
+import 'package:get/get.dart';
 import 'package:learncoding/api/shared_preference/shared_preference.dart';
 import 'package:learncoding/models/lesson.dart';
 import 'package:learncoding/models/user.dart';
 import 'package:learncoding/theme/box_icons_icons.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:learncoding/theme/config.dart' as config;
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -200,19 +200,19 @@ class _LessonState extends State<LessonPage> {
     // double progress = index / lessonHtml.length;
     double progress = index / getContent.length;
     int remainingHearts = 3;
-    return CupertinoPageScaffold(
+    return Scaffold(
       backgroundColor: config.Colors().secondColor(1),
-      navigationBar: CupertinoNavigationBar(
-        border: const Border(bottom: BorderSide(color: Colors.transparent)),
-        padding: const EdgeInsetsDirectional.only(
-          start: 0,
-          end: 20,
-        ),
-        previousPageTitle: "Back",
+      appBar: AppBar(
+        elevation: 0,
+        // padding: const EdgeInsetsDirectional.only(
+        //   start: 0,
+        //   end: 20,
+        // ),
+
         backgroundColor: config.Colors().secondColor(1),
-        leading: CupertinoButton(
+        leading: TextButton(
           onPressed: () {
-            Navigator.pop(context);
+            Get.back();
           },
           child: const Icon(
             Icons.close,
@@ -220,29 +220,31 @@ class _LessonState extends State<LessonPage> {
             size: 30,
           ),
         ),
-        trailing: Container(
-          margin: const EdgeInsets.only(top: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              const Icon(
-                BoxIcons.bxs_heart,
-                color: Color.fromARGB(255, 246, 33, 82),
-                size: 25,
-              ),
-              const SizedBox(width: 5),
-              Text(
-                "$remainingHearts",
-                style: const TextStyle(
-                  fontSize: 19,
-                  fontWeight: FontWeight.w400,
+        actions: [
+          Container(
+            margin: const EdgeInsets.only(top: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                const Icon(
+                  BoxIcons.bxs_heart,
+                  color: Color.fromARGB(255, 246, 33, 82),
+                  size: 25,
                 ),
-              ),
-            ],
+                const SizedBox(width: 5),
+                Text(
+                  "$remainingHearts",
+                  style: const TextStyle(
+                    fontSize: 19,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
+        ],
       ),
-      child: SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
@@ -261,7 +263,7 @@ class _LessonState extends State<LessonPage> {
             Html(
               data: lesson,
             ),
-            CupertinoButton(
+            TextButton(
                 child: const Text("Next lesson"),
                 onPressed: () async {
                   // showFlushbar && index == lessonHtml.length - 1

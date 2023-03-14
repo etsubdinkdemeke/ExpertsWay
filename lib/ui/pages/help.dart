@@ -1,7 +1,6 @@
 import 'package:learncoding/theme/config.dart' as config;
 import 'package:learncoding/theme/box_icons_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 class Help extends StatefulWidget {
   const Help({super.key});
@@ -78,31 +77,35 @@ class HelpState extends State<Help> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        trailing: const CupertinoButton(
-            onPressed: null,
-            child: Icon(
-              Icons.search,
-              color: Colors.black,
-            )),
-        backgroundColor: Colors.white,
-        leading: CupertinoButton(
+    return Scaffold(
+      appBar: AppBar(
+        leading: TextButton(
+          onPressed: () {},
           child: const Icon(
             Icons.chevron_left,
             color: Colors.black,
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
         ),
-        middle: const Text(
-          'Help',
-          style: TextStyle(color: Colors.black, fontSize: 24),
+        centerTitle: true,
+        title: const Center(
+          child: Text(
+            'Help',
+            style: TextStyle(color: Colors.black, fontSize: 24),
+          ),
         ),
+        actions: [
+          TextButton(
+            onPressed: () {},
+            child: const Icon(
+              Icons.search,
+              color: Colors.black,
+            ),
+          ),
+        ],
+        backgroundColor: config.Colors().secondColor(1),
+        elevation: 0,
       ),
-      backgroundColor: config.Colors().secondColor(1),
-      child: Stack(
+      body: Stack(
         children: <Widget>[
           Column(
             mainAxisAlignment: MainAxisAlignment.end,

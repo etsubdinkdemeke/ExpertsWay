@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:learncoding/models/comments_data.dart';
 import 'package:learncoding/theme/box_icons_icons.dart';
 import 'package:learncoding/ui/pages/comment.dart';
 import 'package:learncoding/ui/widgets/card.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' as material;
 
 class VideoPage extends StatefulWidget {
   const VideoPage({super.key});
@@ -17,18 +16,26 @@ class VideoPageState extends State<VideoPage> {
   final comment = comments;
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
+    return Scaffold(
       //backgroundColor: Colorss().secondColor(1),
-      navigationBar: CupertinoNavigationBar(
-        automaticallyImplyLeading: true,
-        previousPageTitle: "Back",
-        trailing: CupertinoButton(
-          padding: const EdgeInsets.all(0),
-          child: const Icon(BoxIcons.bx_share_alt),
-          onPressed: () {},
-        ),
-      ),
-      child: Stack(
+      appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          automaticallyImplyLeading: true,
+          leading: InkWell(
+            onTap: () => Get.back(),
+            child: const Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: const Icon(BoxIcons.bx_share_alt),
+              onPressed: () {},
+            ),
+          ]),
+      body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
           SizedBox(
@@ -193,11 +200,11 @@ class VideoPageState extends State<VideoPage> {
                                 offset: const Offset(0, 4))
                           ],
                           borderRadius: BorderRadius.circular(500)),
-                      child: material.FloatingActionButton(
+                      child: FloatingActionButton(
                           heroTag: "video",
                           elevation: 0,
                           highlightElevation: 0,
-                          backgroundColor: material.Colors.transparent,
+                          backgroundColor: Colors.transparent,
                           child: const Icon(BoxIcons.bx_play, size: 40),
                           onPressed: () {}),
                     )),
@@ -217,13 +224,11 @@ class VideoPageState extends State<VideoPage> {
                 children: const <Widget>[
                   Text(
                     "Attempt Test",
-                    style:
-                        TextStyle(color: material.Colors.white, fontSize: 18),
+                    style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                   Padding(
                     padding: EdgeInsets.all(8.0),
-                    child:
-                        Icon(BoxIcons.bx_pencil, color: material.Colors.white),
+                    child: Icon(BoxIcons.bx_pencil, color: Colors.white),
                   ),
                 ],
               ),

@@ -1,11 +1,8 @@
-import 'package:flutter/cupertino.dart';
-
 class Message {
   String name;
   String message;
   Message({required this.name, required this.message});
 }
-
 
 List<Message> notifMessages = [
   Message(
