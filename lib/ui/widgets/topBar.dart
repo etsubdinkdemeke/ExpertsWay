@@ -36,7 +36,7 @@ class TopBar extends StatefulWidget {
 
 class _TopBarState extends State<TopBar> {
   int tab = 0;
-    late List<CourseElement> course = [];
+  late List<CourseElement?> course = [];
   late List<Section> section = [];
   bool isLoading = false;
 
@@ -44,10 +44,10 @@ class _TopBarState extends State<TopBar> {
   void initState() {
     super.initState();
     getValue();
-        refreshCourse();
-
+    refreshCourse();
   }
-Future refreshCourse() async {
+
+  Future refreshCourse() async {
     setState(() => isLoading = true);
 
     course = await CourseDatabase.instance.readAllCourse();
@@ -115,9 +115,9 @@ Future refreshCourse() async {
                   ]),
               padding: EdgeInsets.all(10),
               style: TextStyle(
-                  color: Color(0xFF343434),
-                  fontSize: 18,
-                  ),
+                color: Color(0xFF343434),
+                fontSize: 18,
+              ),
               enableInteractiveSelection: true,
               controller: widget.controller,
               expands: false,
@@ -136,14 +136,13 @@ Future refreshCourse() async {
               textCapitalization: TextCapitalization.words,
               placeholder: "Search",
               placeholderStyle: TextStyle(
-                  color: Color(0xFFADADAD),
-                  fontSize: 18,
-                  ),
+                color: Color(0xFFADADAD),
+                fontSize: 18,
+              ),
             ),
           ),
           widget.expanded
-              ? 
-              Container(
+              ? Container(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height * 0.165,
                   child: course.isEmpty
@@ -160,22 +159,6 @@ Future refreshCourse() async {
                                 );
                               }
                             }
-                            if (snapshot.data!.courses.isEmpty) {
-                              return const Center(
-                                  child: Text(
-                                "There is no Course",
-                                style: TextStyle(
-                                    color: Color.fromARGB(184, 138, 138, 138)),
-                              ));
-                            }
-                            if (snapshot.hasError) {
-                              return const Center(
-                                  child: Text(
-                                "Unabel to get the data",
-                                style: TextStyle(
-                                    color: Color.fromARGB(184, 138, 138, 138)),
-                              ));
-                            }
                             if (snapshot.hasData) {
                               for (var i = 0;
                                   i < snapshot.data!.courses.length;
@@ -184,27 +167,51 @@ Future refreshCourse() async {
                                 CourseDatabase.instance
                                     .createCourses(courseData);
                               }
+                            } else if (snapshot.data!.courses.isEmpty) {
+                              return const Center(
+                                  child: Text(
+                                "There is no Course",
+                                style: TextStyle(
+                                    color: Color.fromARGB(184, 138, 138, 138)),
+                              ));
+                            } else if (snapshot.hasError) {
+                              return const Center(
+                                  child: Text(
+                                "Unabel to get the data",
+                                style: TextStyle(
+                                    color: Color.fromARGB(184, 138, 138, 138)),
+                              ));
+                            } else if (!snapshot.hasData) {
+                              return const Center(
+                                  child: Text(
+                                "Unabel to get the data",
+                                style: TextStyle(
+                                    color: Color.fromARGB(184, 138, 138, 138)),
+                              ));
                             }
+
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               refreshCourse();
                             });
                             return Container();
                           })
                       : buildCard())
-                : Container(),
+              : Container(),
         ],
       ),
     );
   }
- Widget buildCard() {
+
+  Widget buildCard() {
     return ListView.builder(
       scrollDirection: Axis.horizontal,
       itemCount: course.length,
       itemBuilder: (context, index) {
-        return CourseCard(courses: course[index], index: index);
+        return CourseCard(courses: course[index]!, index: index);
       },
     );
   }
+
   Color colorConvert(String color) {
     color = color.replaceAll("#", "");
     if (color.length == 6) {

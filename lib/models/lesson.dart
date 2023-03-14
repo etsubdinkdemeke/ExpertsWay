@@ -33,6 +33,7 @@ class LessonsElementFields {
     lesson_id,
     slug,
     title,
+    shortDescription,
     section,
     publishedDate,
   ];
@@ -40,6 +41,7 @@ class LessonsElementFields {
   static final String lesson_id = 'lesson_id';
   static final String slug = 'slug';
   static final String title = 'title';
+  static final String shortDescription = 'short_description';
   static final String section = 'section';
   static final String courseSlug = 'course_slug';
   static final String publishedDate = 'published_date';
@@ -49,6 +51,7 @@ class LessonElement {
   int lessonId;
   String slug;
   String title;
+  String shortDescription;
   String section;
   String courseSlug;
   List<String> content;
@@ -61,6 +64,7 @@ class LessonElement {
     required this.lessonId,
     required this.slug,
     required this.title,
+    required this.shortDescription,
     required this.section,
     required this.courseSlug,
     required this.content,
@@ -74,6 +78,7 @@ class LessonElement {
     int? lessonId,
     String? slug,
     String? title,
+    String? shortDescription,
     String? section,
     String? courseSlug,
     List<String>? content,
@@ -83,6 +88,7 @@ class LessonElement {
         lessonId: lessonId ?? this.lessonId,
         slug: slug ?? this.slug,
         title: title ?? this.title,
+        shortDescription: shortDescription ?? this.shortDescription,
         section: section ?? this.section,
         courseSlug: courseSlug ?? this.courseSlug,
         content: content ?? this.content,
@@ -93,6 +99,7 @@ class LessonElement {
         lessonId: json[LessonsElementFields.lesson_id] as int,
         slug: json[LessonsElementFields.slug] as String? ?? '',
         title: json[LessonsElementFields.title] as String? ?? '',
+        shortDescription: json[LessonsElementFields.shortDescription] as String? ?? '',
         section: json[LessonsElementFields.section] as String? ?? '',
         courseSlug: json[LessonsElementFields.courseSlug] as String? ?? '',
         content: json["content"] == null
@@ -113,6 +120,7 @@ class LessonElement {
         LessonsElementFields.lesson_id: lessonId,
         LessonsElementFields.slug: slug,
         LessonsElementFields.title: title,
+        LessonsElementFields.shortDescription: shortDescription,
         LessonsElementFields.section: section,
         LessonsElementFields.courseSlug: courseSlug,
         LessonsElementFields.publishedDate: publishedDate!.toIso8601String(),

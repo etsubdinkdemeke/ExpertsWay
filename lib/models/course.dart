@@ -45,7 +45,7 @@ class Course {
 class CourseElementFields {
   static final List<String> values = [
     // add all fileds
-    course_id, name, slug, description, color, icon, shortVideo,
+    course_id, name, slug, description, color, icon,banner, shortVideo,
     lastUpdated, eneabled
   ];
 
@@ -55,6 +55,7 @@ class CourseElementFields {
   static final String description = 'description';
   static final String color = 'color';
   static final String icon = 'icon';
+  static final String banner = 'banner';
   static final String shortVideo = 'short_video';
   static final String lastUpdated = 'last_updated';
   static final String eneabled = 'enabled';
@@ -70,6 +71,7 @@ class CourseElement {
     required this.description,
     required this.color,
     required this.icon,
+    required this.banner,
     required this.shortVideo,
     required this.lastUpdated,
     required this.enabled,
@@ -84,6 +86,7 @@ class CourseElement {
     String? description,
     String? color,
     String? icon,
+    String? banner,
     String? shortVideo,
     DateTime? lastUpdated,
     bool? enabled,
@@ -97,6 +100,7 @@ class CourseElement {
         description: description ?? this.description,
         color: color ?? this.color,
         icon: icon ?? this.icon,
+        banner: banner ?? this.banner,
         shortVideo: shortVideo ?? this.shortVideo,
         lastUpdated: lastUpdated ?? this.lastUpdated,
         enabled: enabled ?? this.enabled,
@@ -110,6 +114,7 @@ class CourseElement {
   String description;
   String color;
   String icon;
+  String banner;
   String shortVideo;
   DateTime lastUpdated;
   bool enabled;
@@ -123,6 +128,7 @@ class CourseElement {
         description: json[CourseElementFields.description] as String,
         color: json[CourseElementFields.color] as String,
         icon: json[CourseElementFields.icon] as String,
+        banner: json[CourseElementFields.banner] as String,
         shortVideo: json[CourseElementFields.shortVideo] as String,
         lastUpdated: DateTime.parse(json[CourseElementFields.lastUpdated]),
         enabled: json[CourseElementFields.eneabled] == 1,
@@ -137,6 +143,7 @@ class CourseElement {
         CourseElementFields.description: description,
         CourseElementFields.color: color,
         CourseElementFields.icon: icon,
+        CourseElementFields.banner: banner,
         CourseElementFields.shortVideo: shortVideo,
         CourseElementFields.lastUpdated: lastUpdated.toIso8601String(),
         CourseElementFields.eneabled: enabled ? 1 : 0,

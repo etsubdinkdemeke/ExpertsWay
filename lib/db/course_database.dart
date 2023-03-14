@@ -64,6 +64,7 @@ CREATE TABLE $courseElement (
       ${CourseElementFields.description} $textTypeNull,
       ${CourseElementFields.color} $textTypeNull,
       ${CourseElementFields.icon} $textTypeNull,
+      ${CourseElementFields.banner} $textTypeNull,
       ${CourseElementFields.shortVideo} $textTypeNull,
       ${CourseElementFields.lastUpdated} $textTypeNull,
       ${CourseElementFields.eneabled} $boolType,
@@ -78,10 +79,10 @@ CREATE TABLE $lessontable (
       ${LessonsElementFields.lesson_id} $intType,
       ${LessonsElementFields.slug} $textType,
       ${LessonsElementFields.title} $textType,
+      ${LessonsElementFields.shortDescription} $textType,
       ${LessonsElementFields.section} $textType,
       ${LessonsElementFields.courseSlug} $textType,
       ${LessonsElementFields.publishedDate} $textType,
-
       $fk_course
     )
     ''');
@@ -137,14 +138,15 @@ CREATE TABLE $notification (
     try {
       final json = lessonElement.toJson();
       final columns =
-          '${LessonsElementFields.lesson_id},${LessonsElementFields.slug},${LessonsElementFields.title},${LessonsElementFields.section},${LessonsElementFields.courseSlug},${LessonsElementFields.publishedDate}';
+          '${LessonsElementFields.lesson_id},${LessonsElementFields.slug},${LessonsElementFields.title},${LessonsElementFields.shortDescription},${LessonsElementFields.section},${LessonsElementFields.courseSlug},${LessonsElementFields.publishedDate}';
 
       await db.rawInsert(
-        'INSERT INTO $lessontable ($columns) VALUES (?,?,?,?,?,?)',
+        'INSERT INTO $lessontable ($columns) VALUES (?,?,?,?,?,?,?)',
         [
           json[LessonsElementFields.lesson_id].toString(),
           json[LessonsElementFields.slug],
           json[LessonsElementFields.title],
+          json[LessonsElementFields.shortDescription],
           json[LessonsElementFields.section],
           json[LessonsElementFields.courseSlug],
           json[LessonsElementFields.publishedDate],
@@ -267,7 +269,7 @@ CREATE TABLE $notification (
           ),
           margin: EdgeInsets.only(top: 12));
     }
-   }
+  }
 
 // READ COURSE DATA'
   Future<Course> readCourse(int id) async {
@@ -285,7 +287,8 @@ CREATE TABLE $notification (
       throw Exception('ID $id not found');
     }
   }
-   Future<CourseElement> readCourseNameandIcon(int id) async {
+
+  Future<CourseElement> readCourseNameandIcon(int id) async {
     final db = await instance.database;
 
     final maps = await db.query(
@@ -426,7 +429,7 @@ CREATE TABLE $notification (
   }
 
 // DELETE DATA
-   Future<int> deleteNotification(int id) async {
+  Future<int> deleteNotification(int id) async {
     final db = await instance.database;
 
     return await db.delete(
