@@ -9,7 +9,7 @@ class CourseFilds {
     // add all fileds
     code,
   ];
-  static final String code = 'code';
+  static const String code = 'code';
 }
 
 class Course {
@@ -45,26 +45,26 @@ class Course {
 class CourseElementFields {
   static final List<String> values = [
     // add all fileds
-    course_id, name, slug, description, color, icon, shortVideo,
+    courseId, name, slug, description, color, icon, shortVideo,
     lastUpdated, eneabled
   ];
 
-  static final String course_id = '_id';
-  static final String name = 'name';
-  static final String slug = 'slug';
-  static final String description = 'description';
-  static final String color = 'color';
-  static final String icon = 'icon';
-  static final String shortVideo = 'short_video';
-  static final String lastUpdated = 'last_updated';
-  static final String eneabled = 'enabled';
-  static final String isLastSeen = 'is_last_seen';
-  static final String seenCounter = 'seen_counter';
+  static const String courseId = '_id';
+  static const String name = 'name';
+  static const String slug = 'slug';
+  static const String description = 'description';
+  static const String color = 'color';
+  static const String icon = 'icon';
+  static const String shortVideo = 'short_video';
+  static const String lastUpdated = 'last_updated';
+  static const String eneabled = 'enabled';
+  static const String isLastSeen = 'is_last_seen';
+  static const String seenCounter = 'seen_counter';
 }
 
 class CourseElement {
   CourseElement({
-    this.course_id,
+    this.courseId,
     required this.name,
     required this.slug,
     required this.description,
@@ -78,7 +78,7 @@ class CourseElement {
   });
 
   CourseElement copy({
-    int? course_id,
+    int? courseId,
     String? name,
     String? slug,
     String? description,
@@ -91,7 +91,7 @@ class CourseElement {
     int? seenCounter,
   }) =>
       CourseElement(
-        course_id: course_id ?? this.course_id,
+        courseId: courseId ?? this.courseId,
         name: name ?? this.name,
         slug: slug ?? this.slug,
         description: description ?? this.description,
@@ -104,7 +104,7 @@ class CourseElement {
         seenCounter: seenCounter ?? this.seenCounter,
       );
 
-  final int? course_id;
+  final int? courseId;
   String name;
   String slug;
   String description;
@@ -117,7 +117,7 @@ class CourseElement {
   int? isLastSeen;
 
   factory CourseElement.fromJson(Map<String, dynamic> json) => CourseElement(
-        course_id: json[CourseElementFields.course_id] as int?,
+        courseId: json[CourseElementFields.courseId] as int?,
         name: json[CourseElementFields.name] as String,
         slug: json[CourseElementFields.slug] as String,
         description: json[CourseElementFields.description] as String,
@@ -131,7 +131,7 @@ class CourseElement {
       );
 
   Map<String, Object?> toJson() => {
-        CourseElementFields.course_id: course_id,
+        CourseElementFields.courseId: courseId,
         CourseElementFields.name: name,
         CourseElementFields.slug: slug,
         CourseElementFields.description: description,
@@ -146,49 +146,49 @@ class CourseElement {
 }
 
 class SectionFields {
-  static final List<String> sec_values = [sec_id, course_id, sections, level];
-  static final String sec_id = '_id';
-  static final String course_id = 'course_id';
-  static final String sections = 'sections';
-  static final String level = 'level';
+  static final List<String> secValues = [secId, courseId, sections, level];
+  static const String secId = '_id';
+  static const String courseId = 'course_id';
+  static const String sections = 'sections';
+  static const String level = 'level';
 }
 
 class Section {
   Section({
-    this.sec_id,
-    this.course_id,
+    this.secId,
+    this.courseId,
     this.section,
     this.level,
   });
 
-  String? sec_id;
-  String? course_id;
+  String? secId;
+  String? courseId;
   String? section;
   String? level;
 
   Section copy({
-    String? sec_id,
-    String? course_id,
+    String? secId,
+    String? courseId,
     String? section,
     String? level,
   }) =>
       Section(
-        sec_id: sec_id ?? this.sec_id,
-        course_id: course_id ?? this.course_id,
+        secId: secId ?? this.secId,
+        courseId: courseId ?? this.courseId,
         section: section ?? this.section,
         level: level ?? this.level,
       );
 
   factory Section.fromJson(Map<String, dynamic> json) => Section(
-        sec_id: json[SectionFields.sec_id] as String?,
-        course_id: json[SectionFields.course_id] as String?,
+        secId: json[SectionFields.secId] as String?,
+        courseId: json[SectionFields.courseId] as String?,
         section: json[SectionFields.sections] as String,
         level: json[SectionFields.level] as String?,
       );
 
   Map<String, dynamic> toJson() => {
-        SectionFields.sec_id: sec_id ?? '',
-        SectionFields.course_id: course_id ?? '',
+        SectionFields.secId: secId ?? '',
+        SectionFields.courseId: courseId ?? '',
         SectionFields.sections: section ?? '',
         SectionFields.level: level ?? '',
       };

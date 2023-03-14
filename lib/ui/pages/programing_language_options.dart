@@ -41,7 +41,7 @@ class _ProgrammingOptionsState extends State<ProgrammingOptions> {
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2, childAspectRatio: 9 / 3),
-              itemCount: ProgrammingOptionsModels.length,
+              itemCount: programmingOptionsModels.length,
               itemBuilder: (_, int index) {
                 return Padding(
                   padding:
@@ -50,18 +50,18 @@ class _ProgrammingOptionsState extends State<ProgrammingOptions> {
                     defaultBtn: false,
                     onPressed: () {
                       setState(() {
-                        ProgrammingOptionsModels[index].isPicked =
-                            !ProgrammingOptionsModels[index].isPicked;
-                        !ProgrammingOptionsModels[index].isPicked
+                        programmingOptionsModels[index].isPicked =
+                            !programmingOptionsModels[index].isPicked;
+                        !programmingOptionsModels[index].isPicked
                             ? pickedLanguages
-                                .add(ProgrammingOptionsModels[index])
+                                .add(programmingOptionsModels[index])
                             : pickedLanguages
-                                .remove(ProgrammingOptionsModels[index]);
+                                .remove(programmingOptionsModels[index]);
                       });
                     },
-                    btnName: ProgrammingOptionsModels[index].btnName,
-                    iconUrl: ProgrammingOptionsModels[index].iconUrl,
-                    isPcked: ProgrammingOptionsModels[index].isPicked,
+                    btnName: programmingOptionsModels[index].btnName,
+                    iconUrl: programmingOptionsModels[index].iconUrl,
+                    isPcked: programmingOptionsModels[index].isPicked,
                   ),
                 );
               }),

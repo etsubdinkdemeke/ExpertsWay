@@ -1,13 +1,6 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:learncoding/api/shared_preference/shared_preference.dart';
+
 import 'package:learncoding/main.dart';
-import 'package:learncoding/ui/pages/onboarding1.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:learncoding/api/google_signin_api.dart';
 import 'package:learncoding/ui/widgets/header.dart';
@@ -48,21 +41,20 @@ class _SettingsState extends State<Settings> {
               pre.clear();
               GoogleSignInApi.logout();
 
+              // ignore: use_build_context_synchronously
               Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => RestartWidget(child: (MyApp()))));
+                  builder: (context) => const RestartWidget(child: (MyApp()))));
             }
-
-            ;
           },
-          highlightColor: Color.fromARGB(132, 135, 208, 245),
-          splashColor: Color.fromARGB(61, 231, 231, 231),
+          highlightColor: const Color.fromARGB(132, 135, 208, 245),
+          splashColor: const Color.fromARGB(61, 231, 231, 231),
           borderRadius: BorderRadius.circular(radius),
           child: ListTile(
             leading: Container(
               width: 35,
               height: 35,
               decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 233, 233, 233),
+                  color: const Color.fromARGB(255, 233, 233, 233),
                   borderRadius: BorderRadius.circular(radius)),
               child: Icon(
                 leading,
@@ -72,7 +64,7 @@ class _SettingsState extends State<Settings> {
             ),
             title: Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Color.fromARGB(255, 137, 137, 137),
                   fontSize: 18,
                   fontWeight: FontWeight.w500),
@@ -95,8 +87,8 @@ class _SettingsState extends State<Settings> {
         padding: const EdgeInsets.only(top: 60.0),
         child: Column(
           children: [
-            Header(title: "Settings"),
-            SizedBox(
+            const Header(title: "Settings"),
+            const SizedBox(
               height: 10,
             ),
             Container(
@@ -108,15 +100,15 @@ class _SettingsState extends State<Settings> {
                     'Clear data',
                     Icons.arrow_forward_ios,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   _container(
-                    FontAwesomeIcons.ad,
+                    FontAwesomeIcons.rectangleAd,
                     'ad',
                     Icons.arrow_forward_ios,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   _container(
@@ -124,7 +116,7 @@ class _SettingsState extends State<Settings> {
                     'How do you earn coin',
                     Icons.arrow_forward_ios,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   _container(

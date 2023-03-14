@@ -1,8 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:learncoding/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../models/notification.dart';
 
 class UserPreferences {
 // set AuthToken once user login completed

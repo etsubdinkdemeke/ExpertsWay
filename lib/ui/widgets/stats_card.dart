@@ -25,20 +25,19 @@ class StatsCard extends material.StatelessWidget {
               padding: const material.EdgeInsets.only(bottom: 6.0),
               child: material.GestureDetector(
                 child: material.Container(
-                  padding: material.EdgeInsets.fromLTRB(0, 14, 0, 14),
+                  padding: const material.EdgeInsets.fromLTRB(0, 14, 0, 14),
                   decoration: material.BoxDecoration(gradient: Colors().waves),
                   child: material.Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: material.Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
                           child: Text(
                             "3489",
                             style: TextStyle(
-                                fontSize: 18,
-                                color: Color(0xFFFFFFFF)),
+                                fontSize: 18, color: Color(0xFFFFFFFF)),
                           ),
                         ),
                         Image.asset(
@@ -53,40 +52,37 @@ class StatsCard extends material.StatelessWidget {
                   material.Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) => VideoPage(),
+                      builder: (context) => const VideoPage(),
                     ),
                   );
                 },
               ),
             ),
-            material.Padding(
-              padding: const material.EdgeInsets.all(8.0),
+            const material.Padding(
+              padding: material.EdgeInsets.all(8.0),
               child: material.Text(
                 "Statistics",
                 overflow: material.TextOverflow.ellipsis,
                 maxLines: 2,
                 style: material.TextStyle(
-                    color: material.Color(0xFF535353),
-                    fontSize: 16),
+                    color: material.Color(0xFF535353), fontSize: 16),
               ),
             ),
             material.Padding(
               padding: const material.EdgeInsets.symmetric(horizontal: 8.0),
               child: material.Row(
-                children: <material.Widget>[
+                children: const <material.Widget>[
                   material.Icon(BoxIcons.bx_question_mark, size: 16),
                   material.Text(
                     "23 Questions asked",
                     style: material.TextStyle(
-                        color: material.Color(0xFFADADAD),
-                        fontSize: 10),
+                        color: material.Color(0xFFADADAD), fontSize: 10),
                   ),
                   material.Spacer(),
                   material.Text(
                     "12 days Streak",
                     style: material.TextStyle(
-                        color: material.Color(0xFFADADAD),
-                        fontSize: 10),
+                        color: material.Color(0xFFADADAD), fontSize: 10),
                   ),
                   material.Icon(BoxIcons.bxs_flame, size: 16),
                 ],
@@ -95,26 +91,24 @@ class StatsCard extends material.StatelessWidget {
             material.Padding(
               padding: const material.EdgeInsets.symmetric(horizontal: 8.0),
               child: material.Row(
-                children: <material.Widget>[
+                children: const <material.Widget>[
                   material.Icon(BoxIcons.bx_pen, size: 16),
                   material.Text(
                     "89 Questions answered",
                     style: material.TextStyle(
-                        color: material.Color(0xFFADADAD),
-                        fontSize: 10),
+                        color: material.Color(0xFFADADAD), fontSize: 10),
                   ),
                   material.Spacer(),
                   material.Text(
                     "25 topics revised",
                     style: material.TextStyle(
-                        color: material.Color(0xFFADADAD),
-                        fontSize: 10),
+                        color: material.Color(0xFFADADAD), fontSize: 10),
                   ),
                   material.Icon(BoxIcons.bx_book_open, size: 16),
                 ],
               ),
             ),
-            material.Spacer(),
+            const material.Spacer(),
           ],
         ),
       ),

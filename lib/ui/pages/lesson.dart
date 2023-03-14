@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:math';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:learncoding/api/shared_preference/shared_preference.dart';
@@ -10,8 +9,7 @@ import 'package:learncoding/theme/config.dart' as config;
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:learncoding/utils/color.dart';
-import 'package:learncoding/utils/lessonFinishMessage.dart';
-import 'package:get/get.dart';
+import 'package:learncoding/utils/lesson_finish_message.dart';
 import '../../db/course_database.dart';
 
 class LessonPage extends StatefulWidget {
@@ -47,9 +45,9 @@ class _LessonState extends State<LessonPage> {
     getContentsId();
 
     refreshProgress();
-  
   }
 
+  // ignore: unused_element
   static int getPageNum() {
     int val = progressElement!.pageNum;
     return val;
@@ -80,6 +78,7 @@ class _LessonState extends State<LessonPage> {
       pageNum: index,
       userProgress: getUserProgress().toString(),
     );
+    // ignore: unused_local_variable
     String res = await CourseDatabase.instance.updateProgress(progress);
   }
 
@@ -96,7 +95,7 @@ class _LessonState extends State<LessonPage> {
       });
     } else {
       setState(() {
-      index = 0;
+        index = 0;
       });
     }
     setState(() => isLoading = false);
@@ -135,7 +134,6 @@ class _LessonState extends State<LessonPage> {
   }
 
   lessonFinished() {
-    
     Random random = Random();
     int randomNo1 = random.nextInt(greeting.length);
     int randomNo2 = random.nextInt(completed.length);
@@ -279,10 +277,9 @@ class _LessonState extends State<LessonPage> {
                       message: lessonFinished()[1].toString(),
                       duration: const Duration(seconds: 5),
                     ).show(context);
-
-                    
-                  } else
+                  } else {
                     Container();
+                  }
                   index < getContent.length - 1
                       ? setState(() {
                           index++;

@@ -1,19 +1,20 @@
-final String tableCourse = 'courses';
+const String tableCourse = 'courses';
 
 class CourseFields {
   static final List<String> values = [
     // add all fileds
-    id, name, description, iconName, video, seenCounter, isLastSeen 
+    id, name, description, iconName, video, seenCounter, isLastSeen
   ];
 
-  static final String id = '_id';
-  static final String name = 'name';
-  static final String description = 'description';
-  static final String iconName = 'iconName';
-  static final String video = 'video';
-  static final String seenCounter = 'seenCounter';
-  static final String isLastSeen = 'isLastSeen';
+  static const String id = '_id';
+  static const String name = 'name';
+  static const String description = 'description';
+  static const String iconName = 'iconName';
+  static const String video = 'video';
+  static const String seenCounter = 'seenCounter';
+  static const String isLastSeen = 'isLastSeen';
 }
+
 class CourseTable {
   final int? id;
   final String name;
@@ -33,7 +34,7 @@ class CourseTable {
     required this.isLastSeen,
   });
 
-    CourseTable copy({
+  CourseTable copy({
     int? id,
     String? name,
     String? description,
@@ -59,7 +60,6 @@ class CourseTable {
         video: json[CourseFields.video] as String,
         seenCounter: json[CourseFields.seenCounter] as int,
         isLastSeen: DateTime.parse(json[CourseFields.isLastSeen] as String),
-
       );
 
   Map<String, Object?> toJson() => {
@@ -71,5 +71,4 @@ class CourseTable {
         CourseFields.seenCounter: seenCounter,
         CourseFields.isLastSeen: isLastSeen.toIso8601String(),
       };
-
 }

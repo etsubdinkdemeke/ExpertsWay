@@ -13,8 +13,9 @@ class CardWidget extends StatelessWidget {
   final int? duration;
   final Border? border;
   final BorderRadius? borderRadius;
-  final func;
-  CardWidget({
+  final Function()? func;
+  const CardWidget({
+    super.key,
     required this.gradient,
     required this.button,
     this.color,
@@ -24,12 +25,12 @@ class CardWidget extends StatelessWidget {
     this.duration,
     this.func,
     this.border,
-    this.borderRadius,  // an optional field for setting the border-radius
+    this.borderRadius, // an optional field for setting the border-radius
   });
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: material.BoxDecoration(
+      decoration: const material.BoxDecoration(
         boxShadow: [
           BoxShadow(
             blurRadius: 25,
@@ -70,8 +71,8 @@ class CardWidget extends StatelessWidget {
                   child: material.MaterialButton(
                     padding: material.EdgeInsets.zero,
                     elevation: 0,
-                    child: child,
                     onPressed: func,
+                    child: child,
                   ),
                 )
               : child,

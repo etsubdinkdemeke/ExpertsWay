@@ -1,2 +1,2 @@
-const String HomeRoute = '/';
-const String SearchRoute = '/search';
+const String homeRoute = '/';
+const String searchRoute = '/search';

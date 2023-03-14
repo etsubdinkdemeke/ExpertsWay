@@ -1,22 +1,19 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:learncoding/utils/color.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'dart:convert';
 import '../models/course.dart';
 import '../models/lesson.dart';
 import 'package:get/get.dart';
 import '../models/notification.dart';
 
-final String courseElement = 'coursesElement';
-final String tablesections = 'sections';
-final String lessontable = 'lessons';
-final String lesson_contnent_table = 'lessonsContent';
-final String progress = 'progress';
-final String notification = 'notification';
+const String courseElement = 'coursesElement';
+const String tablesections = 'sections';
+const String lessontable = 'lessons';
+const String lessonContnentTable = 'lessonsContent';
+const String progress = 'progress';
+const String notification = 'notification';
 
 class CourseDatabase {
   static final CourseDatabase instance = CourseDatabase.init();
@@ -39,26 +36,28 @@ class CourseDatabase {
   }
 
   Future _createDB(Database db, int version) async {
-    final idType = 'INTEGER PRIMARY KEY';
-    final idTextType = 'TEXT PRIMARY KEY';
-    final textType = 'TEXT NOT NULL';
-    final fk_course =
+    const idType = 'INTEGER PRIMARY KEY';
+    // const idTextType = 'TEXT PRIMARY KEY';
+    const textType = 'TEXT NOT NULL';
+    const fkCourse =
         'FOREIGN KEY (${LessonsElementFields.courseSlug}) REFERENCES $courseElement(${CourseElementFields.slug})';
-    final fk_lesson =
-        'FOREIGN KEY (${LessonsContentFields.lessonId}) REFERENCES $lessontable(${LessonsElementFields.lesson_id})';
+    const fkLesson =
+        'FOREIGN KEY (${LessonsContentFields.lessonId}) REFERENCES $lessontable(${LessonsElementFields.lessonId})';
 
-    final textTypeNull = 'TEXT';
-    final boolType = 'BOOLEAN NOT NULL';
-    final dateType = 'DATE';
-    final intType = 'INTEGER NOT NULL';
-    final intTypeNull = 'INTEGER';
-    print("...createing table.....");
+    const textTypeNull = 'TEXT';
+    const boolType = 'BOOLEAN NOT NULL';
+    // const dateType = 'DATE';
+    const intType = 'INTEGER NOT NULL';
+    const intTypeNull = 'INTEGER';
+    if (kDebugMode) {
+      print("...createing table.....");
+    }
     // CREATEING TABLES
 
 // COURSE TABLE
     await db.execute('''
 CREATE TABLE $courseElement (
-      ${CourseElementFields.course_id} $idType,
+      ${CourseElementFields.courseId} $idType,
       ${CourseElementFields.name} $textTypeNull,
       ${CourseElementFields.slug} $textTypeNull,
       ${CourseElementFields.description} $textTypeNull,
@@ -75,24 +74,24 @@ CREATE TABLE $courseElement (
 // LESSON TABLE
     await db.execute('''
 CREATE TABLE $lessontable (
-      ${LessonsElementFields.lesson_id} $intType,
+      ${LessonsElementFields.lessonId} $intType,
       ${LessonsElementFields.slug} $textType,
       ${LessonsElementFields.title} $textType,
       ${LessonsElementFields.section} $textType,
       ${LessonsElementFields.courseSlug} $textType,
       ${LessonsElementFields.publishedDate} $textType,
 
-      $fk_course
+      $fkCourse
     )
     ''');
 
 // LESSON CONTENT TABLE
     await db.execute('''
-CREATE TABLE $lesson_contnent_table (
+CREATE TABLE $lessonContnentTable (
       ${LessonsContentFields.id} $idType,
       ${LessonsContentFields.lessonId} $textTypeNull,
       ${LessonsContentFields.content} $textTypeNull,
-      $fk_lesson
+      $fkLesson
     )
     ''');
 
@@ -129,20 +128,20 @@ CREATE TABLE $notification (
     //       .createSection(courseElem.sections![i], id.toString());
     //}
 
-    return courseElem.copy(course_id: id);
+    return courseElem.copy(courseId: id);
   }
 
   Future<void> createLessons(LessonElement lessonElement) async {
     final db = await instance.database;
     try {
       final json = lessonElement.toJson();
-      final columns =
-          '${LessonsElementFields.lesson_id},${LessonsElementFields.slug},${LessonsElementFields.title},${LessonsElementFields.section},${LessonsElementFields.courseSlug},${LessonsElementFields.publishedDate}';
+      const columns =
+          '${LessonsElementFields.lessonId},${LessonsElementFields.slug},${LessonsElementFields.title},${LessonsElementFields.section},${LessonsElementFields.courseSlug},${LessonsElementFields.publishedDate}';
 
       await db.rawInsert(
         'INSERT INTO $lessontable ($columns) VALUES (?,?,?,?,?,?)',
         [
-          json[LessonsElementFields.lesson_id].toString(),
+          json[LessonsElementFields.lessonId].toString(),
           json[LessonsElementFields.slug],
           json[LessonsElementFields.title],
           json[LessonsElementFields.section],
@@ -153,51 +152,51 @@ CREATE TABLE $notification (
 
       for (var i = 0; i < lessonElement.content.length; i++) {
         CourseDatabase.instance.createLessonsContent(lessonElement.content[i],
-            json[LessonsElementFields.lesson_id].toString());
+            json[LessonsElementFields.lessonId].toString());
       }
     } on DatabaseException catch (error) {
       Get.snackbar("", "",
           borderWidth: 2,
           borderColor: maincolor,
           dismissDirection: DismissDirection.horizontal,
-          duration: Duration(seconds: 4),
-          backgroundColor: Color.fromRGBO(255, 255, 255, 0.885),
-          titleText: Text(
+          duration: const Duration(seconds: 4),
+          backgroundColor: const Color.fromRGBO(255, 255, 255, 0.885),
+          titleText: const Text(
             'Error',
             style: TextStyle(
                 color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           messageText: Text(
             '$error',
-            style: TextStyle(
+            style: const TextStyle(
                 color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
           ),
-          margin: EdgeInsets.only(top: 12));
+          margin: const EdgeInsets.only(top: 12));
     } catch (e) {
       Get.snackbar("", "",
           borderWidth: 2,
           borderColor: maincolor,
           dismissDirection: DismissDirection.horizontal,
-          duration: Duration(seconds: 4),
-          backgroundColor: Color.fromRGBO(255, 255, 255, 0.885),
-          titleText: Text(
+          duration: const Duration(seconds: 4),
+          backgroundColor: const Color.fromRGBO(255, 255, 255, 0.885),
+          titleText: const Text(
             'Error',
             style: TextStyle(
                 color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           messageText: Text(
-            '${e}',
-            style: TextStyle(
+            '$e',
+            style: const TextStyle(
                 color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
           ),
-          margin: EdgeInsets.only(top: 12));
+          margin: const EdgeInsets.only(top: 12));
     }
   }
 
   Future<void> createLessonsContent(String content, String lessonid) async {
     final db = await instance.database;
     LessonContent lescon = LessonContent(lessonId: lessonid, content: content);
-    final id = await db.insert(lesson_contnent_table, lescon.toJson());
+    final id = await db.insert(lessonContnentTable, lescon.toJson());
     lescon.copy(id: id);
   }
 
@@ -205,7 +204,7 @@ CREATE TABLE $notification (
       ProgressElement progressElement) async {
     final db = await instance.database;
     final json = progressElement.tojson();
-    final columns =
+    const columns =
         '${ProgressFields.progId},${ProgressFields.courseId},${ProgressFields.lessonId},${ProgressFields.contentId},${ProgressFields.pageNum},${ProgressFields.userProgress}';
 
     // final id = await db.insert(progress, progressElement.tojson());
@@ -235,39 +234,39 @@ CREATE TABLE $notification (
           borderWidth: 2,
           borderColor: maincolor,
           dismissDirection: DismissDirection.horizontal,
-          duration: Duration(seconds: 4),
-          backgroundColor: Color.fromRGBO(255, 255, 255, 0.885),
-          titleText: Text(
+          duration: const Duration(seconds: 4),
+          backgroundColor: const Color.fromRGBO(255, 255, 255, 0.885),
+          titleText: const Text(
             'Error',
             style: TextStyle(
                 color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           messageText: Text(
             '$error',
-            style: TextStyle(
+            style: const TextStyle(
                 color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
           ),
-          margin: EdgeInsets.only(top: 12));
+          margin: const EdgeInsets.only(top: 12));
     } catch (e) {
       Get.snackbar("", "",
           borderWidth: 2,
           borderColor: maincolor,
           dismissDirection: DismissDirection.horizontal,
-          duration: Duration(seconds: 4),
-          backgroundColor: Color.fromRGBO(255, 255, 255, 0.885),
-          titleText: Text(
+          duration: const Duration(seconds: 4),
+          backgroundColor: const Color.fromRGBO(255, 255, 255, 0.885),
+          titleText: const Text(
             'Error',
             style: TextStyle(
                 color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           messageText: Text(
-            '${e}',
-            style: TextStyle(
+            '$e',
+            style: const TextStyle(
                 color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
           ),
-          margin: EdgeInsets.only(top: 12));
+          margin: const EdgeInsets.only(top: 12));
     }
-   }
+  }
 
 // READ COURSE DATA'
   Future<Course> readCourse(int id) async {
@@ -276,7 +275,7 @@ CREATE TABLE $notification (
     final maps = await db.query(
       courseElement,
       columns: CourseElementFields.values,
-      where: '${CourseElementFields.course_id} = ?',
+      where: '${CourseElementFields.courseId} = ?',
       whereArgs: [id],
     );
     if (maps.isNotEmpty) {
@@ -296,43 +295,44 @@ CREATE TABLE $notification (
         whereArgs: [courseSlug],
       );
       return result.map((json) => LessonElement.fromJson(json)).toList();
+      // ignore: unused_catch_clause
     } on DatabaseException catch (error) {
       Get.snackbar("", "",
           borderWidth: 2,
           borderColor: maincolor,
           dismissDirection: DismissDirection.horizontal,
-          duration: Duration(seconds: 4),
-          backgroundColor: Color.fromRGBO(255, 255, 255, 0.885),
-          titleText: Text(
+          duration: const Duration(seconds: 4),
+          backgroundColor: const Color.fromRGBO(255, 255, 255, 0.885),
+          titleText: const Text(
             'Error',
             style: TextStyle(
                 color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          messageText: Text(
+          messageText: const Text(
             'Unable to read data from database',
             style: TextStyle(
                 color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
           ),
-          margin: EdgeInsets.only(top: 12));
+          margin: const EdgeInsets.only(top: 12));
       return [];
     } catch (e) {
       Get.snackbar("", "",
           borderWidth: 2,
           borderColor: maincolor,
           dismissDirection: DismissDirection.horizontal,
-          duration: Duration(seconds: 4),
-          backgroundColor: Color.fromRGBO(255, 255, 255, 0.885),
-          titleText: Text(
+          duration: const Duration(seconds: 4),
+          backgroundColor: const Color.fromRGBO(255, 255, 255, 0.885),
+          titleText: const Text(
             'Error',
             style: TextStyle(
                 color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           messageText: Text(
-            '${e}',
-            style: TextStyle(
+            '$e',
+            style: const TextStyle(
                 color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
           ),
-          margin: EdgeInsets.only(top: 12));
+          margin: const EdgeInsets.only(top: 12));
       return [];
     }
 
@@ -341,7 +341,7 @@ CREATE TABLE $notification (
 
   Future<List<CourseElement>> readAllCourse() async {
     final db = await instance.database;
-    final orderby = '${CourseElementFields.isLastSeen} ASC';
+    const orderby = '${CourseElementFields.isLastSeen} ASC';
     final result = await db.query(courseElement, orderBy: orderby);
     return result.map((json) => CourseElement.fromJson(json)).toList();
   }
@@ -349,7 +349,7 @@ CREATE TABLE $notification (
   Future<List<LessonContent>> readLessonContets(int lessonId) async {
     final db = await instance.database;
     final result = await db.query(
-      lesson_contnent_table,
+      lessonContnentTable,
       columns: LessonsContentFields.lessonsvalue,
       where: '${LessonsContentFields.lessonId} = ?',
       whereArgs: [lessonId],
@@ -367,7 +367,7 @@ CREATE TABLE $notification (
   Future<List<LessonContent>> readAllLessonContent() async {
     final db = await instance.database;
 
-    final result = await db.query(lesson_contnent_table);
+    final result = await db.query(lessonContnentTable);
 
     return result.map((json) => LessonContent.fromJson(json)).toList();
   }
@@ -411,7 +411,7 @@ CREATE TABLE $notification (
   }
 
 // DELETE DATA
-   Future<int> deleteNotification(int id) async {
+  Future<int> deleteNotification(int id) async {
     final db = await instance.database;
 
     return await db.delete(

@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:learncoding/models/user.dart';
 import 'package:learncoding/models/course.dart';
 import 'package:learncoding/services/api_controller.dart';
 import 'package:learncoding/theme/box_icons_icons.dart';
-import 'package:learncoding/ui/pages/course_detail.dart';
-import 'package:learncoding/ui/widgets/card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../api/shared_preference/shared_preference.dart';
 import '../../db/course_database.dart';
 import '../../utils/color.dart';
 import 'course_card.dart';
@@ -28,15 +24,15 @@ class TopBar extends StatefulWidget {
 
   final TextEditingController controller;
   final bool expanded;
-  final onMenuTap;
+  final Function()? onMenuTap;
 
   @override
-  _TopBarState createState() => _TopBarState();
+  TopBarState createState() => TopBarState();
 }
 
-class _TopBarState extends State<TopBar> {
+class TopBarState extends State<TopBar> {
   int tab = 0;
-    late List<CourseElement> course = [];
+  late List<CourseElement> course = [];
   late List<Section> section = [];
   bool isLoading = false;
 
@@ -44,10 +40,10 @@ class _TopBarState extends State<TopBar> {
   void initState() {
     super.initState();
     getValue();
-        refreshCourse();
-
+    refreshCourse();
   }
-Future refreshCourse() async {
+
+  Future refreshCourse() async {
     setState(() => isLoading = true);
 
     course = await CourseDatabase.instance.readAllCourse();
@@ -81,8 +77,8 @@ Future refreshCourse() async {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Text(
-                    "Hi," + name!,
-                    style: TextStyle(
+                    "Hi,${name!}",
+                    style: const TextStyle(
                         color: Color(0xFF343434),
                         fontSize: 24,
                         fontWeight: material.FontWeight.w600),
@@ -91,10 +87,10 @@ Future refreshCourse() async {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: GestureDetector(
+                    onTap: widget.onMenuTap,
                     child: material.CircleAvatar(
                       backgroundImage: NetworkImage(image!),
                     ),
-                    onTap: widget.onMenuTap,
                   ),
                 ),
               ],
@@ -106,18 +102,18 @@ Future refreshCourse() async {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: material.Colors.white,
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       blurRadius: 25,
                       offset: Offset(0, 10),
                       color: Color(0x1A636363),
                     ),
                   ]),
-              padding: EdgeInsets.all(10),
-              style: TextStyle(
-                  color: Color(0xFF343434),
-                  fontSize: 18,
-                  ),
+              padding: const EdgeInsets.all(10),
+              style: const TextStyle(
+                color: Color(0xFF343434),
+                fontSize: 18,
+              ),
               enableInteractiveSelection: true,
               controller: widget.controller,
               expands: false,
@@ -125,8 +121,8 @@ Future refreshCourse() async {
                 FilteringTextInputFormatter.singleLineFormatter
               ],
               keyboardType: TextInputType.text,
-              suffix: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              suffix: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
                 child: Icon(
                   BoxIcons.bx_search,
                   color: Color(0xFFADADAD),
@@ -135,15 +131,14 @@ Future refreshCourse() async {
               textInputAction: TextInputAction.search,
               textCapitalization: TextCapitalization.words,
               placeholder: "Search",
-              placeholderStyle: TextStyle(
-                  color: Color(0xFFADADAD),
-                  fontSize: 18,
-                  ),
+              placeholderStyle: const TextStyle(
+                color: Color(0xFFADADAD),
+                fontSize: 18,
+              ),
             ),
           ),
           widget.expanded
-              ? 
-              Container(
+              ? SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height * 0.165,
                   child: course.isEmpty
@@ -153,7 +148,7 @@ Future refreshCourse() async {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
                               {
-                                return Center(
+                                return const Center(
                                   child: CircularProgressIndicator(
                                     color: maincolor,
                                   ),
@@ -191,12 +186,13 @@ Future refreshCourse() async {
                             return Container();
                           })
                       : buildCard())
-                : Container(),
+              : Container(),
         ],
       ),
     );
   }
- Widget buildCard() {
+
+  Widget buildCard() {
     return ListView.builder(
       scrollDirection: Axis.horizontal,
       itemCount: course.length,
@@ -205,6 +201,7 @@ Future refreshCourse() async {
       },
     );
   }
+
   Color colorConvert(String color) {
     color = color.replaceAll("#", "");
     if (color.length == 6) {

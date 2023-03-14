@@ -1,23 +1,23 @@
 import 'package:learncoding/theme/config.dart' as config;
 import 'package:learncoding/ui/widgets/card.dart';
-import 'package:learncoding/ui/widgets/sectionHeader.dart';
-import 'package:learncoding/ui/widgets/statsCard.dart';
-import 'package:learncoding/ui/widgets/topBar.dart';
+import 'package:learncoding/ui/widgets/section_header.dart';
+import 'package:learncoding/ui/widgets/stats_card.dart';
+import 'package:learncoding/ui/widgets/top_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as material;
 
 class LeaderboardPage extends StatefulWidget {
-  LeaderboardPage({
+  const LeaderboardPage({
     Key? key,
     required this.onMenuTap,
   }) : super(key: key);
-  final Function? onMenuTap;
+  final Function()? onMenuTap;
 
   @override
-  _LeaderboardPageState createState() => _LeaderboardPageState();
+  LeaderboardPageState createState() => LeaderboardPageState();
 }
 
-class _LeaderboardPageState extends State<LeaderboardPage> {
+class LeaderboardPageState extends State<LeaderboardPage> {
   TextEditingController controller = TextEditingController();
   late bool local;
   final List names = [
@@ -46,7 +46,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     '3450'
   ];
 
-  final List colors = [
+  final List colors = const [
     Color(0xFFFFD700),
     Color(0xFFC0C0C0),
     Color(0xFFCD7F32),
@@ -89,11 +89,11 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                       SliverToBoxAdapter(
                         child: Stack(
                           children: <Widget>[
-                            Container(
+                            SizedBox(
                               width: MediaQuery.of(context).size.width,
                               height: 240,
                               child: ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 itemCount: 3,
                                 itemBuilder: (context, index) {
                                   return Padding(
@@ -102,13 +102,14 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                     child: CardWidget(
                                       gradient: false,
                                       button: false,
+                                      height: 60,
                                       child: Row(
                                         children: <Widget>[
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Text(
                                               "${index + 1}.",
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 18,
                                                   color: Color(0xFF585858)),
                                             ),
@@ -117,24 +118,26 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                             padding: const EdgeInsets.all(8.0),
                                             child: Text(
                                               "${names[index]}",
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 18,
                                                   color: Color(0xFF585858)),
                                             ),
                                           ),
-                                          Spacer(),
+                                          const Spacer(),
                                           Container(
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
                                                 0.3,
                                             decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.elliptical(
-                                                        10, 50),
-                                                    bottomLeft:
-                                                        Radius.elliptical(
-                                                            10, 50)),
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.elliptical(
+                                                                10, 50),
+                                                        bottomLeft:
+                                                            Radius.elliptical(
+                                                                10, 50)),
                                                 gradient: LinearGradient(
                                                     colors: [
                                                       material.Colors.white,
@@ -157,7 +160,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                                   ),
                                                   Text(
                                                     "${coins[index]}",
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         fontSize: 18,
                                                         color:
                                                             Color(0xFF585858)),
@@ -168,7 +171,6 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                           )
                                         ],
                                       ),
-                                      height: 60,
                                     ),
                                   );
                                 },
@@ -188,10 +190,10 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                         ),
                       ),
                       SliverToBoxAdapter(
-                        child: Container(
+                        child: SizedBox(
                           width: MediaQuery.of(context).size.width,
                           height: 245,
-                          child: StatsCard(),
+                          child: const StatsCard(),
                         ),
                       ),
                     ],
@@ -212,11 +214,11 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                       SliverToBoxAdapter(
                         child: Stack(
                           children: <Widget>[
-                            Container(
+                            SizedBox(
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.height,
                               child: ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 itemCount: 10,
                                 itemBuilder: (context, index) {
                                   return Padding(
@@ -225,13 +227,14 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                     child: CardWidget(
                                       gradient: false,
                                       button: false,
+                                      height: 60,
                                       child: Row(
                                         children: <Widget>[
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Text(
                                               "${index + 1}.",
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 18,
                                                   color: Color(0xFF585858)),
                                             ),
@@ -240,24 +243,26 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                             padding: const EdgeInsets.all(8.0),
                                             child: Text(
                                               "${names[index]}",
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 18,
                                                   color: Color(0xFF585858)),
                                             ),
                                           ),
-                                          Spacer(),
+                                          const Spacer(),
                                           Container(
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
                                                 0.3,
                                             decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.elliptical(
-                                                        10, 50),
-                                                    bottomLeft:
-                                                        Radius.elliptical(
-                                                            10, 50)),
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.elliptical(
+                                                                10, 50),
+                                                        bottomLeft:
+                                                            Radius.elliptical(
+                                                                10, 50)),
                                                 gradient: LinearGradient(
                                                     colors: [
                                                       material.Colors.white,
@@ -280,7 +285,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                                   ),
                                                   Text(
                                                     "${coins[index]}",
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         fontSize: 18,
                                                         color:
                                                             Color(0xFF585858)),
@@ -291,7 +296,6 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                           )
                                         ],
                                       ),
-                                      height: 60,
                                     ),
                                   );
                                 },
@@ -332,7 +336,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                   local = true;
                                 });
                               },
-                              child: Text(
+                              child: const Text(
                                 "Local",
                                 style: TextStyle(
                                     color: Color(0xFF343434),
@@ -346,7 +350,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                   local = false;
                                 });
                               },
-                              child: Text(
+                              child: const Text(
                                 "Global",
                                 style: TextStyle(
                                     color: Color(0xFF343434),
@@ -370,9 +374,9 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                 MediaQuery.of(context).size.width * 0.67 - 10),
                     width: 40,
                     height: 4,
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     decoration: BoxDecoration(
-                        color: Color(0xFF03A9F4),
+                        color: const Color(0xFF03A9F4),
                         borderRadius: BorderRadius.circular(500)),
                   ),
                 )

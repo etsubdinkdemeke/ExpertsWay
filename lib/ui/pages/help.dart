@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class Help extends StatefulWidget {
+  const Help({super.key});
+
   @override
-  _HelpState createState() => _HelpState();
+  HelpState createState() => HelpState();
 }
 
-class _HelpState extends State<Help> {
+class HelpState extends State<Help> {
   Widget _container(String title, String description) {
     return Material(
       color: config.Colors().secondColor(1),
@@ -78,15 +80,15 @@ class _HelpState extends State<Help> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        trailing: CupertinoButton(
+        trailing: const CupertinoButton(
+            onPressed: null,
             child: Icon(
               Icons.search,
               color: Colors.black,
-            ),
-            onPressed: null),
+            )),
         backgroundColor: Colors.white,
         leading: CupertinoButton(
-          child: Icon(
+          child: const Icon(
             Icons.chevron_left,
             color: Colors.black,
           ),
@@ -94,10 +96,9 @@ class _HelpState extends State<Help> {
             Navigator.pop(context);
           },
         ),
-        middle: Text(
+        middle: const Text(
           'Help',
-          style: TextStyle(
-              color: Colors.black, fontSize: 24),
+          style: TextStyle(color: Colors.black, fontSize: 24),
         ),
       ),
       backgroundColor: config.Colors().secondColor(1),
@@ -133,7 +134,7 @@ class _HelpState extends State<Help> {
             ],
           ),
           SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
+            padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
             child: Column(
               children: <Widget>[
                 _container('How you earn coins ? ',

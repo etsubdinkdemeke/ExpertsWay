@@ -59,6 +59,10 @@ dependencies:
   sqflite: ^2.2.2
   timeago: ^3.2.2
 
+  path: ^1.8.2
+
+  page_transition: ^2.0.9
+
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:

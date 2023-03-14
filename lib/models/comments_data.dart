@@ -1,9 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-
 
 //-----Comment model-----------------//
 class Comment {
@@ -122,7 +119,7 @@ class Com extends ChangeNotifier {
       disLike: 7,
       reply: [],
       message:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
     ),
     Comment(
       date: "7",
@@ -143,7 +140,7 @@ class Com extends ChangeNotifier {
       disLike: 0,
       reply: [],
       message:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
     ),
     Comment(
       date: "8",
@@ -154,7 +151,7 @@ class Com extends ChangeNotifier {
       disLike: 1,
       reply: [],
       message:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
     ),
     Comment(
       date: "9",
@@ -185,7 +182,7 @@ class Com extends ChangeNotifier {
       disLike: 3,
       reply: [],
       message:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
     ),
   ];
 
@@ -215,7 +212,7 @@ List<Comment> comments = [
     disLike: 7,
     reply: [],
     message:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
   ),
   Comment(
     date: "7",
@@ -236,7 +233,7 @@ List<Comment> comments = [
     disLike: 0,
     reply: [],
     message:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
   ),
   Comment(
     date: "8",
@@ -247,7 +244,7 @@ List<Comment> comments = [
     disLike: 1,
     reply: [],
     message:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
   ),
   Comment(
     date: "9",
@@ -278,6 +275,6 @@ List<Comment> comments = [
     disLike: 3,
     reply: [],
     message:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis bibendum, odio semper placerat efficitur, augue nibh dictum lectus, at ultricies justo dolor non orci.",
   ),
 ];

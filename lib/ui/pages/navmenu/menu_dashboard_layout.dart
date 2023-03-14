@@ -1,22 +1,19 @@
 import 'package:learncoding/theme/config.dart' as config;
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:learncoding/ui/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:learncoding/ui/pages/navmenu/dashboard.dart';
 
-
 import 'menu.dart';
 
-final Color backgroundColor = Colors.lightBlue;
+const Color backgroundColor = Colors.lightBlue;
 
 class MenuDashboardLayout extends StatefulWidget {
-
-  MenuDashboardLayout({Key? key}) : super(key: key);
+  const MenuDashboardLayout({Key? key}) : super(key: key);
   @override
-  _MenuDashboardLayoutState createState() => _MenuDashboardLayoutState();
+  MenuDashboardLayoutState createState() => MenuDashboardLayoutState();
 }
 
-class _MenuDashboardLayoutState extends State<MenuDashboardLayout>
+class MenuDashboardLayoutState extends State<MenuDashboardLayout>
     with SingleTickerProviderStateMixin {
   bool isCollapsed = true;
   double? screenWidth, screenHeight;
@@ -33,8 +30,9 @@ class _MenuDashboardLayoutState extends State<MenuDashboardLayout>
     _scaleAnimation = Tween<double>(begin: 1, end: 0.75).animate(_controller);
     _menuScaleAnimation =
         Tween<double>(begin: 0.5, end: 1).animate(_controller);
-    _slideAnimation = Tween<Offset>(begin: Offset(-1, 0), end: Offset(0, 0))
-        .animate(_controller);
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(-1, 0), end: const Offset(0, 0))
+            .animate(_controller);
   }
 
   @override
@@ -45,10 +43,7 @@ class _MenuDashboardLayoutState extends State<MenuDashboardLayout>
 
   void onMenuTap() {
     setState(() {
-      if (isCollapsed)
-        _controller.forward();
-      else
-        _controller.reverse();
+      isCollapsed ? _controller.forward() : _controller.reverse();
 
       isCollapsed = !isCollapsed;
     });
@@ -80,19 +75,19 @@ class _MenuDashboardLayoutState extends State<MenuDashboardLayout>
             ),
           ),
           Menu(
-              onMenuTap: onMenuTap,
-              slideAnimation: _slideAnimation,
-              menuAnimation: _menuScaleAnimation,
-              onMenuItemClicked: onMenuItemClicked,
-              
-              ),
+            onMenuTap: onMenuTap,
+            slideAnimation: _slideAnimation,
+            menuAnimation: _menuScaleAnimation,
+            onMenuItemClicked: onMenuItemClicked,
+          ),
           Dashboard(
             duration: duration,
             onMenuTap: onMenuTap,
             scaleAnimation: _scaleAnimation,
             isCollapsed: isCollapsed,
             screenWidth: screenWidth,
-            child: Home(onMenuTap: onMenuTap,
+            child: Home(
+              onMenuTap: onMenuTap,
             ),
           ),
         ],

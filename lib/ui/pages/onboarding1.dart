@@ -1,18 +1,18 @@
 import 'package:learncoding/api/shared_preference/shared_preference.dart';
-import 'package:learncoding/theme/box_icons_icons.dart';
 import 'package:learncoding/ui/pages/navmenu/menu_dashboard_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learncoding/api/google_signin_api.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Onboarding extends StatefulWidget {
+  const Onboarding({super.key});
+
   @override
-  _OnboardingState createState() => _OnboardingState();
+  OnboardingState createState() => OnboardingState();
 }
 
-class _OnboardingState extends State<Onboarding> {
+class OnboardingState extends State<Onboarding> {
   final PageController controller = PageController(initialPage: 0);
 
   int counter = 0; // a counter to track which "page" we're at
@@ -189,8 +189,9 @@ class _OnboardingState extends State<Onboarding> {
           "testDisplayName");
     }
 
+    // ignore: use_build_context_synchronously
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => (MenuDashboardLayout())));
+        MaterialPageRoute(builder: (context) => (const MenuDashboardLayout())));
   }
 
   @override
