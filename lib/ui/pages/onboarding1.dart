@@ -1,18 +1,17 @@
 import 'package:learncoding/api/shared_preference/shared_preference.dart';
-import 'package:learncoding/theme/box_icons_icons.dart';
 import 'package:learncoding/ui/pages/navmenu/menu_dashboard_layout.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learncoding/api/google_signin_api.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Onboarding extends StatefulWidget {
+  const Onboarding({super.key});
+
   @override
-  _OnboardingState createState() => _OnboardingState();
+  OnboardingState createState() => OnboardingState();
 }
 
-class _OnboardingState extends State<Onboarding> {
+class OnboardingState extends State<Onboarding> {
   final PageController controller = PageController(initialPage: 0);
 
   int counter = 0; // a counter to track which "page" we're at
@@ -95,7 +94,7 @@ class _OnboardingState extends State<Onboarding> {
               mainMessage,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 20,
+                fontSize: 24,
                 fontWeight: FontWeight.w600,
                 color: Colors.black,
               ),
@@ -107,7 +106,7 @@ class _OnboardingState extends State<Onboarding> {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.black,
-                fontSize: 13,
+                fontSize: 14,
               ),
             ),
           ],
@@ -135,9 +134,7 @@ class _OnboardingState extends State<Onboarding> {
           child: Center(
             child: Text(
               label,
-              style: const TextStyle(
-                color: Colors.white,
-              ),
+              style: const TextStyle(color: Colors.white, fontSize: 18),
             ),
           ),
         ),
@@ -189,8 +186,9 @@ class _OnboardingState extends State<Onboarding> {
           "testDisplayName");
     }
 
+    // ignore: use_build_context_synchronously
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => (MenuDashboardLayout())));
+        MaterialPageRoute(builder: (context) => (const MenuDashboardLayout())));
   }
 
   @override
@@ -198,8 +196,8 @@ class _OnboardingState extends State<Onboarding> {
     // we will maintain the same layout-forming column but switch the
     // contained widgets in order to show the 3 different "pages"
     createWidgets();
-    return CupertinoPageScaffold(
-      child: Column(
+    return Scaffold(
+      body: Column(
         children: <Widget>[
           const Spacer(flex: 3),
           AnimatedSwitcher(

@@ -1,25 +1,25 @@
 import 'package:learncoding/theme/config.dart' as config;
 import 'package:learncoding/ui/widgets/card.dart';
-import 'package:learncoding/ui/widgets/sectionHeader.dart';
-import 'package:learncoding/ui/widgets/topBar.dart';
-import 'package:learncoding/ui/widgets/videoCard.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:learncoding/ui/widgets/section_header.dart';
+import 'package:learncoding/ui/widgets/top_bar.dart';
+import 'package:learncoding/ui/widgets/video_card.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
-import 'package:flutter/material.dart' as material;
+import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class PlannerPage extends StatelessWidget {
   PlannerPage({
     Key? key,
     required this.onMenuTap,
   }) : super(key: key);
-  final Function? onMenuTap;
+  final Function()? onMenuTap;
 
   TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
+    return Scaffold(
       backgroundColor: config.Colors().secondColor(1),
-      child: Stack(
+      body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
           SafeArea(
@@ -35,14 +35,14 @@ class PlannerPage extends StatelessWidget {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: Container(
+                  child: SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: 240,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: 2,
                       itemBuilder: (context, index) {
-                        return VideoCard(long: true);
+                        return const VideoCard(long: true);
                       },
                     ),
                   ),
@@ -54,22 +54,22 @@ class PlannerPage extends StatelessWidget {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: Container(
+                  child: SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: 450,
                     child: CardWidget(
                       button: false,
                       gradient: false,
-                      child: material.Material(
+                      child: Material(
                         child: CalendarCarousel(
                           isScrollable: false,
-                          todayButtonColor: material.Colors.lightBlue,
+                          todayButtonColor: Colors.lightBlue,
                         ),
                       ),
                     ),
                   ),
                 ),
-                SliverToBoxAdapter(
+                const SliverToBoxAdapter(
                   child: SizedBox(
                     height: 70,
                     child: Text(""),

@@ -1,22 +1,23 @@
+import 'package:flutter/material.dart';
 import 'package:learncoding/theme/config.dart' as config;
-import 'package:learncoding/ui/widgets/sectionHeader.dart';
-import 'package:learncoding/ui/widgets/topBar.dart';
-import 'package:learncoding/ui/widgets/videoCard.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:learncoding/ui/widgets/section_header.dart';
+import 'package:learncoding/ui/widgets/top_bar.dart';
+import 'package:learncoding/ui/widgets/video_card.dart';
 
+// ignore: must_be_immutable
 class VideosPage extends StatelessWidget {
+  final Function()? onMenuTap;
   VideosPage({
     Key? key,
     required this.onMenuTap,
   }) : super(key: key);
-  final Function? onMenuTap;
 
   TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
+    return Scaffold(
       backgroundColor: config.Colors().secondColor(1),
-      child: Stack(
+      body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
           SafeArea(
@@ -32,14 +33,14 @@ class VideosPage extends StatelessWidget {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: Container(
+                  child: SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: 245,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: 4,
                       itemBuilder: (context, index) {
-                        return VideoCard(long: false);
+                        return const VideoCard(long: false);
                       },
                     ),
                   ),
@@ -51,14 +52,14 @@ class VideosPage extends StatelessWidget {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: Container(
+                  child: SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: 245,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: 4,
                       itemBuilder: (context, index) {
-                        return VideoCard(long: false);
+                        return const VideoCard(long: false);
                       },
                     ),
                   ),
@@ -70,14 +71,14 @@ class VideosPage extends StatelessWidget {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: Container(
+                  child: SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: 245,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: 4,
                       itemBuilder: (context, index) {
-                        return VideoCard(long: false);
+                        return const VideoCard(long: false);
                       },
                     ),
                   ),
@@ -89,14 +90,14 @@ class VideosPage extends StatelessWidget {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: Container(
+                  child: SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: 245,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: 4,
                       itemBuilder: (context, index) {
-                        return VideoCard(long: false);
+                        return const VideoCard(long: false);
                       },
                     ),
                   ),

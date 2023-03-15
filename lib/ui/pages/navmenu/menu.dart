@@ -1,13 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:learncoding/theme/box_icons_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:learncoding/ui/widgets/topBar.dart';
+import 'package:learncoding/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../help.dart';
 import '../profile.dart';
 import '../setting.dart';
-import '../notification.dart'as n;
+import '../notification.dart' as n;
 
 String? name;
 String? image;
@@ -17,6 +16,7 @@ class Menu extends StatefulWidget {
   final Animation<double>? menuAnimation;
   final int? selectedIndex;
   final Function onMenuItemClicked;
+  // ignore: prefer_typing_uninitialized_variables
   final onMenuTap;
 
   const Menu({
@@ -33,6 +33,7 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
+  @override
   void initState() {
     super.initState();
     getValue();
@@ -55,7 +56,7 @@ class _MenuState extends State<Menu> {
             width: MediaQuery.of(context).size.width * 0.33,
             height: MediaQuery.of(context).size.height * 0.67,
             decoration: BoxDecoration(
-              color: Color(0x80FFFFFF),
+              color: const Color(0x80FFFFFF),
               borderRadius: BorderRadius.circular(10),
             ),
           ),
@@ -65,7 +66,7 @@ class _MenuState extends State<Menu> {
           child: Container(
             width: MediaQuery.of(context).size.width,
             height: 135,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage("assets/images/navwave.png"),
                   fit: BoxFit.fitWidth),
@@ -77,7 +78,7 @@ class _MenuState extends State<Menu> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 28, 10, 0),
               child: IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.close,
                   color: Colors.white,
                 ),
@@ -102,14 +103,17 @@ class _MenuState extends State<Menu> {
                         // Navigate to the Help page when the user taps the widget
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Profile()),
+                          MaterialPageRoute(
+                              builder: (context) => const Profile()),
                         );
                       },
                       child: Row(
                         children: <Widget>[
                           CircleAvatar(
                             radius: 30,
-                            backgroundImage: NetworkImage(image!),
+                            backgroundImage: CachedNetworkImageProvider(
+                              image ?? Constant.imagePlaceholder,
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 16.0),
@@ -118,16 +122,16 @@ class _MenuState extends State<Menu> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  name!,
+                                  name ?? '',
                                   maxLines: 1,
                                   overflow: TextOverflow.fade,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w600,
                                     fontSize: 24,
                                   ),
                                 ),
-                                Text(
+                                const Text(
                                   "Student",
                                   maxLines: 1,
                                   overflow: TextOverflow.fade,
@@ -143,13 +147,13 @@ class _MenuState extends State<Menu> {
                         ],
                       ),
                     ),
-                    Spacer(
+                    const Spacer(
                       flex: 3,
                     ),
                     Row(
-                      children: <Widget>[
+                      children: const [
                         Padding(
-                          padding: const EdgeInsets.only(right: 20.0),
+                          padding: EdgeInsets.only(right: 20.0),
                           child: Icon(
                             BoxIcons.bx_home_circle,
                             color: Colors.white,
@@ -167,11 +171,11 @@ class _MenuState extends State<Menu> {
                         ),
                       ],
                     ),
-                    Spacer(flex: 2),
+                    const Spacer(flex: 2),
                     Row(
-                      children: <Widget>[
+                      children: const <Widget>[
                         Padding(
-                          padding: const EdgeInsets.only(right: 20.0),
+                          padding: EdgeInsets.only(right: 20.0),
                           child: Icon(
                             BoxIcons.bx_edit,
                             color: Colors.white,
@@ -189,11 +193,11 @@ class _MenuState extends State<Menu> {
                         ),
                       ],
                     ),
-                    Spacer(flex: 2),
+                    const Spacer(flex: 2),
                     Row(
-                      children: <Widget>[
+                      children: const <Widget>[
                         Padding(
-                          padding: const EdgeInsets.only(right: 20.0),
+                          padding: EdgeInsets.only(right: 20.0),
                           child: Icon(
                             BoxIcons.bx_book_alt,
                             color: Colors.white,
@@ -211,11 +215,11 @@ class _MenuState extends State<Menu> {
                         ),
                       ],
                     ),
-                    Spacer(flex: 2),
+                    const Spacer(flex: 2),
                     Row(
-                      children: <Widget>[
+                      children: const <Widget>[
                         Padding(
-                          padding: const EdgeInsets.only(right: 20.0),
+                          padding: EdgeInsets.only(right: 20.0),
                           child: Icon(
                             BoxIcons.bx_chat,
                             color: Colors.white,
@@ -233,11 +237,11 @@ class _MenuState extends State<Menu> {
                         ),
                       ],
                     ),
-                    Spacer(flex: 2),
+                    const Spacer(flex: 2),
                     Row(
-                      children: <Widget>[
+                      children: const <Widget>[
                         Padding(
-                          padding: const EdgeInsets.only(right: 20.0),
+                          padding: EdgeInsets.only(right: 20.0),
                           child: Icon(
                             BoxIcons.bx_calendar,
                             color: Colors.white,
@@ -255,7 +259,7 @@ class _MenuState extends State<Menu> {
                         ),
                       ],
                     ),
-                    Spacer(flex: 2),
+                    const Spacer(flex: 2),
                     SizedBox(
                       height: 1,
                       width: 200,
@@ -263,19 +267,20 @@ class _MenuState extends State<Menu> {
                         color: Colors.white54,
                       ),
                     ),
-                    Spacer(flex: 2),
+                    const Spacer(flex: 2),
                     GestureDetector(
                       onTap: () {
                         // Navigate to the Help page when the user taps the widget
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Settings()),
+                          MaterialPageRoute(
+                              builder: (context) => const Settings()),
                         );
                       },
                       child: Row(
-                        children: <Widget>[
+                        children: const <Widget>[
                           Padding(
-                            padding: const EdgeInsets.only(right: 20.0),
+                            padding: EdgeInsets.only(right: 20.0),
                             child: Icon(
                               BoxIcons.bx_cog,
                               color: Colors.white,
@@ -294,20 +299,20 @@ class _MenuState extends State<Menu> {
                         ],
                       ),
                     ),
-                    Spacer(flex: 2),
+                    const Spacer(flex: 2),
                     GestureDetector(
                       onTap: () {
                         // Navigate to the Help page when the user taps the widget
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => n.Notification()),
+                              builder: (context) => const n.Notification()),
                         );
                       },
                       child: Row(
-                        children: <Widget>[
+                        children: const <Widget>[
                           Padding(
-                            padding: const EdgeInsets.only(right: 20.0),
+                            padding: EdgeInsets.only(right: 20.0),
                             child: Icon(
                               BoxIcons.bx_help_circle,
                               color: Colors.white,
@@ -326,7 +331,7 @@ class _MenuState extends State<Menu> {
                         ],
                       ),
                     ),
-                    Spacer(flex: 5),
+                    const Spacer(flex: 5),
                   ],
                 ),
               ),

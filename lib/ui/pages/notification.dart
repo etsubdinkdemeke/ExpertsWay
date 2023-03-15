@@ -1,17 +1,11 @@
-import 'dart:convert';
-import 'dart:ffi';
-import 'dart:math';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:learncoding/theme/config.dart' as config;
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:learncoding/utils/color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../db/course_database.dart';
 import '../../models/notification.dart';
 import '../../theme/box_icons_icons.dart';
-import '../../utils/notificationMessage.dart';
+import '../../utils/notification_message.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class Notification extends StatefulWidget {
@@ -21,7 +15,7 @@ class Notification extends StatefulWidget {
   State<Notification> createState() => _NotificationState();
 }
 
-enum _MenuValues { All, Unread, Read }
+enum _MenuValues { all, unread, read }
 
 class _NotificationState extends State<Notification> {
   List<NotificationElement> list = [];
@@ -142,10 +136,10 @@ class _NotificationState extends State<Notification> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              margin: EdgeInsets.only(top: 30),
+              margin: const EdgeInsets.only(top: 30),
               child: Row(
                 children: [
-                  CupertinoButton(
+                  TextButton(
                     child: const Icon(
                       Icons.chevron_left,
                       color: Colors.black,
@@ -172,11 +166,11 @@ class _NotificationState extends State<Notification> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(left: 20, bottom: 20),
+              margin: const EdgeInsets.only(left: 20, bottom: 20),
               child: Row(children: [
                 Text.rich(TextSpan(
-                    style:
-                        TextStyle(color: Colors.redAccent), //apply style to all
+                    style: const TextStyle(
+                        color: Colors.redAccent), //apply style to all
                     children: [
                       const TextSpan(
                           text: "You have ",
@@ -214,7 +208,7 @@ class _NotificationState extends State<Notification> {
                     ])),
                 SizedBox(width: MediaQuery.of(context).size.width * 0.34),
                 PopupMenuButton<_MenuValues>(
-                  initialValue: _MenuValues.All,
+                  initialValue: _MenuValues.all,
                   position: PopupMenuPosition.under,
                   icon: const Icon(
                     BoxIcons.bx_slider,
@@ -223,32 +217,32 @@ class _NotificationState extends State<Notification> {
                   iconSize: 22,
                   itemBuilder: (BuildContext context) => [
                     const PopupMenuItem(
-                      value: _MenuValues.All,
+                      value: _MenuValues.all,
                       child: Text('All'),
                     ),
                     const PopupMenuItem(
-                      value: _MenuValues.Unread,
+                      value: _MenuValues.unread,
                       child: Text('Unread'),
                     ),
                     const PopupMenuItem(
-                      value: _MenuValues.Read,
+                      value: _MenuValues.read,
                       child: Text('Read'),
                     ),
                   ],
                   onSelected: (value) {
                     FocusManager.instance.primaryFocus?.unfocus();
                     switch (value) {
-                      case _MenuValues.All:
+                      case _MenuValues.all:
                         allNotifs = true;
                         readNotifs = false;
                         getNotifs();
                         break;
-                      case _MenuValues.Unread:
+                      case _MenuValues.unread:
                         allNotifs = false;
                         readNotifs = false;
                         getNotifs();
                         break;
-                      case _MenuValues.Read:
+                      case _MenuValues.read:
                         allNotifs = false;
                         readNotifs = true;
                         getNotifs();
@@ -262,29 +256,29 @@ class _NotificationState extends State<Notification> {
               child: SingleChildScrollView(
                   child: Column(
                 children: [
-                  today.length > 0
+                  today.isNotEmpty
                       ? Column(
                           children: [
                             titleText("Today"),
                             buildNotif(today.length, today),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                           ],
                         )
                       : Container(),
-                  thisWeek.length > 0
+                  thisWeek.isNotEmpty
                       ? Column(
                           children: [
                             titleText("This week"),
                             buildNotif(thisWeek.length, thisWeek),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                           ],
                         )
                       : Container(),
-                  older.length > 0
+                  older.isNotEmpty
                       ? Column(
                           children: [
                             titleText("Older"),
@@ -303,7 +297,7 @@ class _NotificationState extends State<Notification> {
     return ListView.separated(
         shrinkWrap: true,
         physics: const ClampingScrollPhysics(),
-        padding: EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.only(bottom: 20),
         itemCount: length,
         itemBuilder: (context, index) {
           return Column(
@@ -314,9 +308,9 @@ class _NotificationState extends State<Notification> {
         },
         separatorBuilder: (context, index) {
           return Container(
-            margin: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+            margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
             height: 1,
-            color: Color.fromARGB(255, 245, 245, 245),
+            color: const Color.fromARGB(255, 245, 245, 245),
           );
         });
   }
@@ -355,6 +349,7 @@ class _NotificationState extends State<Notification> {
           child: Container(
               decoration: const BoxDecoration(color: Colors.white),
               child: Row(children: [
+                // ignore: avoid_unnecessary_containers
                 Container(
                     child:
                         // item.
@@ -392,7 +387,7 @@ class _NotificationState extends State<Notification> {
                 Flexible(
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.78,
-                    margin: EdgeInsets.fromLTRB(20, 0, 5, 0),
+                    margin: const EdgeInsets.fromLTRB(20, 0, 5, 0),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -404,11 +399,11 @@ class _NotificationState extends State<Notification> {
                           //         color: Color.fromARGB(136, 31, 31, 31))),
                         ),
                         Padding(
-                            padding: EdgeInsets.only(right: 10),
+                            padding: const EdgeInsets.only(right: 10),
                             child: Text(
                               timeago.format(
                                   DateTime.parse(item.createdDate.toString())),
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Color.fromARGB(136, 31, 31, 31)),
                             )),
                       ],
@@ -436,10 +431,11 @@ class _NotificationState extends State<Notification> {
           text: TextSpan(children: [
         TextSpan(
             text: ' ${notifMessages[0].message}',
-            style: TextStyle(color: Color.fromARGB(136, 31, 31, 31))),
+            style: const TextStyle(color: Color.fromARGB(136, 31, 31, 31))),
         TextSpan(
             text: ' $heighlightText',
-            style: TextStyle(color: maincolor, fontWeight: FontWeight.w600)),
+            style:
+                const TextStyle(color: maincolor, fontWeight: FontWeight.w600)),
       ]));
     }
     if (type == 'replay') {
@@ -447,10 +443,11 @@ class _NotificationState extends State<Notification> {
           text: TextSpan(children: [
         TextSpan(
             text: ' $heighlightText',
-            style: TextStyle(color: maincolor, fontWeight: FontWeight.w600)),
+            style:
+                const TextStyle(color: maincolor, fontWeight: FontWeight.w600)),
         TextSpan(
             text: ' ${notifMessages[1].message}',
-            style: TextStyle(color: Color.fromARGB(136, 31, 31, 31))),
+            style: const TextStyle(color: Color.fromARGB(136, 31, 31, 31))),
       ]));
     }
     if (type == 'quiz') {
@@ -461,8 +458,9 @@ class _NotificationState extends State<Notification> {
             style: const TextStyle(color: Color.fromARGB(136, 31, 31, 31))),
         TextSpan(
             text: ' $heighlightText',
-            style: TextStyle(color: maincolor, fontWeight: FontWeight.w600)),
-        TextSpan(
+            style:
+                const TextStyle(color: maincolor, fontWeight: FontWeight.w600)),
+        const TextSpan(
             text: ' today',
             style: TextStyle(color: Color.fromARGB(136, 31, 31, 31))),
       ]));
@@ -472,14 +470,15 @@ class _NotificationState extends State<Notification> {
           text: TextSpan(children: [
         TextSpan(
             text: ' ${notifMessages[3].message}',
-            style: TextStyle(color: Color.fromARGB(136, 31, 31, 31))),
+            style: const TextStyle(color: Color.fromARGB(136, 31, 31, 31))),
         TextSpan(
             text: ' $heighlightText',
-            style: TextStyle(color: maincolor, fontWeight: FontWeight.w600)),
+            style:
+                const TextStyle(color: maincolor, fontWeight: FontWeight.w600)),
       ]));
     } else {
       return RichText(
-          text: TextSpan(children: [
+          text: const TextSpan(children: [
         TextSpan(
             text: '', style: TextStyle(color: Color.fromARGB(136, 31, 31, 31))),
         TextSpan(text: '', style: TextStyle(color: maincolor)),

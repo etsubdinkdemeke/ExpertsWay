@@ -1,18 +1,20 @@
+import 'package:flutter/foundation.dart';
 import 'package:learncoding/routes/routing_constants.dart';
 import 'package:learncoding/ui/pages/home.dart';
-import 'package:learncoding/ui/pages/undefinedScreen.dart';
+import 'package:learncoding/ui/pages/undefined_screen.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:learncoding/analytics/analytics_service.dart';
 
 List<String> navStack = ["Home"];
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
-    case HomeRoute:
+    case AppRoute.homeRoute:
       navStack.add("Splash");
-      print(navStack);
-      analytics.setCurrentScreen(screenName: HomeRoute);
-      return CupertinoPageRoute(builder: (context) => Home());
+      if (kDebugMode) {
+        print(navStack);
+      }
+      analytics.setCurrentScreen(screenName: AppRoute.homeRoute);
+      return CupertinoPageRoute(builder: (context) => const Home());
     // case SearchRoute:
     //   navStack.add("Search");
     //   print(navStack);
@@ -21,7 +23,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     //       pageBuilder: (context, animation1, animation2) => SearchScreen());
     default:
       navStack.add("undefined");
-      print(navStack);
+      if (kDebugMode) {
+        print(navStack);
+      }
       analytics.setCurrentScreen(screenName: "/undefined");
       return CupertinoPageRoute(
         builder: (context) => UndefinedScreen(

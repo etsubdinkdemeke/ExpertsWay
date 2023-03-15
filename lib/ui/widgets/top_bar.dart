@@ -1,16 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:learncoding/models/user.dart';
 import 'package:learncoding/models/course.dart';
 import 'package:learncoding/services/api_controller.dart';
 import 'package:learncoding/theme/box_icons_icons.dart';
-import 'package:learncoding/ui/pages/course_detail.dart';
-import 'package:learncoding/ui/widgets/card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/services.dart';
+import 'package:learncoding/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../api/shared_preference/shared_preference.dart';
 import '../../db/course_database.dart';
 import '../../utils/color.dart';
 import 'course_card.dart';
@@ -28,13 +26,13 @@ class TopBar extends StatefulWidget {
 
   final TextEditingController controller;
   final bool expanded;
-  final onMenuTap;
+  final Function()? onMenuTap;
 
   @override
-  _TopBarState createState() => _TopBarState();
+  TopBarState createState() => TopBarState();
 }
 
-class _TopBarState extends State<TopBar> {
+class TopBarState extends State<TopBar> {
   int tab = 0;
   late List<CourseElement?> course = [];
   late List<Section> section = [];
@@ -81,8 +79,8 @@ class _TopBarState extends State<TopBar> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Text(
-                    "Hi," + name!,
-                    style: TextStyle(
+                    "Hi,${name ?? ''}",
+                    style: const TextStyle(
                         color: Color(0xFF343434),
                         fontSize: 24,
                         fontWeight: material.FontWeight.w600),
@@ -91,10 +89,13 @@ class _TopBarState extends State<TopBar> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: GestureDetector(
-                    child: material.CircleAvatar(
-                      backgroundImage: NetworkImage(image!),
-                    ),
                     onTap: widget.onMenuTap,
+                    child: material.CircleAvatar(
+                      backgroundImage: CachedNetworkImageProvider(
+                        image ?? Constant.imagePlaceholder,
+                        errorListener: () => const Text('failed to load image'),
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -106,15 +107,15 @@ class _TopBarState extends State<TopBar> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: material.Colors.white,
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       blurRadius: 25,
                       offset: Offset(0, 10),
                       color: Color(0x1A636363),
                     ),
                   ]),
-              padding: EdgeInsets.all(10),
-              style: TextStyle(
+              padding: const EdgeInsets.all(10),
+              style: const TextStyle(
                 color: Color(0xFF343434),
                 fontSize: 18,
               ),
@@ -125,8 +126,8 @@ class _TopBarState extends State<TopBar> {
                 FilteringTextInputFormatter.singleLineFormatter
               ],
               keyboardType: TextInputType.text,
-              suffix: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              suffix: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
                 child: Icon(
                   BoxIcons.bx_search,
                   color: Color(0xFFADADAD),
@@ -135,14 +136,14 @@ class _TopBarState extends State<TopBar> {
               textInputAction: TextInputAction.search,
               textCapitalization: TextCapitalization.words,
               placeholder: "Search",
-              placeholderStyle: TextStyle(
+              placeholderStyle: const TextStyle(
                 color: Color(0xFFADADAD),
                 fontSize: 18,
               ),
             ),
           ),
           widget.expanded
-              ? Container(
+              ? SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height * 0.165,
                   child: course.isEmpty
@@ -152,7 +153,7 @@ class _TopBarState extends State<TopBar> {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
                               {
-                                return Center(
+                                return const Center(
                                   child: CircularProgressIndicator(
                                     color: maincolor,
                                   ),

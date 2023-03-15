@@ -10,7 +10,7 @@ class ProgrammingOptionsModel {
   });
 }
 
-List<ProgrammingOptionsModel> ProgrammingOptionsModels = [
+List<ProgrammingOptionsModel> programmingOptionsModels = [
   ProgrammingOptionsModel(
       btnName: 'JavaScript',
       isPicked: true,

@@ -12,14 +12,14 @@ class NotificationFields {
     id,
     heighlightText,
     type,
-    imgUrl, 
+    imgUrl,
     createdDate,
   ];
-  static final String id = '_id';
-  static final String heighlightText = 'heighlightText';
-  static final String type = 'type';
-  static final String imgUrl = 'imgUrl';
-  static final String createdDate = 'createdDate';
+  static const String id = '_id';
+  static const String heighlightText = 'heighlightText';
+  static const String type = 'type';
+  static const String imgUrl = 'imgUrl';
+  static const String createdDate = 'createdDate';
 }
 
 NotificationElement notificationFromJson(dynamic str) =>

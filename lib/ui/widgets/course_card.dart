@@ -7,7 +7,7 @@ import 'package:learncoding/utils/color.dart';
 import 'card.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-
+// ignore: must_be_immutable
 class CourseCard extends StatefulWidget {
   CourseElement courses;
   int index;
@@ -47,7 +47,8 @@ class _CourseCardState extends State<CourseCard> {
                 height: 30,
                 child: CachedNetworkImage(
                   imageUrl: widget.courses.icon,
-                  placeholder: (context, url) => CircularProgressIndicator(
+                  placeholder: (context, url) =>
+                      const CircularProgressIndicator(
                     color: maincolor,
                   ),
                   errorWidget: (context, url, error) => const Icon(Icons.error),

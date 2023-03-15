@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:learncoding/main.dart';
 import 'package:learncoding/ui/widgets/header.dart';
 import 'package:learncoding/utils/color.dart';
 
@@ -28,15 +27,15 @@ class _ProfileState extends State<Profile> {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {},
-          highlightColor: Color.fromARGB(132, 135, 208, 245),
-          splashColor: Color.fromARGB(61, 231, 231, 231),
+          highlightColor: const Color.fromARGB(132, 135, 208, 245),
+          splashColor: const Color.fromARGB(61, 231, 231, 231),
           borderRadius: BorderRadius.circular(radius),
           child: ListTile(
             leading: Container(
               width: 35,
               height: 35,
               decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 233, 233, 233),
+                  color: const Color.fromARGB(255, 233, 233, 233),
                   borderRadius: BorderRadius.circular(radius)),
               child: Icon(
                 leading,
@@ -46,7 +45,7 @@ class _ProfileState extends State<Profile> {
             ),
             title: Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Color.fromARGB(255, 137, 137, 137),
                   fontSize: 18,
                   fontWeight: FontWeight.w500),
@@ -69,25 +68,25 @@ class _ProfileState extends State<Profile> {
       padding: const EdgeInsets.only(top: 60.0),
       child: Column(
         children: [
-          Header(title: "Profile"),
+          const Header(title: "Profile"),
 
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           // profile
           Container(
-            margin: EdgeInsets.all(12),
+            margin: const EdgeInsets.all(12),
             child: Stack(
               alignment: Alignment.topCenter,
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height / 3.4,
-                  margin: EdgeInsets.only(top: 55),
+                  margin: const EdgeInsets.only(top: 55),
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(202, 116, 175, 211),
+                    color: const Color.fromARGB(202, 116, 175, 211),
                     borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                         blurRadius: 20,
                         offset: Offset(5, 15),
@@ -104,7 +103,7 @@ class _ProfileState extends State<Profile> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Column(
-                            children: [
+                            children: const [
                               Text(
                                 "John Perol",
                                 style: TextStyle(
@@ -121,7 +120,7 @@ class _ProfileState extends State<Profile> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Row(
@@ -138,7 +137,7 @@ class _ProfileState extends State<Profile> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
+                                    children: const [
                                       Text(
                                         "23",
                                         style: TextStyle(
@@ -170,7 +169,7 @@ class _ProfileState extends State<Profile> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
+                                    children: const [
                                       Text(
                                         "88",
                                         style: TextStyle(
@@ -202,7 +201,7 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                 ),
-                Positioned(
+                const Positioned(
                   child: CircleAvatar(
                     radius: 55,
                     backgroundColor: seccolor,
@@ -217,7 +216,7 @@ class _ProfileState extends State<Profile> {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
 
@@ -233,7 +232,7 @@ class _ProfileState extends State<Profile> {
                       "My questions",
                       Icons.arrow_forward_ios,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     _container(
@@ -241,7 +240,7 @@ class _ProfileState extends State<Profile> {
                       "My answer",
                       Icons.arrow_forward_ios,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     _container(
@@ -249,7 +248,7 @@ class _ProfileState extends State<Profile> {
                       "My Calendar",
                       Icons.arrow_forward_ios,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     _container(

@@ -1,12 +1,7 @@
-import 'package:learncoding/api/google_signin_api.dart';
-import 'package:learncoding/ui/pages/help.dart';
-import 'package:learncoding/ui/pages/navmenu/dashboard.dart';
+import 'package:learncoding/routes/page.dart';
 import 'package:learncoding/ui/pages/navmenu/menu_dashboard_layout.dart';
 import 'package:learncoding/ui/pages/onboarding1.dart';
-import 'package:learncoding/ui/pages/profile.dart';
-import 'package:learncoding/ui/pages/setting.dart';
-import 'package:learncoding/ui/pages/undefinedScreen.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:learncoding/ui/pages/undefined_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,7 +23,7 @@ Future main() async {
   SharedPreferences.getInstance().then((prefs) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
         .then((value) => runApp(
-              RestartWidget(
+              const RestartWidget(
                 child: MyApp(),
               ),
             ));
@@ -36,11 +31,13 @@ Future main() async {
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
-  _MyAppState createState() => _MyAppState();
+  MyAppState createState() => MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> {
   void getLoginStatus() async {
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -59,46 +56,46 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     getLoginStatus();
-    MenuDashboardLayout();
+    const MenuDashboardLayout();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GetCupertinoApp(
-        localizationsDelegates: [
-          DefaultMaterialLocalizations.delegate,
-          DefaultCupertinoLocalizations.delegate,
-          DefaultWidgetsLocalizations.delegate,
-        ],
-        onGenerateRoute: router.generateRoute,
-        onUnknownRoute: (settings) => CupertinoPageRoute(
-            builder: (context) => UndefinedScreen(
-                  name: settings.name,
-                )),
-        // theme: Provider.of<ThemeModel>(context).currentTheme,
-        debugShowCheckedModeBanner: false,
-        // home: Settings(),
-        // home: Profile(),
-        // home: name == null ? Onboarding() : MenuDashboardLayout(),
-        home: SplashScreen());
+    return GetMaterialApp(
+      localizationsDelegates: const [
+        DefaultMaterialLocalizations.delegate,
+        DefaultCupertinoLocalizations.delegate,
+        DefaultWidgetsLocalizations.delegate,
+      ],
+      theme: ThemeData(fontFamily: 'Poppins'),
+      onGenerateRoute: router.generateRoute,
+      onUnknownRoute: (settings) => CupertinoPageRoute(
+          builder: (context) => UndefinedScreen(
+                name: settings.name,
+              )),
+      // theme: Provider.of<ThemeModel>(context).currentTheme,
+      debugShowCheckedModeBanner: false,
+      getPages: pages,
+      home: const SplashScreen(),
+    );
   }
 }
 
 class RestartWidget extends StatefulWidget {
-  RestartWidget({this.child});
+  const RestartWidget({this.child, super.key});
 
   final Widget? child;
 
   static void restartApp(BuildContext context) {
-    context.findAncestorStateOfType<_RestartWidgetState>()!.restartApp();
+    context.findAncestorStateOfType<RestartWidgetState>()!.restartApp();
   }
 
   @override
-  _RestartWidgetState createState() => _RestartWidgetState();
+  RestartWidgetState createState() => RestartWidgetState();
 }
 
-class _RestartWidgetState extends State<RestartWidget> {
+class RestartWidgetState extends State<RestartWidget> {
   Key key = UniqueKey();
 
   void restartApp() {
@@ -122,13 +119,15 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
-        splash: Image.asset('assets/images/splash.png'),
-        duration: 3000,
-        splashIconSize: 350,
-        splashTransition: SplashTransition.slideTransition,
-        animationDuration: Duration(milliseconds: 1500),
-        backgroundColor: Color.fromARGB(255, 255, 255, 255),
-        pageTransitionType: PageTransitionType.fade,
-        nextScreen: name == null ? Onboarding() : MenuDashboardLayout());
+      splash: Image.asset('assets/images/splash.png'),
+      duration: 3000,
+      splashIconSize: 350,
+      splashTransition: SplashTransition.slideTransition,
+      animationDuration: const Duration(milliseconds: 1500),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      pageTransitionType: PageTransitionType.fade,
+      nextScreen:
+          name == null ? const Onboarding() : const MenuDashboardLayout(),
+    );
   }
 }

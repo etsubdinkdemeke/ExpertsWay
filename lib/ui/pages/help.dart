@@ -1,14 +1,15 @@
 import 'package:learncoding/theme/config.dart' as config;
 import 'package:learncoding/theme/box_icons_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 class Help extends StatefulWidget {
+  const Help({super.key});
+
   @override
-  _HelpState createState() => _HelpState();
+  HelpState createState() => HelpState();
 }
 
-class _HelpState extends State<Help> {
+class HelpState extends State<Help> {
   Widget _container(String title, String description) {
     return Material(
       color: config.Colors().secondColor(1),
@@ -76,32 +77,35 @@ class _HelpState extends State<Help> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        trailing: CupertinoButton(
-            child: Icon(
-              Icons.search,
-              color: Colors.black,
-            ),
-            onPressed: null),
-        backgroundColor: Colors.white,
-        leading: CupertinoButton(
-          child: Icon(
+    return Scaffold(
+      appBar: AppBar(
+        leading: TextButton(
+          onPressed: () {},
+          child: const Icon(
             Icons.chevron_left,
             color: Colors.black,
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
         ),
-        middle: Text(
-          'Help',
-          style: TextStyle(
-              color: Colors.black, fontSize: 24),
+        centerTitle: true,
+        title: const Center(
+          child: Text(
+            'Help',
+            style: TextStyle(color: Colors.black, fontSize: 24),
+          ),
         ),
+        actions: [
+          TextButton(
+            onPressed: () {},
+            child: const Icon(
+              Icons.search,
+              color: Colors.black,
+            ),
+          ),
+        ],
+        backgroundColor: config.Colors().secondColor(1),
+        elevation: 0,
       ),
-      backgroundColor: config.Colors().secondColor(1),
-      child: Stack(
+      body: Stack(
         children: <Widget>[
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -133,7 +137,7 @@ class _HelpState extends State<Help> {
             ],
           ),
           SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
+            padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
             child: Column(
               children: <Widget>[
                 _container('How you earn coins ? ',

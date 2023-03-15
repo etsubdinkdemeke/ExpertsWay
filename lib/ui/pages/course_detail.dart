@@ -1,13 +1,10 @@
-import 'dart:convert';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:learncoding/models/course.dart';
 import 'package:learncoding/models/lesson.dart' as lesson;
 import 'package:learncoding/ui/pages/lesson.dart';
 import 'package:learncoding/services/api_controller.dart';
-import 'package:learncoding/theme/box_icons_icons.dart';
-import 'package:learncoding/ui/pages/quiz.dart';
-import 'package:learncoding/ui/widgets/card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:learncoding/theme/config.dart' as config;
 import 'package:flutter/material.dart';
@@ -20,16 +17,16 @@ import '../../utils/color.dart';
 class CourseDetailPage extends StatefulWidget {
   final CourseElement courseData;
 
-  CourseDetailPage({
+  const CourseDetailPage({
     Key? key,
     required this.courseData,
   }) : super(key: key);
 
   @override
-  _CoursePagePageState createState() => _CoursePagePageState();
+  CoursePagePageState createState() => CoursePagePageState();
 }
 
-class _CoursePagePageState extends State<CourseDetailPage> {
+class CoursePagePageState extends State<CourseDetailPage> {
   late List<LessonElement> lessonData = [];
   late List<LessonContent> lessoncontent = [];
   bool isLoading = false;
@@ -44,7 +41,9 @@ class _CoursePagePageState extends State<CourseDetailPage> {
     setState(() => isLoading = true);
     lessonData =
         await CourseDatabase.instance.readLesson(widget.courseData.slug);
-    print("....lesson length ...." + lessonData.length.toString());
+    if (kDebugMode) {
+      print("....lesson length ....${lessonData.length}");
+    }
     setState(() => isLoading = false);
   }
 
@@ -87,6 +86,7 @@ class _CoursePagePageState extends State<CourseDetailPage> {
           width: MediaQuery.of(context).size.width,
           // height: MediaQuery.of(context).size.height * 0.4,
 
+          // ignore: unnecessary_null_comparison
           child: widget.courseData != null
               ? Image.network(
                   widget.courseData.banner,
@@ -127,7 +127,7 @@ class _CoursePagePageState extends State<CourseDetailPage> {
           ),
         ),
         SafeArea(
-          child: Container(
+          child: SizedBox(
             height: 40,
             width: 40,
             child: Align(
@@ -208,13 +208,13 @@ class _CoursePagePageState extends State<CourseDetailPage> {
   List lessonListId(lessonData, section) {
     // Currently, this method is not used. But I didn't want to remove it 'cause
     // there's a lot of effort put in making this. I chose to keep it just in case ...
-    var Id = [];
+    var id = [];
     for (var lesson in lessonData) {
       if (lesson.section == section) {
-        Id.add(lesson.lessonId);
+        id.add(lesson.lessonId);
       }
     }
-    return Id;
+    return id;
   }
 
   Widget buildLessonList(lessonData, section) {
@@ -286,11 +286,12 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                                 List lessonIds =
                                     lessonListId(lessonData, section);
                                 String lessonIndex =
-                                    (lessonIds[index]).toString() as String;
+                                    (lessonIds[index]).toString();
 
                                 lessoncontent = await CourseDatabase.instance
                                     .readLessonContets(lessonIds[index]);
                                 if (lessoncontent.isNotEmpty) {
+                                  // ignore: use_build_context_synchronously
                                   Navigator.push(
                                     context,
                                     CupertinoPageRoute(
@@ -300,7 +301,7 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                                         section: section.toString(),
                                         lessonId: lessonIndex,
                                         lesson: lessonTitle[index].toString(),
-                                        courseId: widget.courseData.course_id
+                                        courseId: widget.courseData.courseId
                                             .toString(),
                                       ),
                                     ),
@@ -338,7 +339,7 @@ class _CoursePagePageState extends State<CourseDetailPage> {
 
     return ListView.builder(
         shrinkWrap: true,
-        padding: EdgeInsets.all(0),
+        padding: const EdgeInsets.all(0),
         itemCount: sections.length,
         itemBuilder: (context, index) {
           return Column(
@@ -368,7 +369,7 @@ class _CoursePagePageState extends State<CourseDetailPage> {
               children: [
                 GestureDetector(
                   child: ListTile(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                     title: Text(
                       lessonData[index].title,
                       style: const TextStyle(
@@ -442,9 +443,8 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                             lesson: lessonData[index]
                                 .title, // please don't be mad with the namings ... X(
                             contents: lessonContents,
-                            courseId: widget.courseData.course_id.toString(),
-                            lessonId:
-                                lessonData[index].lessonId.toString() as String,
+                            courseId: widget.courseData.courseId.toString(),
+                            lessonId: lessonData[index].lessonId.toString(),
                             section: lessonData[index].section,
                           ),
                         ),
@@ -464,9 +464,9 @@ class _CoursePagePageState extends State<CourseDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
+    return Scaffold(
       backgroundColor: config.Colors().secondColor(1),
-      child: Stack(
+      body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
           SizedBox(
@@ -553,7 +553,7 @@ class _CoursePagePageState extends State<CourseDetailPage> {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
                                   {
-                                    return Center(
+                                    return const Center(
                                       child: CircularProgressIndicator(
                                         color: maincolor,
                                       ),

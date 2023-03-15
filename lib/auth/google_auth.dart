@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:learncoding/analytics/analytics_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,6 +34,7 @@ class GoogleAuth {
 
     final UserCredential authResult =
         await _auth.signInWithCredential(credential);
+    // ignore: unnecessary_nullable_for_final_variable_declarations
     final User? user = authResult.user!;
     assert(user?.email != null);
     assert(user?.displayName != null);
@@ -45,7 +47,7 @@ class GoogleAuth {
           .where('id', isEqualTo: user.uid)
           .get();
       final List<DocumentSnapshot> documents = result.docs;
-      if (documents.length == 0) {
+      if (documents.isEmpty) {
         FirebaseFirestore.instance.collection('users').doc(user.uid).set({
           'name': user.displayName,
           'email': user.email,
@@ -74,6 +76,7 @@ class GoogleAuth {
     });
     if (user != null) {
       assert(!user.isAnonymous);
+      // ignore: unnecessary_null_comparison
       assert(await user.getIdToken() != null);
     }
     final User currentUser = _auth.currentUser!;
@@ -94,7 +97,10 @@ class GoogleAuth {
       value.setString('logged', "false");
       value.setBool('premium', false);
     });
-    print("User Sign Out");
+
+    if (kDebugMode) {
+      print("User Sign Out");
+    }
   }
 
   Future<bool> isSignedIn() async {
