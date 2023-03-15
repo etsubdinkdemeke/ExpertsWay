@@ -45,7 +45,7 @@ class Course {
 class CourseElementFields {
   static final List<String> values = [
     // add all fileds
-    course_id, name, slug, description, color, icon,banner, shortVideo,
+    course_id, name, slug, description, color, icon, banner, shortVideo,
     lastUpdated, eneabled
   ];
 
@@ -73,7 +73,7 @@ class CourseElement {
     required this.icon,
     required this.banner,
     required this.shortVideo,
-    required this.lastUpdated,
+    this.lastUpdated,
     required this.enabled,
     this.seenCounter,
     this.isLastSeen,
@@ -116,21 +116,23 @@ class CourseElement {
   String icon;
   String banner;
   String shortVideo;
-  DateTime lastUpdated;
+  DateTime? lastUpdated;
   bool enabled;
   int? seenCounter;
   int? isLastSeen;
 
   factory CourseElement.fromJson(Map<String, dynamic> json) => CourseElement(
         course_id: json[CourseElementFields.course_id] as int?,
-        name: json[CourseElementFields.name] as String,
-        slug: json[CourseElementFields.slug] as String,
-        description: json[CourseElementFields.description] as String,
-        color: json[CourseElementFields.color] as String,
-        icon: json[CourseElementFields.icon] as String,
-        banner: json[CourseElementFields.banner] as String,
-        shortVideo: json[CourseElementFields.shortVideo] as String,
-        lastUpdated: DateTime.parse(json[CourseElementFields.lastUpdated]),
+        name: json[CourseElementFields.name] ?? '',
+        slug: json[CourseElementFields.slug] ?? '',
+        description: json[CourseElementFields.description] ?? '',
+        color: json[CourseElementFields.color] ?? '',
+        icon: json[CourseElementFields.icon] ?? '',
+        banner: json[CourseElementFields.banner] ?? '',
+        shortVideo: json[CourseElementFields.shortVideo] ?? '',
+        lastUpdated: json[CourseElementFields.lastUpdated] == null
+            ? null
+            : DateTime.parse(json[CourseElementFields.lastUpdated]),
         enabled: json[CourseElementFields.eneabled] == 1,
         isLastSeen: json[CourseElementFields.isLastSeen] as int?,
         seenCounter: json[CourseElementFields.seenCounter] as int?,
@@ -145,7 +147,7 @@ class CourseElement {
         CourseElementFields.icon: icon,
         CourseElementFields.banner: banner,
         CourseElementFields.shortVideo: shortVideo,
-        CourseElementFields.lastUpdated: lastUpdated.toIso8601String(),
+        CourseElementFields.lastUpdated: lastUpdated!.toIso8601String(),
         CourseElementFields.eneabled: enabled ? 1 : 0,
         CourseElementFields.isLastSeen: isLastSeen,
         CourseElementFields.seenCounter: seenCounter,
