@@ -301,8 +301,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
                                         section: section.toString(),
                                         lessonId: lessonIndex,
                                         lesson: lessonTitle[index].toString(),
-                                        courseId: widget.courseData.courseId
-                                            .toString(),
+                                        courseData: widget.courseData,
                                       ),
                                     ),
                                   );
@@ -443,7 +442,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
                             lesson: lessonData[index]
                                 .title, // please don't be mad with the namings ... X(
                             contents: lessonContents,
-                            courseId: widget.courseData.courseId.toString(),
+                            courseData: widget.courseData,
                             lessonId: lessonData[index].lessonId.toString(),
                             section: lessonData[index].section,
                           ),
