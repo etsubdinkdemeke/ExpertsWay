@@ -255,8 +255,10 @@ class _LessonState extends State<LessonPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Html(
-                      data: lesson,
+                    child: Material(
+                      child: Html(
+                        data: lesson,
+                      ),
                     ),
                   ),
                 ],
