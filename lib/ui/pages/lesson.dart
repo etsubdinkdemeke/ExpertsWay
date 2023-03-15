@@ -218,7 +218,7 @@ class _LessonState extends State<LessonPage> {
     // String lesson = lessonHtml[index];
     String lesson = getContent[index];
     return CupertinoPageScaffold(
-      backgroundColor: config.Colors().secondColor(1),
+      backgroundColor: const Color.fromARGB(255, 250, 250, 250),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
