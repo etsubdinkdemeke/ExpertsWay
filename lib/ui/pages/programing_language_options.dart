@@ -65,6 +65,7 @@ class _ProgrammingOptionsState extends State<ProgrammingOptions> {
                   ),
                 );
               }),
+          const SizedBox(height: 100),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Opacity(
