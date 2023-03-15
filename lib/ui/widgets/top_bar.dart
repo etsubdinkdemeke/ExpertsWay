@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:learncoding/models/course.dart';
 import 'package:learncoding/services/api_controller.dart';
@@ -5,6 +6,7 @@ import 'package:learncoding/theme/box_icons_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/services.dart';
+import 'package:learncoding/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../db/course_database.dart';
@@ -77,7 +79,7 @@ class TopBarState extends State<TopBar> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Text(
-                    "Hi,${name!}",
+                    "Hi,${name ?? ''}",
                     style: const TextStyle(
                         color: Color(0xFF343434),
                         fontSize: 24,
@@ -89,7 +91,10 @@ class TopBarState extends State<TopBar> {
                   child: GestureDetector(
                     onTap: widget.onMenuTap,
                     child: material.CircleAvatar(
-                      backgroundImage: NetworkImage(image!),
+                      backgroundImage: CachedNetworkImageProvider(
+                        image ?? Constant.imagePlaceholder,
+                        errorListener: () => const Text('failed to load image'),
+                      ),
                     ),
                   ),
                 ),

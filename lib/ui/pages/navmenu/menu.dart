@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:learncoding/theme/box_icons_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:learncoding/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../profile.dart';
@@ -109,7 +111,9 @@ class _MenuState extends State<Menu> {
                         children: <Widget>[
                           CircleAvatar(
                             radius: 30,
-                            backgroundImage: NetworkImage(image!),
+                            backgroundImage: CachedNetworkImageProvider(
+                              image ?? Constant.imagePlaceholder,
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 16.0),
@@ -118,7 +122,7 @@ class _MenuState extends State<Menu> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  name!,
+                                  name ?? '',
                                   maxLines: 1,
                                   overflow: TextOverflow.fade,
                                   style: const TextStyle(

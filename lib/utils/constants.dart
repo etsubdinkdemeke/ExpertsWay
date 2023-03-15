@@ -6,3 +6,8 @@ class AppUrl {
   static var courseUrl = '$baseUrl/courses';
   static var lessonUrl = '$baseUrl/lesson';
 }
+
+class Constant {
+  static const imagePlaceholder =
+      'https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png';
+}
