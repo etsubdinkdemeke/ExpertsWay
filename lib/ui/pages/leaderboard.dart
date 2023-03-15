@@ -109,7 +109,6 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                             child: Text(
                                               "${index + 1}.",
                                               style: TextStyle(
-                                                  fontFamily: 'Red Hat Display',
                                                   fontSize: 18,
                                                   color: Color(0xFF585858)),
                                             ),
@@ -119,7 +118,6 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                             child: Text(
                                               "${names[index]}",
                                               style: TextStyle(
-                                                  fontFamily: 'Red Hat Display',
                                                   fontSize: 18,
                                                   color: Color(0xFF585858)),
                                             ),
@@ -160,8 +158,6 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                                   Text(
                                                     "${coins[index]}",
                                                     style: TextStyle(
-                                                        fontFamily:
-                                                            'Red Hat Display',
                                                         fontSize: 18,
                                                         color:
                                                             Color(0xFF585858)),
@@ -236,7 +232,6 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                             child: Text(
                                               "${index + 1}.",
                                               style: TextStyle(
-                                                  fontFamily: 'Red Hat Display',
                                                   fontSize: 18,
                                                   color: Color(0xFF585858)),
                                             ),
@@ -246,7 +241,6 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                             child: Text(
                                               "${names[index]}",
                                               style: TextStyle(
-                                                  fontFamily: 'Red Hat Display',
                                                   fontSize: 18,
                                                   color: Color(0xFF585858)),
                                             ),
@@ -287,8 +281,6 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                                   Text(
                                                     "${coins[index]}",
                                                     style: TextStyle(
-                                                        fontFamily:
-                                                            'Red Hat Display',
                                                         fontSize: 18,
                                                         color:
                                                             Color(0xFF585858)),
@@ -345,7 +337,6 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                 style: TextStyle(
                                     color: Color(0xFF343434),
                                     fontSize: 20,
-                                    fontFamily: 'Red Hat Display',
                                     fontWeight: material.FontWeight.w600),
                               ),
                             ),
@@ -360,7 +351,6 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                 style: TextStyle(
                                     color: Color(0xFF343434),
                                     fontSize: 20,
-                                    fontFamily: 'Red Hat Display',
                                     fontWeight: material.FontWeight.w600),
                               ),
                             )

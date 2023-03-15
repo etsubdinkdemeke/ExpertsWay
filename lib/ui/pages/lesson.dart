@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:math';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:learncoding/api/shared_preference/shared_preference.dart';
@@ -10,16 +11,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:learncoding/utils/color.dart';
 import 'package:learncoding/utils/lessonFinishMessage.dart';
+import 'package:get/get.dart';
+import '../../db/course_database.dart';
+import '../../models/course.dart';
+import '../../models/notification.dart';
 
 class LessonPage extends StatefulWidget {
   final List<LessonElement?> lessonData;
+  final List<LessonContent?> contents;
   final String section;
   final String lesson;
+  final String lessonId;
+  final String courseId;
   const LessonPage({
     super.key,
     required this.section,
     required this.lesson,
     required this.lessonData,
+    required this.contents,
+    required this.lessonId,
+    required this.courseId,
   });
 
   @override
@@ -27,10 +38,113 @@ class LessonPage extends StatefulWidget {
 }
 
 class _LessonState extends State<LessonPage> {
+  static ProgressElement? progressElement;
+  static CourseElement? courseElement;
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
     init();
+    getLeContents();
+    getContentsId();
+    getCourseNameandIcon();
+    refreshProgress();
+  }
+
+  Future<void> getCourseNameandIcon() async {
+    courseElement = await CourseDatabase.instance
+        .readCourseNameandIcon(int.parse(widget.courseId));
+  }
+
+  Future addNotification() async {
+    await getCourseNameandIcon();
+
+    NotificationElement notElem = NotificationElement(
+      heighlightText: courseElement!.name,
+      imgUrl: courseElement!.icon,
+      type: 'finishedCourse',
+      createdDate: DateTime.now(),
+    );
+    await CourseDatabase.instance.createNotification(notElem);
+  }
+
+  static int getPageNum() {
+    int val = progressElement!.pageNum;
+    return val;
+  }
+
+  Future<void> addOrupdateProgress() async {
+    if (progressElement != null) {
+      await updateProgress();
+    } else {
+      await addProgress();
+    }
+  }
+
+  Future addProgress() async {
+    progressElement = ProgressElement(
+        progId: null,
+        courseId: widget.courseId,
+        lessonId: widget.lessonId,
+        contentId: getContentID[index].toString(),
+        pageNum: index,
+        userProgress: getUserProgress().toString());
+    await CourseDatabase.instance.createProgress(progressElement!);
+  }
+
+  Future updateProgress() async {
+    final progress = progressElement!.copy(
+      contentId: getContentID[index].toString(),
+      pageNum: index,
+      userProgress: getUserProgress().toString(),
+    );
+    String res = await CourseDatabase.instance.updateProgress(progress);
+  }
+
+  Future refreshProgress() async {
+    setState(() => isLoading = true);
+    // getContentID[index].toString()
+    progressElement = await CourseDatabase.instance.readProgress(
+      widget.courseId,
+      widget.lessonId,
+    );
+    if (progressElement != null) {
+      setState(() {
+        index = progressElement!.pageNum;
+      });
+    } else {
+      setState(() {
+        index = 0;
+      });
+    }
+    setState(() => isLoading = false);
+  }
+
+  @override
+  Future<void> dispose() async {
+    super.dispose();
+    progressElement = null;
+    getContent.clear();
+    getContentID.clear();
+  }
+
+  int index = 0;
+  final getContent = [];
+  final getContentID = [];
+  final getContentLessonId = [];
+
+  getLeContents() {
+    for (var i = 0; i < widget.contents.length; i++) {
+      var val = widget.contents[i];
+      getContent.add(val!.content);
+    }
+  }
+
+  getContentsId() {
+    for (var val in widget.contents) {
+      getContentID.add(val!.id);
+    }
   }
 
   Future init() async {
@@ -89,7 +203,6 @@ class _LessonState extends State<LessonPage> {
     return null;
   }
 
-  int index = 0;
   bool finishLesson = false;
   String nextLessonTitle = "";
   bool showFlushbar = true;
@@ -97,11 +210,15 @@ class _LessonState extends State<LessonPage> {
 
   @override
   Widget build(BuildContext context) {
-    final lessonHtml =
-        lessonContent(widget.lessonData, widget.lesson, widget.section);
+    // We don't need lessonHtml any more: becouse we use getContent (which is data retrive from database)
+
+    // final lessonHtml =
+    //     lessonContent(widget.lessonData, widget.lesson, widget.section);
     nextLesson(widget.lessonData, widget.lesson, widget.section);
-    String lesson = lessonHtml[index];
-    double progress = index / lessonHtml.length;
+    // String lesson = lessonHtml[index];
+    String lesson = getContent[index];
+    // double progress = index / lessonHtml.length;
+    double progress = index / getContent.length;
     int remainingHearts = 3;
     return CupertinoPageScaffold(
       backgroundColor: config.Colors().secondColor(1),
@@ -166,32 +283,43 @@ class _LessonState extends State<LessonPage> {
             ),
             CupertinoButton(
                 child: const Text("Next lesson"),
-                onPressed: () {
-                  showFlushbar && index == lessonHtml.length - 1
-                      ? Flushbar(
-                          flushbarPosition: FlushbarPosition.BOTTOM,
-                          margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),
-                          titleSize: 20,
-                          messageSize: 17,
-                          backgroundColor: maincolor,
-                          borderRadius: BorderRadius.circular(8),
-                          title: lessonFinished()[0].toString(),
-                          message: lessonFinished()[1].toString(),
-                          duration: const Duration(seconds: 5),
-                        ).show(context)
-                      : Container();
-                  index < lessonHtml.length - 1
-                      ? setState(() {
-                          index++;
-                        })
-                      : setState(() {
-                          finishLesson = true;
-                          showFlushbar = false;
-                        });
+                onPressed: () async {
+                  // showFlushbar && index == lessonHtml.length - 1
+                  if (showFlushbar && index == getContent.length - 1) {
+                    await addNotification();
+                    Flushbar(
+                      flushbarPosition: FlushbarPosition.BOTTOM,
+                      margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),
+                      titleSize: 20,
+                      messageSize: 17,
+                      backgroundColor: maincolor,
+                      borderRadius: BorderRadius.circular(8),
+                      title: lessonFinished()[0].toString(),
+                      message: lessonFinished()[1].toString(),
+                      duration: const Duration(seconds: 5),
+                    ).show(context);
+                  } else {
+                    index < getContent.length - 1
+                        ? setState(() {
+                            index++;
+                          })
+                        : setState(() {
+                            finishLesson = true;
+                            showFlushbar = false;
+                          });
+
+                    await addOrupdateProgress();
+                    refreshProgress();
+                  }
                 })
           ],
         ),
       ),
     );
+  }
+
+  double getUserProgress() {
+    double status = (index * 100) / getContent.length;
+    return status;
   }
 }

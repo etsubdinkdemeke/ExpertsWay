@@ -13,6 +13,9 @@ import 'package:flutter/services.dart';
 import 'package:learncoding/global/globals.dart' as globals;
 import 'package:learncoding/routes/router.dart' as router;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
+import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:page_transition/page_transition.dart';
 
 String? name;
 String? image;
@@ -62,18 +65,23 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
-      onGenerateRoute: router.generateRoute,
-      onUnknownRoute: (settings) => CupertinoPageRoute(
-          builder: (context) => UndefinedScreen(
-                name: settings.name,
-              )),
-      // theme: Provider.of<ThemeModel>(context).currentTheme,
-      debugShowCheckedModeBanner: false,
-      // home: Settings(),
-      // home: Profile(),
-      home: name == null ? Onboarding():MenuDashboardLayout(),
-    );
+    return GetCupertinoApp(
+        localizationsDelegates: [
+          DefaultMaterialLocalizations.delegate,
+          DefaultCupertinoLocalizations.delegate,
+          DefaultWidgetsLocalizations.delegate,
+        ],
+        onGenerateRoute: router.generateRoute,
+        onUnknownRoute: (settings) => CupertinoPageRoute(
+            builder: (context) => UndefinedScreen(
+                  name: settings.name,
+                )),
+        // theme: Provider.of<ThemeModel>(context).currentTheme,
+        debugShowCheckedModeBanner: false,
+        // home: Settings(),
+        // home: Profile(),
+        // home: name == null ? Onboarding() : MenuDashboardLayout(),
+        home: SplashScreen());
   }
 }
 
@@ -105,5 +113,22 @@ class _RestartWidgetState extends State<RestartWidget> {
       key: key,
       child: widget.child!,
     );
+  }
+}
+
+class SplashScreen extends StatelessWidget {
+  const SplashScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSplashScreen(
+        splash: Image.asset('assets/images/splash.png'),
+        duration: 3000,
+        splashIconSize: 350,
+        splashTransition: SplashTransition.slideTransition,
+        animationDuration: Duration(milliseconds: 1500),
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        pageTransitionType: PageTransitionType.fade,
+        nextScreen: name == null ? Onboarding() : MenuDashboardLayout());
   }
 }

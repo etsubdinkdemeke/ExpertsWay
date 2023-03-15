@@ -37,7 +37,6 @@ class StatsCard extends material.StatelessWidget {
                           child: Text(
                             "3489",
                             style: TextStyle(
-                                fontFamily: 'Red Hat Display',
                                 fontSize: 18,
                                 color: Color(0xFFFFFFFF)),
                           ),
@@ -68,7 +67,6 @@ class StatsCard extends material.StatelessWidget {
                 maxLines: 2,
                 style: material.TextStyle(
                     color: material.Color(0xFF535353),
-                    fontFamily: 'Red Hat Display',
                     fontSize: 16),
               ),
             ),
@@ -81,7 +79,6 @@ class StatsCard extends material.StatelessWidget {
                     "23 Questions asked",
                     style: material.TextStyle(
                         color: material.Color(0xFFADADAD),
-                        fontFamily: 'Red Hat Display',
                         fontSize: 10),
                   ),
                   material.Spacer(),
@@ -89,7 +86,6 @@ class StatsCard extends material.StatelessWidget {
                     "12 days Streak",
                     style: material.TextStyle(
                         color: material.Color(0xFFADADAD),
-                        fontFamily: 'Red Hat Display',
                         fontSize: 10),
                   ),
                   material.Icon(BoxIcons.bxs_flame, size: 16),
@@ -105,7 +101,6 @@ class StatsCard extends material.StatelessWidget {
                     "89 Questions answered",
                     style: material.TextStyle(
                         color: material.Color(0xFFADADAD),
-                        fontFamily: 'Red Hat Display',
                         fontSize: 10),
                   ),
                   material.Spacer(),
@@ -113,7 +108,6 @@ class StatsCard extends material.StatelessWidget {
                     "25 topics revised",
                     style: material.TextStyle(
                         color: material.Color(0xFFADADAD),
-                        fontFamily: 'Red Hat Display',
                         fontSize: 10),
                   ),
                   material.Icon(BoxIcons.bx_book_open, size: 16),
