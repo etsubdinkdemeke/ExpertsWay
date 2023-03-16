@@ -91,7 +91,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           controller: firstnameController,
                           decoration: InputDecoration(
                             prefixIcon: Icon(Icons.account_circle_outlined),
-                            hintText: "first name",
+                            hintText: "First name",
+                            hintStyle: TextStyle(fontSize: 14),
                             filled: true,
                             border: inputBorder,
                             enabledBorder: inputBorder,
@@ -114,7 +115,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           controller: lastnameController,
                           decoration: InputDecoration(
                             prefixIcon: Icon(Icons.account_circle_outlined),
-                            hintText: "last name",
+                            hintText: "Last name",
+                            hintStyle: TextStyle(fontSize: 14),
                             filled: true,
                             border: inputBorder,
                             enabledBorder: inputBorder,
@@ -137,7 +139,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           controller: emailController,
                           decoration: InputDecoration(
                             prefixIcon: Icon(Icons.mail_outline),
-                            hintText: "email",
+                            hintText: "Email",
+                            hintStyle: TextStyle(fontSize: 14),
                             filled: true,
                             border: inputBorder,
                             enabledBorder: inputBorder,
@@ -170,7 +173,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ? const Icon(Icons.visibility_outlined)
                                   : const Icon(Icons.visibility_off_outlined),
                             ),
-                            hintText: "password",
+                            hintText: "Password",
+                            hintStyle: TextStyle(fontSize: 14),
                             filled: true,
                             border: inputBorder,
                             enabledBorder: inputBorder,
@@ -184,6 +188,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       const SizedBox(height: 20),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Checkbox(
                               shape: RoundedRectangleBorder(

@@ -90,7 +90,8 @@ class _LoginPageState extends State<LoginPage> {
                           controller: emailController,
                           decoration: InputDecoration(
                             prefixIcon: Icon(Icons.mail_outline),
-                            hintText: "email",
+                            hintText: "Email",
+                            hintStyle: TextStyle(fontSize: 14),
                             filled: true,
                             border: inputBorder,
                             enabledBorder: inputBorder,
@@ -123,7 +124,8 @@ class _LoginPageState extends State<LoginPage> {
                                   ? const Icon(Icons.visibility_outlined)
                                   : const Icon(Icons.visibility_off_outlined),
                             ),
-                            hintText: "password",
+                            hintText: "Password",
+                            hintStyle: TextStyle(fontSize: 14),
                             filled: true,
                             border: inputBorder,
                             enabledBorder: inputBorder,
