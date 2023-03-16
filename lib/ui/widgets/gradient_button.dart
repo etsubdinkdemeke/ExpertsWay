@@ -42,7 +42,7 @@ class GradientBtn extends StatelessWidget {
               ? null
               : const LinearGradient(
                   colors: [Color(0xff2686FF), Color(0xff26B0FF)]),
-          borderRadius: BorderRadius.circular(100),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

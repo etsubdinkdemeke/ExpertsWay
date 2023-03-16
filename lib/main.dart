@@ -12,6 +12,8 @@ import 'package:get/get.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
+import 'auth/auth.dart';
+
 String? name;
 String? image;
 late SharedPreferences prefs;
@@ -126,6 +128,7 @@ class SplashScreen extends StatelessWidget {
       animationDuration: const Duration(milliseconds: 1500),
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       pageTransitionType: PageTransitionType.fade,
+      // nextScreen: AuthPage(),
       nextScreen:
           name == null ? const Onboarding() : const MenuDashboardLayout(),
     );
