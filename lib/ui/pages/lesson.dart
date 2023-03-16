@@ -15,6 +15,7 @@ import 'package:get/get.dart';
 import '../../db/course_database.dart';
 import '../../models/course.dart';
 import '../../models/notification.dart';
+import 'package:learncoding/ui/pages/comment.dart';
 
 class LessonPage extends StatefulWidget {
   final List<LessonElement?> lessonData;
@@ -238,8 +239,12 @@ class _LessonState extends State<LessonPage> {
                             Icons.comment_outlined,
                             size: 20,
                           ),
-                          onPressed:
-                              () {}, // TODO: implement this method: showing comments for this course
+                          onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                  const CommentSection()),
+                            ),
                         ),
                         CupertinoButton(
                           padding: const EdgeInsets.all(4),
