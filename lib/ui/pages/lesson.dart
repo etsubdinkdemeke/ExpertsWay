@@ -432,9 +432,11 @@ class _LessonState extends State<LessonPage> {
                     ),
                     const Spacer(),
                     CupertinoButton(
+                      color: Colors.white,
                       padding: const EdgeInsets.all(4),
                       child: const Icon(
                         Icons.comment_outlined,
+                        color: Colors.blue,
                         size: 20,
                       ),
                       onPressed: () => Navigator.push(
@@ -443,10 +445,13 @@ class _LessonState extends State<LessonPage> {
                             builder: (context) => const CommentSection()),
                       ),
                     ),
+                    const SizedBox(width: 5),
                     CupertinoButton(
+                      color: Colors.white,
                       padding: const EdgeInsets.all(4),
                       child: const Icon(
                         Icons.bookmark_outline,
+                        color: Colors.blue,
                         size: 20,
                       ),
                       onPressed:
