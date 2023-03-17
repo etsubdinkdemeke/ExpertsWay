@@ -230,35 +230,7 @@ class _LessonState extends State<LessonPage> {
               child: Column(
                 children: [
                   buildCoverImage(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Row(
-                      children: <Widget>[
-                        const Spacer(),
-                        CupertinoButton(
-                          padding: const EdgeInsets.all(4),
-                          child: const Icon(
-                            Icons.comment_outlined,
-                            size: 20,
-                          ),
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const CommentSection()),
-                          ),
-                        ),
-                        CupertinoButton(
-                          padding: const EdgeInsets.all(4),
-                          child: const Icon(
-                            Icons.bookmark_outline,
-                            size: 20,
-                          ),
-                          onPressed:
-                              () {}, // TODO: implement this method: bookmarking this course
-                        ),
-                      ],
-                    ),
-                  ),
+                  const SizedBox(height: 30),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Material(
@@ -458,12 +430,28 @@ class _LessonState extends State<LessonPage> {
                         fontSize: 18,
                       ),
                     ),
-                    Text(
-                      // we're considering the lessons to be the "chapters"
-                      "${widget.lessonData.length} Chapters",
-                      // TODO: consider color contrast issues here.
-                      style: const TextStyle(color: Colors.white, fontSize: 14),
-                    )
+                    const Spacer(),
+                    CupertinoButton(
+                      padding: const EdgeInsets.all(4),
+                      child: const Icon(
+                        Icons.comment_outlined,
+                        size: 20,
+                      ),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CommentSection()),
+                      ),
+                    ),
+                    CupertinoButton(
+                      padding: const EdgeInsets.all(4),
+                      child: const Icon(
+                        Icons.bookmark_outline,
+                        size: 20,
+                      ),
+                      onPressed:
+                          () {}, // TODO: implement this method: bookmarking this course
+                    ),
                   ],
                 ),
               ),
