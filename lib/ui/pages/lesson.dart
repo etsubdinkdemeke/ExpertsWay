@@ -449,7 +449,7 @@ class _LessonState extends State<LessonPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      widget.courseData.name,
+                      widget.lesson.title,
                       // TODO: consider color contrast issues here.
                       style: const TextStyle(
                         color: Colors.white,
