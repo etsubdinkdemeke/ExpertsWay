@@ -1,18 +1,24 @@
-// ignore_for_file: use_build_context_synchronously
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:learncoding/api/shared_preference/shared_preference.dart';
 import 'package:learncoding/main.dart';
 import 'package:learncoding/ui/pages/help.dart';
+import 'package:learncoding/ui/pages/onboarding1.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:learncoding/api/google_signin_api.dart';
-import 'package:learncoding/ui/pages/profile_edit.dart';
+import 'package:learncoding/ui/widgets/header.dart';
 import 'package:learncoding/utils/color.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../models/user.dart';
 import '../../theme/box_icons_icons.dart';
+import '../../theme/theme.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -34,9 +40,8 @@ class _SettingsState extends State<Settings> {
 
   getValue() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    name = prefs.getString('name')!;
-    image = prefs.getString('image')!;
-    setState(() {});
+    name = prefs.getString('name');
+    image = prefs.getString('image');
   }
 
   logout() async {
@@ -47,7 +52,7 @@ class _SettingsState extends State<Settings> {
     GoogleSignInApi.logout();
 
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => const RestartWidget(child: (MyApp()))));
+        builder: (context) => RestartWidget(child: (MyApp()))));
   }
 
   @override
@@ -60,32 +65,31 @@ class _SettingsState extends State<Settings> {
     Color backgroundColor = Theme.of(context).scaffoldBackgroundColor;
     IconThemeData icon = Theme.of(context).iconTheme;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: backgroundColor,
       body: Column(
         children: [
           Container(
-            margin: const EdgeInsets.only(top: 40, left: 5, right: 15),
+            margin: EdgeInsets.only(top: 40, left: 5, right: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TextButton(
-                  child: const Icon(
+                CupertinoButton(
+                  padding: EdgeInsets.all(0),
+                  child: Icon(
                     Icons.chevron_left,
-                    color: Colors.grey,
+                    color: icon.color,
                     size: 35,
                   ),
                   onPressed: () {
                     Navigator.pop(context);
                   },
                 ),
-                const Text(
-                  'Settings',
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: "Red Hat Display",
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black),
+                Container(
+                  child: Text(
+                    'Settings',
+                    textAlign: TextAlign.end,
+                    style: textTheme.headline3,
+                  ),
                 ),
                 Container(
                   height: 25,
@@ -93,7 +97,8 @@ class _SettingsState extends State<Settings> {
                   decoration: BoxDecoration(
                       color: Colors.lightBlue[100],
                       borderRadius: BorderRadius.circular(100)),
-                  child: TextButton(
+                  child: CupertinoButton(
+                    padding: EdgeInsets.only(left: 3),
                     child: const Icon(
                       Icons.logout,
                       color: Colors.blue,
@@ -121,34 +126,24 @@ class _SettingsState extends State<Settings> {
             ],
           ),
           Container(
-            margin: const EdgeInsets.only(top: 10),
+            margin: EdgeInsets.only(top: 10),
             alignment: Alignment.center,
             child: Column(
               children: [
                 Text(
                   name ?? "John Doe",
-                  style: const TextStyle(
-                    fontFamily: 'Red Hat Display',
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black,
-                  ),
+                  style: textTheme.bodyText2,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 5),
-                  child: Text("$name@gmail.com", //tobechanged
-                      style: const TextStyle(
-                        fontFamily: 'Red Hat Display',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black,
-                      )),
+                  child: Text(name ?? "JohnDoe@gmail.com",
+                      style: textTheme.bodyText2),
                 ),
               ],
             ),
           ),
           Container(
-            margin: const EdgeInsets.fromLTRB(20, 25, 20, 0),
+            margin: EdgeInsets.fromLTRB(20, 25, 20, 0),
             height: 2,
             color: Colors.grey[200],
           ),
@@ -165,8 +160,7 @@ class _SettingsState extends State<Settings> {
                         Icons.arrow_forward_ios, true, () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const EditProfile()),
+                        MaterialPageRoute(builder: (context) => Help()),
                       );
                     }),
                     _container(BoxIcons.bx_lock, 'Security', null,
@@ -175,15 +169,10 @@ class _SettingsState extends State<Settings> {
                         Icons.language,
                         'Language',
                         Container(
-                            margin: const EdgeInsets.only(right: 10),
+                            margin: EdgeInsets.only(right: 10),
                             child: Text(
                               "English(US)",
-                              style: TextStyle(
-                                fontFamily: 'Red Hat Display',
-                                fontSize: 15,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey[900],
-                              ),
+                              style: textTheme.bodyText2,
                             )),
                         Icons.arrow_forward_ios,
                         true, () {
@@ -191,19 +180,22 @@ class _SettingsState extends State<Settings> {
                     }),
                     _container(
                         Icons.cleaning_services,
-                        lightmode ? 'Dark Mode' : 'Light Mode',
+                        !themeProvider.isDarkMode ? 'Dark Mode' : 'Light Mode',
                         Transform.scale(
                           scale: 0.8,
                           child: CupertinoSwitch(
-                            trackColor: const Color.fromARGB(255, 86, 85, 85),
-                            activeColor:
-                                const Color.fromARGB(255, 197, 232, 247),
-                            thumbColor:
-                                lightmode ? Colors.blue : Colors.grey[900],
-                            value: lightmode,
+                            trackColor: Color.fromARGB(255, 217, 238, 247),
+                            activeColor: Color.fromARGB(0, 76, 185, 22),
+                            thumbColor: !themeProvider.isDarkMode
+                                ? Colors.blue
+                                : Colors.grey[900],
+                            value: themeProvider.isDarkMode,
                             onChanged: (bool value) {
                               setState(() {
-                                lightmode = value;
+                                final provider = Provider.of<ThemeProvider>(
+                                    context,
+                                    listen: false);
+                                provider.toggleTheme(value);
                               });
                               setState(() {});
                             },
@@ -211,9 +203,7 @@ class _SettingsState extends State<Settings> {
                         ),
                         null,
                         false, () {
-                      if (kDebugMode) {
-                        print("object");
-                      }
+                      print("object");
                     }),
                     _container(
                         Icons.notifications_none_rounded,
@@ -240,11 +230,14 @@ class _SettingsState extends State<Settings> {
 
   Widget _container(IconData leading, title, Widget? info, IconData? trailing,
       bool splash, VoidCallback tapped) {
+    TextTheme textTheme = Theme.of(context).textTheme;
+    Color secondbackgroundColor = Theme.of(context).backgroundColor;
+    IconThemeData icon = Theme.of(context).iconTheme;
     return Column(
       children: [
         Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: secondbackgroundColor,
             boxShadow: const [
               BoxShadow(
                   blurRadius: 10,
@@ -256,12 +249,14 @@ class _SettingsState extends State<Settings> {
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: tapped,
+              onTap: () async {
+                tapped;
+              },
               highlightColor: splash
-                  ? const Color.fromARGB(132, 135, 208, 245)
+                  ? Color.fromARGB(132, 135, 208, 245)
                   : Colors.transparent,
               splashColor: splash
-                  ? const Color.fromARGB(61, 231, 231, 231)
+                  ? Color.fromARGB(61, 231, 231, 231)
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(radius),
               child: Row(
@@ -270,8 +265,7 @@ class _SettingsState extends State<Settings> {
                   Row(
                     children: [
                       Container(
-                        margin: const EdgeInsets.only(
-                            left: 15, top: 10, bottom: 10),
+                        margin: EdgeInsets.only(left: 15, top: 10, bottom: 10),
                         width: 30,
                         height: 30,
                         decoration: BoxDecoration(
@@ -283,33 +277,25 @@ class _SettingsState extends State<Settings> {
                           size: 18,
                         ),
                       ),
-                      const SizedBox(
+                      SizedBox(
                         width: 20,
                       ),
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontFamily: 'Red Hat Display',
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.grey[900],
-                        ),
-                      ) //15
+                      Text(title, style: textTheme.bodyText2), //15
                     ],
                   ),
                   Row(
                     children: [
-                      info ?? Container(),
+                      info == null ? Container() : info,
                       const SizedBox(
                         width: 10,
                       ),
                       trailing == null
                           ? Container()
                           : Container(
-                              margin: const EdgeInsets.only(right: 15),
+                              margin: EdgeInsets.only(right: 15),
                               child: Icon(
                                 trailing,
-                                color: Colors.grey[900],
+                                color: icon.color,
                                 size: 20,
                               ),
                             )
@@ -330,11 +316,11 @@ class _SettingsState extends State<Settings> {
   Widget buildImage() {
     NetworkImage imagebuild = NetworkImage(image.toString());
     ImageProvider<Object> alternativeImage =
-        const AssetImage('assets/images/video.jpg');
+        AssetImage('assets/images/video.jpg');
     return CircleAvatar(
       radius: 45,
       foregroundImage: image != null ? imagebuild : alternativeImage,
-      child: const Material(
+      child: Material(
         color: Color.fromARGB(0, 231, 6, 6), //
       ),
     );
@@ -344,7 +330,7 @@ class _SettingsState extends State<Settings> {
     IconThemeData icon = Theme.of(context).iconTheme;
     return ClipOval(
       child: Container(
-        padding: const EdgeInsets.all(5),
+        padding: EdgeInsets.all(5),
         color: color,
         child: InkWell(
             onTap: () {},
