@@ -7,7 +7,10 @@ import 'package:intl/intl.dart';
 import 'package:learncoding/main.dart';
 import 'package:learncoding/theme/box_icons_icons.dart';
 import 'package:path/path.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../theme/theme.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -45,8 +48,15 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
+    final text = Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
+        ? 'DarkTheme'
+        : 'LightTheme';
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    TextTheme textTheme = Theme.of(context).textTheme;
+    Color backgroundColor = Theme.of(context).scaffoldBackgroundColor;
+    IconThemeData icon = Theme.of(context).iconTheme;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: backgroundColor,
       body: SingleChildScrollView(
         child: Column(children: [
           Container(

@@ -11,6 +11,7 @@ import 'package:learncoding/ui/pages/help.dart';
 import 'package:learncoding/ui/pages/onboarding1.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:learncoding/api/google_signin_api.dart';
+import 'package:learncoding/ui/pages/profile_edit.dart';
 import 'package:learncoding/ui/widgets/header.dart';
 import 'package:learncoding/utils/color.dart';
 import 'package:provider/provider.dart';
@@ -160,7 +161,7 @@ class _SettingsState extends State<Settings> {
                         Icons.arrow_forward_ios, true, () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Help()),
+                        MaterialPageRoute(builder: (context) => EditProfile()),
                       );
                     }),
                     _container(BoxIcons.bx_lock, 'Security', null,
@@ -249,9 +250,7 @@ class _SettingsState extends State<Settings> {
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: () async {
-                tapped;
-              },
+              onTap: tapped,
               highlightColor: splash
                   ? Color.fromARGB(132, 135, 208, 245)
                   : Colors.transparent,

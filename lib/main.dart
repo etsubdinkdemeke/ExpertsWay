@@ -1,4 +1,5 @@
 import 'package:learncoding/routes/page.dart';
+import 'package:learncoding/theme/theme.dart';
 import 'package:learncoding/ui/pages/navmenu/menu_dashboard_layout.dart';
 import 'package:learncoding/ui/pages/onboarding1.dart';
 import 'package:learncoding/ui/pages/undefined_screen.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:learncoding/global/globals.dart' as globals;
 import 'package:learncoding/routes/router.dart' as router;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
@@ -61,25 +63,28 @@ class MyAppState extends State<MyApp> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      localizationsDelegates: const [
-        DefaultMaterialLocalizations.delegate,
-        DefaultCupertinoLocalizations.delegate,
-        DefaultWidgetsLocalizations.delegate,
-      ],
-      theme: ThemeData(fontFamily: 'Poppins'),
-      onGenerateRoute: router.generateRoute,
-      onUnknownRoute: (settings) => CupertinoPageRoute(
-          builder: (context) => UndefinedScreen(
-                name: settings.name,
-              )),
-      // theme: Provider.of<ThemeModel>(context).currentTheme,
-      debugShowCheckedModeBanner: false,
-      getPages: pages,
-      home: const SplashScreen(),
-    );
-  }
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      builder: (context, _) {
+        final themeProvider = Provider.of<ThemeProvider>(context);
+        return GetMaterialApp(
+          localizationsDelegates: const [
+            DefaultMaterialLocalizations.delegate,
+            DefaultCupertinoLocalizations.delegate,
+            DefaultWidgetsLocalizations.delegate,
+          ],
+          theme: ThemeData(fontFamily: 'Poppins'),
+          onGenerateRoute: router.generateRoute,
+          onUnknownRoute: (settings) => CupertinoPageRoute(
+              builder: (context) => UndefinedScreen(
+                    name: settings.name,
+                  )),
+          // theme: Provider.of<ThemeModel>(context).currentTheme,
+          debugShowCheckedModeBanner: false,
+          getPages: pages,
+          home: const SplashScreen(),
+        );
+      });
 }
 
 class RestartWidget extends StatefulWidget {
@@ -118,16 +123,23 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSplashScreen(
-      splash: Image.asset('assets/images/splash.png'),
-      duration: 3000,
-      splashIconSize: 350,
-      splashTransition: SplashTransition.slideTransition,
-      animationDuration: const Duration(milliseconds: 1500),
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      pageTransitionType: PageTransitionType.fade,
-      nextScreen:
-          name == null ? const Onboarding() : const MenuDashboardLayout(),
+    final text = Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
+        ? 'DarkTheme'
+        : 'LightTheme';
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
+    return Scaffold(
+      body: AnimatedSplashScreen(
+        splash: Image.asset('assets/images/splash.png'),
+        duration: 3000,
+        splashIconSize: 350,
+        splashTransition: SplashTransition.slideTransition,
+        animationDuration: const Duration(milliseconds: 1500),
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        pageTransitionType: PageTransitionType.fade,
+        nextScreen:
+            name == null ? const Onboarding() : const MenuDashboardLayout(),
+      ),
     );
   }
 }
