@@ -20,17 +20,19 @@ import 'package:learncoding/ui/pages/comment.dart';
 class LessonPage extends StatefulWidget {
   final List<LessonElement?> lessonData;
   final List<LessonContent?> contents;
-  final String section;
-  final String lesson;
-  final String lessonId;
+  // final String section;
+  // final String lesson;
+  // final String lessonId;
+  final LessonElement lesson;
   final CourseElement courseData;
   const LessonPage({
     super.key,
-    required this.section,
+    // required this.section, //
+    // required this.lesson,  // this is the titile
     required this.lesson,
     required this.lessonData,
     required this.contents,
-    required this.lessonId,
+    // required this.lessonId, //
     required this.courseData,
   });
 
@@ -87,7 +89,7 @@ class _LessonState extends State<LessonPage> {
     progressElement = ProgressElement(
         progId: null,
         courseId: widget.courseData.courseId!.toString(),
-        lessonId: widget.lessonId,
+        lessonId: widget.lesson.lessonId.toString(),
         contentId: getContentID[index].toString(),
         pageNum: index,
         userProgress: getUserProgress().toString());
@@ -108,7 +110,7 @@ class _LessonState extends State<LessonPage> {
     // getContentID[index].toString()
     progressElement = await CourseDatabase.instance.readProgress(
       widget.courseData.courseId!.toString(),
-      widget.lessonId,
+      widget.lesson.lessonId.toString(),
     );
     if (progressElement != null) {
       setState(() {
@@ -172,10 +174,10 @@ class _LessonState extends State<LessonPage> {
     if (encouragement[randomNo3].endsWith(".") ||
         encouragement[randomNo3].endsWith("!")) {
       message =
-          "${completed[randomNo2]}${widget.lesson} in ${widget.section}. ${encouragement[randomNo3]}";
+          "${completed[randomNo2]}${widget.lesson} in ${widget.lesson.section}. ${encouragement[randomNo3]}";
     } else {
       message =
-          "${completed[randomNo2]}${widget.lesson} in ${widget.section}. ${encouragement[randomNo3]} $nextLessonTitle in the next chapter.";
+          "${completed[randomNo2]}${widget.lesson} in ${widget.lesson.section}. ${encouragement[randomNo3]} $nextLessonTitle in the next chapter.";
     }
     List<String> encouragementMessage = [greet, message];
     return encouragementMessage;
@@ -215,7 +217,7 @@ class _LessonState extends State<LessonPage> {
 
     // final lessonHtml =
     //     lessonContent(widget.lessonData, widget.lesson, widget.section);
-    nextLesson(widget.lessonData, widget.lesson, widget.section);
+    nextLesson(widget.lessonData, widget.lesson, widget.lesson.section);
     // String lesson = lessonHtml[index];
     String lesson = getContent[index];
     return CupertinoPageScaffold(
@@ -228,36 +230,7 @@ class _LessonState extends State<LessonPage> {
               child: Column(
                 children: [
                   buildCoverImage(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Row(
-                      children: <Widget>[
-                        const Spacer(),
-                        CupertinoButton(
-                          padding: const EdgeInsets.all(4),
-                          child: const Icon(
-                            Icons.comment_outlined,
-                            size: 20,
-                          ),
-                          onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                  const CommentSection()),
-                            ),
-                        ),
-                        CupertinoButton(
-                          padding: const EdgeInsets.all(4),
-                          child: const Icon(
-                            Icons.bookmark_outline,
-                            size: 20,
-                          ),
-                          onPressed:
-                              () {}, // TODO: implement this method: bookmarking this course
-                        ),
-                      ],
-                    ),
-                  ),
+                  const SizedBox(height: 30),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Material(
@@ -448,7 +421,7 @@ class _LessonState extends State<LessonPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      widget.courseData.name,
+                      widget.lesson.title,
                       // TODO: consider color contrast issues here.
                       style: const TextStyle(
                         color: Colors.white,
@@ -457,12 +430,33 @@ class _LessonState extends State<LessonPage> {
                         fontSize: 18,
                       ),
                     ),
-                    Text(
-                      // we're considering the lessons to be the "chapters"
-                      "${widget.lessonData.length} Chapters",
-                      // TODO: consider color contrast issues here.
-                      style: const TextStyle(color: Colors.white, fontSize: 14),
-                    )
+                    const Spacer(),
+                    CupertinoButton(
+                      color: Colors.white,
+                      padding: const EdgeInsets.all(4),
+                      child: const Icon(
+                        Icons.comment_outlined,
+                        color: Colors.blue,
+                        size: 20,
+                      ),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CommentSection()),
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    CupertinoButton(
+                      color: Colors.white,
+                      padding: const EdgeInsets.all(4),
+                      child: const Icon(
+                        Icons.bookmark_outline,
+                        color: Colors.blue,
+                        size: 20,
+                      ),
+                      onPressed:
+                          () {}, // TODO: implement this method: bookmarking this course
+                    ),
                   ],
                 ),
               ),
