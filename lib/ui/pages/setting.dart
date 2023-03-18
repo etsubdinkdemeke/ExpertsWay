@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:learncoding/main.dart';
 import 'package:learncoding/ui/pages/help.dart';
 import 'package:learncoding/api/google_signin_api.dart';
+import 'package:learncoding/ui/pages/profile_edit.dart';
 import 'package:learncoding/utils/color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -156,7 +157,8 @@ class _SettingsState extends State<Settings> {
                         Icons.arrow_forward_ios, true, () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const Help()),
+                        MaterialPageRoute(
+                            builder: (context) => const EditProfile()),
                       );
                     }),
                     _container(BoxIcons.bx_lock, 'Security', null,
@@ -246,9 +248,7 @@ class _SettingsState extends State<Settings> {
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: () async {
-                tapped;
-              },
+              onTap: tapped,
               highlightColor: splash
                   ? const Color.fromARGB(132, 135, 208, 245)
                   : Colors.transparent,
