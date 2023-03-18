@@ -1,34 +1,39 @@
+import 'dart:ffi';
 import 'dart:math';
 import 'package:another_flushbar/flushbar.dart';
-import 'package:get/get.dart';
 import 'package:learncoding/api/shared_preference/shared_preference.dart';
 import 'package:learncoding/models/lesson.dart';
 import 'package:learncoding/models/user.dart';
 import 'package:learncoding/theme/box_icons_icons.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:learncoding/theme/config.dart' as config;
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:learncoding/utils/color.dart';
 import 'package:learncoding/utils/lesson_finish_message.dart';
+import 'package:get/get.dart';
 import '../../db/course_database.dart';
 import '../../models/course.dart';
 import '../../models/notification.dart';
+import 'package:learncoding/ui/pages/comment.dart';
 
 class LessonPage extends StatefulWidget {
   final List<LessonElement?> lessonData;
   final List<LessonContent?> contents;
-  final String section;
-  final String lesson;
-  final String lessonId;
-  final String courseId;
+  // final String section;
+  // final String lesson;
+  // final String lessonId;
+  final LessonElement lesson;
+  final CourseElement courseData;
   const LessonPage({
     super.key,
-    required this.section,
+    // required this.section, //
+    // required this.lesson,  // this is the titile
     required this.lesson,
     required this.lessonData,
     required this.contents,
-    required this.lessonId,
-    required this.courseId,
+    // required this.lessonId, //
+    required this.courseData,
   });
 
   @override
@@ -52,7 +57,7 @@ class _LessonState extends State<LessonPage> {
 
   Future<void> getCourseNameandIcon() async {
     courseElement = await CourseDatabase.instance
-        .readCourseNameandIcon(int.parse(widget.courseId));
+        .readCourseNameandIcon(widget.courseData.courseId!);
   }
 
   Future addNotification() async {
@@ -67,7 +72,6 @@ class _LessonState extends State<LessonPage> {
     await CourseDatabase.instance.createNotification(notElem);
   }
 
-  // ignore: unused_element
   static int getPageNum() {
     int val = progressElement!.pageNum;
     return val;
@@ -84,8 +88,8 @@ class _LessonState extends State<LessonPage> {
   Future addProgress() async {
     progressElement = ProgressElement(
         progId: null,
-        courseId: widget.courseId,
-        lessonId: widget.lessonId,
+        courseId: widget.courseData.courseId!.toString(),
+        lessonId: widget.lesson.lessonId.toString(),
         contentId: getContentID[index].toString(),
         pageNum: index,
         userProgress: getUserProgress().toString());
@@ -98,7 +102,6 @@ class _LessonState extends State<LessonPage> {
       pageNum: index,
       userProgress: getUserProgress().toString(),
     );
-    // ignore: unused_local_variable
     String res = await CourseDatabase.instance.updateProgress(progress);
   }
 
@@ -106,8 +109,8 @@ class _LessonState extends State<LessonPage> {
     setState(() => isLoading = true);
     // getContentID[index].toString()
     progressElement = await CourseDatabase.instance.readProgress(
-      widget.courseId,
-      widget.lessonId,
+      widget.courseData.courseId!.toString(),
+      widget.lesson.lessonId.toString(),
     );
     if (progressElement != null) {
       setState(() {
@@ -171,10 +174,10 @@ class _LessonState extends State<LessonPage> {
     if (encouragement[randomNo3].endsWith(".") ||
         encouragement[randomNo3].endsWith("!")) {
       message =
-          "${completed[randomNo2]}${widget.lesson} in ${widget.section}. ${encouragement[randomNo3]}";
+          "${completed[randomNo2]}${widget.lesson} in ${widget.lesson.section}. ${encouragement[randomNo3]}";
     } else {
       message =
-          "${completed[randomNo2]}${widget.lesson} in ${widget.section}. ${encouragement[randomNo3]} $nextLessonTitle in the next chapter.";
+          "${completed[randomNo2]}${widget.lesson} in ${widget.lesson.section}. ${encouragement[randomNo3]} $nextLessonTitle in the next chapter.";
     }
     List<String> encouragementMessage = [greet, message];
     return encouragementMessage;
@@ -214,110 +217,272 @@ class _LessonState extends State<LessonPage> {
 
     // final lessonHtml =
     //     lessonContent(widget.lessonData, widget.lesson, widget.section);
-    nextLesson(widget.lessonData, widget.lesson, widget.section);
+    nextLesson(widget.lessonData, widget.lesson, widget.lesson.section);
     // String lesson = lessonHtml[index];
     String lesson = getContent[index];
-    // double progress = index / lessonHtml.length;
-    double progress = index / getContent.length;
-    int remainingHearts = 3;
-    return Scaffold(
-      backgroundColor: config.Colors().secondColor(1),
-      appBar: AppBar(
-        elevation: 0,
-        // padding: const EdgeInsetsDirectional.only(
-        //   start: 0,
-        //   end: 20,
-        // ),
-
-        backgroundColor: config.Colors().secondColor(1),
-        leading: TextButton(
-          onPressed: () {
-            Get.back();
-          },
-          child: const Icon(
-            Icons.close,
-            color: Colors.black87,
-            size: 30,
-          ),
-        ),
-        actions: [
-          Container(
-            margin: const EdgeInsets.only(top: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                const Icon(
-                  BoxIcons.bxs_heart,
-                  color: Color.fromARGB(255, 246, 33, 82),
-                  size: 25,
-                ),
-                const SizedBox(width: 5),
-                Text(
-                  "$remainingHearts",
-                  style: const TextStyle(
-                    fontSize: 19,
-                    fontWeight: FontWeight.w400,
+    return CupertinoPageScaffold(
+      backgroundColor: const Color.fromARGB(255, 250, 250, 250),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  buildCoverImage(),
+                  const SizedBox(height: 30),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Material(
+                      child: Html(
+                        data: lesson,
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
+            ),
+          ),
+          Material(
+            color: const Color(0xf5f6fb),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: OutlinedButton(
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all(
+                          const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
+                        ),
+                        side: MaterialStateBorderSide.resolveWith((states) {
+                          if (states.contains(MaterialState.disabled)) {
+                            return const BorderSide(color: Colors.grey);
+                          }
+                          return const BorderSide(color: Colors.blue);
+                        }),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      onPressed: index <= 0
+                          ? null
+                          : () {
+                              setState(() {
+                                index--;
+                              });
+                            },
+                      child: const Text("Prev"),
+                    ),
+                  ),
+                  Expanded(
+                      flex: 2,
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 200),
+                        child: buildProgressBar(),
+                      )),
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color.fromARGB(255, 32, 130, 209),
+                            Color.fromARGB(255, 79, 170, 255)
+                          ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(10),
+                          onTap: index < getContent.length - 1
+                              ? nextButtonHandler
+                              : launchTest,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
+                            child: Center(
+                              child: Text(
+                                index < widget.contents.length - 1
+                                    ? "Next"
+                                    : "Take test",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.fromLTRB(20, 25, 20, 0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: LinearProgressIndicator(
-                  backgroundColor: Colors.green,
-                  value: finishLesson ? 1 : progress,
-                  valueColor: const AlwaysStoppedAnimation<Color>(
-                      Color.fromARGB(255, 4, 67, 33)),
-                  minHeight: 18,
+    );
+  }
+
+  Widget buildProgressBar() {
+    // index and widget.contents.length
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TweenAnimationBuilder<double>(
+        tween:
+            Tween<double>(begin: 0, end: (index + 1) / widget.contents.length),
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOut,
+        builder: (context, value, child) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: LinearProgressIndicator(
+              backgroundColor: Colors.blue[100],
+              color: Colors.blue[600],
+              value: value,
+              minHeight: 8,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  void nextButtonHandler() async {
+    // showFlushbar && index == lessonHtml.length - 1
+    if (showFlushbar && index == getContent.length - 1) {
+      await addNotification();
+      Flushbar(
+        flushbarPosition: FlushbarPosition.BOTTOM,
+        margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),
+        titleSize: 20,
+        messageSize: 17,
+        backgroundColor: maincolor,
+        borderRadius: BorderRadius.circular(8),
+        title: lessonFinished()[0].toString(),
+        message: lessonFinished()[1].toString(),
+        duration: const Duration(seconds: 5),
+      ).show(context);
+    } else
+      Container();
+    index < getContent.length - 1
+        ? setState(() {
+            index++;
+          })
+        : setState(() {
+            finishLesson = true;
+            showFlushbar = false;
+          });
+    if (index < getContent.length - 1) {
+      await addOrupdateProgress();
+      refreshProgress();
+    }
+  }
+
+  void launchTest() {
+    // TODO: implement this method
+  }
+
+  Widget buildCoverImage() {
+    // this mehtod builds the cover image and the texts
+    // on it (displayed at the top of the course-detail screen)
+    return Stack(
+      // we use this stack to display the course name and chapters on top of the cover image.
+      children: <Widget>[
+        SizedBox(
+          width: MediaQuery.of(context).size.width,
+          // height: MediaQuery.of(context).size.height * 0.4,
+          child: Image.network(
+            widget.courseData.banner,
+            fit: BoxFit.cover,
+          ), // TODO: replace this url with real course specific data
+        ),
+        Positioned(
+          bottom: 5,
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Material(
+                color: Colors.transparent,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      widget.lesson.title,
+                      // TODO: consider color contrast issues here.
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontFamily: "Poppins",
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
+                      ),
+                    ),
+                    const Spacer(),
+                    CupertinoButton(
+                      color: Colors.white,
+                      padding: const EdgeInsets.all(4),
+                      child: const Icon(
+                        Icons.comment_outlined,
+                        color: Colors.blue,
+                        size: 20,
+                      ),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CommentSection()),
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    CupertinoButton(
+                      color: Colors.white,
+                      padding: const EdgeInsets.all(4),
+                      child: const Icon(
+                        Icons.bookmark_outline,
+                        color: Colors.blue,
+                        size: 20,
+                      ),
+                      onPressed:
+                          () {}, // TODO: implement this method: bookmarking this course
+                    ),
+                  ],
                 ),
               ),
             ),
-            Html(
-              data: lesson,
-            ),
-            TextButton(
-                child: const Text("Next lesson"),
-                onPressed: () async {
-                  // showFlushbar && index == lessonHtml.length - 1
-                  if (showFlushbar && index == getContent.length - 1) {
-                    await addNotification();
-                    // ignore: use_build_context_synchronously
-                    Flushbar(
-                      flushbarPosition: FlushbarPosition.BOTTOM,
-                      margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),
-                      titleSize: 20,
-                      messageSize: 17,
-                      backgroundColor: maincolor,
-                      borderRadius: BorderRadius.circular(8),
-                      title: lessonFinished()[0].toString(),
-                      message: lessonFinished()[1].toString(),
-                      duration: const Duration(seconds: 5),
-                    ).show(context);
-                  } else {
-                    index < getContent.length - 1
-                        ? setState(() {
-                            index++;
-                          })
-                        : setState(() {
-                            finishLesson = true;
-                            showFlushbar = false;
-                          });
-
-                    await addOrupdateProgress();
-                    refreshProgress();
-                  }
-                })
-          ],
+          ),
         ),
-      ),
+        SafeArea(
+          child: SizedBox(
+            height: 40,
+            width: 40,
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: Material(
+                shape: const CircleBorder(),
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_new),
+                  iconSize: 14,
+                  constraints:
+                      const BoxConstraints(maxHeight: 60, maxWidth: 60),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

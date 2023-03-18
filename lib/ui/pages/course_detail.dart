@@ -296,13 +296,11 @@ class CoursePagePageState extends State<CourseDetailPage> {
                                     context,
                                     CupertinoPageRoute(
                                       builder: (context) => LessonPage(
-                                        lessonData: lessonData,
-                                        contents: lessoncontent,
-                                        section: section.toString(),
-                                        lessonId: lessonIndex,
-                                        lesson: lessonTitle[index].toString(),
-                                        courseId: widget.courseData.courseId
-                                            .toString(),
+                                        // sorry for the bad namimg here X)
+                                        lesson: lessonData[index],    // this is the current lessonElement
+                                        lessonData: lessonData,       // this is a list of lessonElements, passed to go to the next lesson
+                                        contents: lessoncontent,      // this is a list of lessonContents, read from database
+                                        courseData: widget.courseData,  // this is the course element that contains this lesson.
                                       ),
                                     ),
                                   );
@@ -440,12 +438,9 @@ class CoursePagePageState extends State<CourseDetailPage> {
                         CupertinoPageRoute(
                           builder: (context) => LessonPage(
                             lessonData: lessonData,
-                            lesson: lessonData[index]
-                                .title, // please don't be mad with the namings ... X(
+                            lesson: lessonData[index],
                             contents: lessonContents,
-                            courseId: widget.courseData.courseId.toString(),
-                            lessonId: lessonData[index].lessonId.toString(),
-                            section: lessonData[index].section,
+                            courseData: widget.courseData,
                           ),
                         ),
                       );
