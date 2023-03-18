@@ -9,6 +9,7 @@ import 'package:learncoding/ui/pages/help.dart';
 import 'package:learncoding/api/google_signin_api.dart';
 import 'package:learncoding/ui/pages/profile_edit.dart';
 import 'package:learncoding/utils/color.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../theme/box_icons_icons.dart';
@@ -51,6 +52,13 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
+    final text = Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
+        ? 'DarkTheme'
+        : 'LightTheme';
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    TextTheme textTheme = Theme.of(context).textTheme;
+    Color backgroundColor = Theme.of(context).scaffoldBackgroundColor;
+    IconThemeData icon = Theme.of(context).iconTheme;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
