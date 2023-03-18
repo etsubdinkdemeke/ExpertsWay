@@ -57,20 +57,21 @@ class CoursePagePageState extends State<CourseDetailPage> {
     super.dispose();
   }
 
-  List sectionList(lessonData) {
-    var seen = [];
+  List<String> sectionList(lessonData) {
+    var seen = <String>[];
     for (var lesson in lessonData) {
-      seen.add(lesson.section);
+      seen.add(lesson.section as String);
     }
     final sectionList = seen.toSet().toList();
     return sectionList;
   }
 
-  List lessonList(lessonData, section) {
-    var seen = [];
+  List<LessonElement> lessonList(
+      List<LessonElement> lessonData, String section) {
+    var seen = <LessonElement>[];
     for (var lesson in lessonData) {
       if (lesson.section == section) {
-        seen.add(lesson.title);
+        seen.add(lesson);
       }
     }
     return seen;
@@ -297,10 +298,14 @@ class CoursePagePageState extends State<CourseDetailPage> {
                                     CupertinoPageRoute(
                                       builder: (context) => LessonPage(
                                         // sorry for the bad namimg here X)
-                                        lesson: lessonData[index],    // this is the current lessonElement
-                                        lessonData: lessonData,       // this is a list of lessonElements, passed to go to the next lesson
-                                        contents: lessoncontent,      // this is a list of lessonContents, read from database
-                                        courseData: widget.courseData,  // this is the course element that contains this lesson.
+                                        lesson: lessonData[
+                                            index], // this is the current lessonElement
+                                        lessonData:
+                                            lessonData, // this is a list of lessonElements, passed to go to the next lesson
+                                        contents:
+                                            lessoncontent, // this is a list of lessonContents, read from database
+                                        courseData: widget
+                                            .courseData, // this is the course element that contains this lesson.
                                       ),
                                     ),
                                   );
@@ -591,7 +596,8 @@ class CoursePagePageState extends State<CourseDetailPage> {
 
                                 return Container();
                               })
-                          : buildUniformLessonList();
+                          : buildLessonGroups();
+                      // buildUniformLessonList();
                     }),
                   ),
                 ],
@@ -600,6 +606,95 @@ class CoursePagePageState extends State<CourseDetailPage> {
           ),
         ],
       ),
+    );
+  }
+
+  buildLessonGroups() {
+    var sections = sectionList(lessonData);
+    return Column(
+      children: [
+        for (int i = 0; i < sections.length; i++)
+          Builder(builder: (context) {
+            var lessonsUnderSection = lessonList(lessonData, sections[i]);
+            return ExpansionTile(
+              tilePadding: const EdgeInsets.symmetric(horizontal: 10),
+              childrenPadding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+              title: Text(
+                sections[i],
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 17,
+                ),
+              ),
+              children: [
+                for (int j = 0; j < lessonsUnderSection.length; j++)
+                  GestureDetector(
+                    child: ListTile(
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 0),
+                        title: Text(
+                          lessonsUnderSection[j].title,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        subtitle: Text(
+                          lessonsUnderSection[j].shortDescription.isNotEmpty
+                              ? lessonsUnderSection[j].shortDescription
+                              : "Lorem ipsum is a pseudo-Latin text used in web design, typography, layout, and printing in place of English to emphasise design elements over content. It's also called placeholder (or filler) text.",
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        trailing: Builder(builder: (_) {
+                          // we're generating a lot of random booleans here for demonstration purposes
+                          // all these boolean flags should be received from the database or API in the future.
+                          // TODO: change the following code to make it work with real data
+                          var isLessonCompleted = Random().nextBool();
+                          if (isLessonCompleted) {
+                            var testResult = Random().nextInt(101);
+                            return CircleAvatar(
+                              radius: 20,
+                              foregroundColor: Colors.white,
+                              backgroundColor: testResult > 60
+                                  ? Colors.green[300]
+                                  : (testResult > 30
+                                      ? Colors.yellow[400]
+                                      : Colors.red[300]),
+                              child: Text(testResult.toString()),
+                            );
+                          } else {
+                            var progress = Random()
+                                .nextDouble(); // how much the user has progressed with the lesson
+                            // the widget below is from a 3rd party package named 'percent indicator'. check it out on 'pub.dev'
+                            return CircularPercentIndicator(
+                              radius: 20,
+                              lineWidth: 3,
+                              percent: progress,
+                              progressColor: Colors.blue,
+                            );
+                          }
+                        })),
+                    onTap: () async {
+                      var lessonContents = await CourseDatabase.instance
+                          .readLessonContets(lessonsUnderSection[j].lessonId);
+                      // again, we're making the very last lesson locked.
+                      // ignore: use_build_context_synchronously
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => LessonPage(
+                            lessonData: lessonData,
+                            lesson: lessonsUnderSection[j],
+                            contents: lessonContents,
+                            courseData: widget.courseData,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+              ],
+            );
+          }),
+      ],
     );
   }
 }
