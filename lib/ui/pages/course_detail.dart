@@ -625,6 +625,8 @@ class CoursePagePageState extends State<CourseDetailPage> {
                   child: Column(
                     children: [
                       ListTile(
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 0),
                         title: Text(
                           sections[i],
                           style: const TextStyle(
@@ -640,7 +642,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
                       const SizedBox(height: 6),
                       Container(
                         color: Colors.grey[300],
-                        width: MediaQuery.of(context).size.width - 50,
+                        width: MediaQuery.of(context).size.width - 36,
                         height: 1,
                       )
                     ],
@@ -653,6 +655,8 @@ class CoursePagePageState extends State<CourseDetailPage> {
                   child: Column(
                     children: [
                       ListTile(
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 0),
                         title: Text(
                           sections[i],
                           style: const TextStyle(
@@ -670,82 +674,78 @@ class CoursePagePageState extends State<CourseDetailPage> {
                         decoration: BoxDecoration(
                             color: Colors.blue,
                             borderRadius: BorderRadius.circular(10)),
-                        width: MediaQuery.of(context).size.width - 50,
+                        width: MediaQuery.of(context).size.width - 36,
                         height: 4,
                       )
                     ],
                   ),
                 ),
               ),
-              childrenBody: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: Column(
-                  children: [
-                    for (int j = 0; j < lessonsUnderSection.length; j++)
-                      GestureDetector(
-                        child: ListTile(
-                            title: Text(
-                              lessonsUnderSection[j].title,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                              ),
+              childrenBody: Column(
+                children: [
+                  for (int j = 0; j < lessonsUnderSection.length; j++)
+                    GestureDetector(
+                      child: ListTile(
+                          title: Text(
+                            lessonsUnderSection[j].title,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
                             ),
-                            subtitle: Text(
-                              lessonsUnderSection[j].shortDescription.isNotEmpty
-                                  ? lessonsUnderSection[j].shortDescription
-                                  : "Lorem ipsum is a pseudo-Latin text used in web design, typography, layout, and printing in place of English to emphasise design elements over content. It's also called placeholder (or filler) text.",
-                              overflow: TextOverflow.ellipsis,
+                          ),
+                          subtitle: Text(
+                            lessonsUnderSection[j].shortDescription.isNotEmpty
+                                ? lessonsUnderSection[j].shortDescription
+                                : "Lorem ipsum is a pseudo-Latin text used in web design, typography, layout, and printing in place of English to emphasise design elements over content. It's also called placeholder (or filler) text.",
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          trailing: Builder(builder: (_) {
+                            // we're generating a lot of random booleans here for demonstration purposes
+                            // all these boolean flags should be received from the database or API in the future.
+                            // TODO: change the following code to make it work with real data
+                            var isLessonCompleted = Random().nextBool();
+                            if (isLessonCompleted) {
+                              var testResult = Random().nextInt(101);
+                              return CircleAvatar(
+                                radius: 20,
+                                foregroundColor: Colors.white,
+                                backgroundColor: testResult > 60
+                                    ? Colors.green[300]
+                                    : (testResult > 30
+                                        ? Colors.yellow[400]
+                                        : Colors.red[300]),
+                                child: Text(testResult.toString()),
+                              );
+                            } else {
+                              var progress = Random()
+                                  .nextDouble(); // how much the user has progressed with the lesson
+                              // the widget below is from a 3rd party package named 'percent indicator'. check it out on 'pub.dev'
+                              return CircularPercentIndicator(
+                                radius: 20,
+                                lineWidth: 3,
+                                percent: progress,
+                                progressColor: Colors.blue,
+                              );
+                            }
+                          })),
+                      onTap: () async {
+                        var lessonContents = await CourseDatabase.instance
+                            .readLessonContets(lessonsUnderSection[j].lessonId);
+                        // again, we're making the very last lesson locked.
+                        // ignore: use_build_context_synchronously
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => LessonPage(
+                              lessonData: lessonData,
+                              lesson: lessonsUnderSection[j],
+                              contents: lessonContents,
+                              courseData: widget.courseData,
                             ),
-                            trailing: Builder(builder: (_) {
-                              // we're generating a lot of random booleans here for demonstration purposes
-                              // all these boolean flags should be received from the database or API in the future.
-                              // TODO: change the following code to make it work with real data
-                              var isLessonCompleted = Random().nextBool();
-                              if (isLessonCompleted) {
-                                var testResult = Random().nextInt(101);
-                                return CircleAvatar(
-                                  radius: 20,
-                                  foregroundColor: Colors.white,
-                                  backgroundColor: testResult > 60
-                                      ? Colors.green[300]
-                                      : (testResult > 30
-                                          ? Colors.yellow[400]
-                                          : Colors.red[300]),
-                                  child: Text(testResult.toString()),
-                                );
-                              } else {
-                                var progress = Random()
-                                    .nextDouble(); // how much the user has progressed with the lesson
-                                // the widget below is from a 3rd party package named 'percent indicator'. check it out on 'pub.dev'
-                                return CircularPercentIndicator(
-                                  radius: 20,
-                                  lineWidth: 3,
-                                  percent: progress,
-                                  progressColor: Colors.blue,
-                                );
-                              }
-                            })),
-                        onTap: () async {
-                          var lessonContents = await CourseDatabase.instance
-                              .readLessonContets(
-                                  lessonsUnderSection[j].lessonId);
-                          // again, we're making the very last lesson locked.
-                          // ignore: use_build_context_synchronously
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => LessonPage(
-                                lessonData: lessonData,
-                                lesson: lessonsUnderSection[j],
-                                contents: lessonContents,
-                                courseData: widget.courseData,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                  ],
-                ),
+                          ),
+                        );
+                      },
+                    ),
+                ],
               ),
             );
             // return ExpansionTile(
