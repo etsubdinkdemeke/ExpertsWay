@@ -101,6 +101,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                           keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
                         ),
                       ),
                       SizedBox(
@@ -125,6 +126,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                           keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
                         ),
                       ),
                       SizedBox(
@@ -149,6 +151,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                           keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
                         ),
                       ),
                       SizedBox(
@@ -184,6 +187,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           keyboardType: TextInputType.text,
                           obscureText: isPressed,
+                          textInputAction: TextInputAction.done,
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -202,15 +206,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                 });
                               }),
                           Container(
-                            // padding: EdgeInsets.only(
-                            //   left: 30,
-                            // ),
-                            width: MediaQuery.of(context).size.width - 150,
-                            height: 50,
+                            width: MediaQuery.of(context).size.width / 1.6,
+                            height: 70,
                             child: Text(
                               "By continuing you accept our Privacy Policy and Terms of Use",
                               overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
+                              maxLines: 3,
                               style: TextStyle(
                                   fontWeight: FontWeight.normal,
                                   fontSize: 16,
@@ -234,7 +235,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   height: 52,
                 ),
                 SizedBox(
-                  height: 30,
+                  height: 20,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50.0),
@@ -292,7 +293,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 SizedBox(
-                  height: 60,
+                  height: 30,
                 ),
                 RichText(
                   text: TextSpan(children: [

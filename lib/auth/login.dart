@@ -100,9 +100,10 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Material(
@@ -113,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: TextFormField(
                           controller: passwordController,
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.lock_outline),
+                            prefixIcon: const Icon(Icons.lock_outline),
                             suffixIcon: IconButton(
                               onPressed: () {
                                 setState(() {
@@ -135,6 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           keyboardType: TextInputType.text,
                           obscureText: isPressed,
+                          textInputAction: TextInputAction.done,
                         ),
                       ),
                       SizedBox(height: 20),

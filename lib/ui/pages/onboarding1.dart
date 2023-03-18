@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:learncoding/api/google_signin_api.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../auth/auth.dart';
+
 class Onboarding extends StatefulWidget {
   const Onboarding({super.key});
 
@@ -172,23 +174,23 @@ class OnboardingState extends State<Onboarding> {
   }
 
   Future signin() async {
-    try {
-      final user = await GoogleSignInApi.login();
-      String? name = user!.displayName;
-      String? image = user.photoUrl;
+    // try {
+    //   final user = await GoogleSignInApi.login();
+    //   String? name = user!.displayName;
+    //   String? image = user.photoUrl;
 
-      // SharedPreferences pref = await SharedPreferences.getInstance();
-      UserPreferences.setuser(image!, name!);
-    } catch (error) {
-      // console.error("Error during login: ", error);
-      UserPreferences.setuser(
-          "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
-          "testDisplayName");
-    }
+    //   // SharedPreferences pref = await SharedPreferences.getInstance();
+    //   UserPreferences.setuser(image!, name!);
+    // } catch (error) {
+    //   // console.error("Error during login: ", error);
+    //   UserPreferences.setuser(
+    //       "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+    //       "testDisplayName");
+    // }
 
     // ignore: use_build_context_synchronously
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => (const MenuDashboardLayout())));
+        MaterialPageRoute(builder: (context) => (const AuthPage())));
   }
 
   @override
