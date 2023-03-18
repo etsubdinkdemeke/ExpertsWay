@@ -482,35 +482,19 @@ class CoursePagePageState extends State<CourseDetailPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Padding(
+                        const SizedBox(height: 4),
+                        Container(
+                          height: 44,
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Row(
-                            children: <Widget>[
-                              const Text(
+                            children: const <Widget>[
+                              Text(
                                 "Description",
                                 style: TextStyle(
                                     color: Color.fromARGB(255, 138, 138, 138),
                                     fontSize: 14),
                               ),
-                              const Spacer(),
-                              CupertinoButton(
-                                padding: const EdgeInsets.all(4),
-                                child: const Icon(
-                                  Icons.comment_outlined,
-                                  size: 20,
-                                ),
-                                onPressed:
-                                    () {}, // TODO: implement this method: showing comments for this course
-                              ),
-                              CupertinoButton(
-                                padding: const EdgeInsets.all(4),
-                                child: const Icon(
-                                  Icons.bookmark_outline,
-                                  size: 20,
-                                ),
-                                onPressed:
-                                    () {}, // TODO: implement this method: bookmarking this course
-                              )
+                              Spacer(),
                             ],
                           ),
                         ),
