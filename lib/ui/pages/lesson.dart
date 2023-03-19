@@ -273,9 +273,9 @@ class _LessonState extends State<LessonPage> {
                 borderRadius: BorderRadius.circular(10),
                 child: LinearProgressIndicator(
                   backgroundColor: Colors.green,
-                  value: finishLesson ? 1 : progress,
+                  value: finishLesson ? 100 : progress,
                   valueColor: const AlwaysStoppedAnimation<Color>(
-                      Color.fromARGB(255, 4, 67, 33)),
+                      Color.fromARGB(255, 57, 243, 144)),
                   minHeight: 18,
                 ),
               ),

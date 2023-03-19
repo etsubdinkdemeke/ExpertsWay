@@ -1,5 +1,6 @@
+import 'package:get/get.dart';
 import 'package:learncoding/api/shared_preference/shared_preference.dart';
-import 'package:learncoding/ui/pages/navmenu/menu_dashboard_layout.dart';
+import 'package:learncoding/routes/routing_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:learncoding/api/google_signin_api.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -186,9 +187,11 @@ class OnboardingState extends State<Onboarding> {
           "testDisplayName");
     }
 
+    Get.toNamed(AppRoute.programmingOptions);
+
     // ignore: use_build_context_synchronously
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => (const MenuDashboardLayout())));
+    // Navigator.of(context).pushReplacement(
+    //     MaterialPageRoute(builder: (context) => (const MenuDashboardLayout())));
   }
 
   @override
