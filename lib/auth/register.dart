@@ -50,7 +50,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Column(children: [
+                Column(children: const [
                   SizedBox(
                     height: 20,
                   ),
@@ -58,7 +58,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     "Let's get you set up,",
                     style: TextStyle(
                       fontSize: 17,
-                      color: Colors.black,
                     ),
                   ),
                   Text(
@@ -66,11 +65,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
                     ),
                   ),
                 ]),
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
                 Container(
@@ -205,9 +203,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                   checkPolicy = !checkPolicy;
                                 });
                               }),
-                          Container(
-                            width: MediaQuery.of(context).size.width / 1.6,
-                            height: 70,
+                          Expanded(
+                            // width: MediaQuery.of(context).size.width / 1.6,
+                            // height: 70,
                             child: Text(
                               "By continuing you accept our Privacy Policy and Terms of Use",
                               overflow: TextOverflow.ellipsis,
@@ -300,9 +298,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     TextSpan(
                         text: "Already have an account?",
                         style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontWeight: FontWeight.w400)),
+                            fontSize: 17, fontWeight: FontWeight.w400)),
                     TextSpan(
                         recognizer: TapGestureRecognizer()
                           ..onTap = widget.onClickedRegister,

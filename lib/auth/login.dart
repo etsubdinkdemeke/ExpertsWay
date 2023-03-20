@@ -42,30 +42,28 @@ class _LoginPageState extends State<LoginPage> {
         child: Padding(
           padding: const EdgeInsets.only(top: 80),
           child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: Column(children: [
                     Image.asset('assets/images/splash.png'),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    Text(
+                    const Text(
                       "Hey there,",
                       style: TextStyle(
                         fontSize: 17,
-                        color: Colors.black,
                       ),
                     ),
-                    Text(
+                    const Text(
                       "Welcome Back",
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
                       ),
                     ),
                   ]),
@@ -140,8 +138,8 @@ class _LoginPageState extends State<LoginPage> {
                           textInputAction: TextInputAction.done,
                         ),
                       ),
-                      SizedBox(height: 20),
-                      Align(
+                      const SizedBox(height: 20),
+                      const Align(
                         alignment: Alignment.center,
                         child: Text(
                           "Forgot your password?",
@@ -184,17 +182,17 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         flex: 1,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
-                      Text(
+                      const Text(
                         "Or",
                         style: TextStyle(
                             color: Colors.grey,
                             fontWeight: FontWeight.w600,
                             fontSize: 17),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Flexible(
@@ -236,9 +234,7 @@ class _LoginPageState extends State<LoginPage> {
                     TextSpan(
                         text: "Don't have an account?",
                         style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontWeight: FontWeight.w400)),
+                            fontSize: 17, fontWeight: FontWeight.w400)),
                     TextSpan(
                         recognizer: TapGestureRecognizer()
                           ..onTap = widget.onClickedLogIn,
@@ -273,7 +269,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     // ignore: use_build_context_synchronously
-  //   Navigator.of(context).pushReplacement(
-  //       MaterialPageRoute(builder: (context) => (const MenuDashboardLayout())));
-   }
+    //   Navigator.of(context).pushReplacement(
+    //       MaterialPageRoute(builder: (context) => (const MenuDashboardLayout())));
+  }
 }
