@@ -205,9 +205,6 @@ class _RegisterPageState extends State<RegisterPage> {
                               }),
 
                           const Expanded(
-
-                            // width: MediaQuery.of(context).size.width / 1.6,
-                            // height: 70,
                             child: Text(
                               "By continuing you accept our Privacy Policy and Terms of Use",
                               overflow: TextOverflow.ellipsis,
