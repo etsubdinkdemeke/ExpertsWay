@@ -73,7 +73,9 @@ class MyAppState extends State<MyApp> {
             DefaultCupertinoLocalizations.delegate,
             DefaultWidgetsLocalizations.delegate,
           ],
-          theme: ThemeData(fontFamily: 'Poppins'),
+          themeMode: themeProvider.themeMode,
+          theme: Themes.lightTheme,
+          darkTheme: Themes.darkTheme,
           onGenerateRoute: router.generateRoute,
           onUnknownRoute: (settings) => CupertinoPageRoute(
               builder: (context) => UndefinedScreen(

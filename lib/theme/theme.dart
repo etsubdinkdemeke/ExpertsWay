@@ -32,6 +32,7 @@ class Themes {
     canvasColor: Colors.transparent,
     iconTheme: const IconThemeData(color: Colors.black),
     primaryColor: Colors.white,
+    primarySwatch: Colors.blue,
     brightness: Brightness.light,
     backgroundColor: Colors.white,
     textTheme: TextTheme(
@@ -82,11 +83,11 @@ class Themes {
         fontFamily: 'Red Hat Display',
         fontSize: 15,
         fontWeight: FontWeight.w500,
-        color: Colors.black,
+        color: Colors.grey[900],
       ),
       // bodyMedium: TextStyle(
       //   fontFamily: 'Red Hat Display',
-      //   fontSize: 18,
+      //   fontSize: 20,
       //   fontWeight: FontWeight.w500,
       //   color: Colors.black,
       // ),
@@ -96,6 +97,7 @@ class Themes {
         fontWeight: FontWeight.w500,
         color: Colors.white.withOpacity(1),
       ),
+
       // caption: TextStyle(
       //   fontFamily: 'Red Hat Display',
       //   fontSize: 16,
@@ -113,6 +115,7 @@ class Themes {
     iconTheme: const IconThemeData(color: Colors.white),
     canvasColor: Colors.transparent,
     primaryColor: Color.fromARGB(0, 38, 50, 56),
+    primarySwatch: Colors.blue,
     brightness: Brightness.dark,
     accentColor: config.Colors().accentDarkColor(1),
     focusColor: config.Colors().mainDarkColor(1),
@@ -167,12 +170,12 @@ class Themes {
       bodyText2: TextStyle(
         fontFamily: 'Red Hat Display',
         fontSize: 15,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w400,
         color: Colors.white,
       ),
       // bodyMedium: TextStyle(
       //   fontFamily: 'Red Hat Display',
-      //   fontSize: 18,
+      //   fontSize: 20,
       //   fontWeight: FontWeight.w500,
       //   color: Colors.white,
       // ),
