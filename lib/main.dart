@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:learncoding/routes/page.dart';
 import 'package:learncoding/theme/theme.dart';
 import 'package:learncoding/ui/pages/navmenu/menu_dashboard_layout.dart';

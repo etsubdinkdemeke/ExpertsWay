@@ -287,6 +287,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
                               onTap: () async {
                                 List lessonIds =
                                     lessonListId(lessonData, section);
+                                // ignore: unused_local_variable
                                 String lessonIndex =
                                     (lessonIds[index]).toString();
 
@@ -669,9 +670,10 @@ class CoursePagePageState extends State<CourseDetailPage> {
                 children: [
                   for (int j = 0; j < lessonsUnderSection.length; j++)
                     GestureDetector(
-                      onTap: (i == 0 && j == 0) // only the very first lesson will be unlocked
+                      onTap: (i == 0 &&
+                              j ==
+                                  0) // only the very first lesson will be unlocked
                           ? () async {
-                              
                               var lessonContents = await CourseDatabase.instance
                                   .readLessonContets(
                                       lessonsUnderSection[j].lessonId);

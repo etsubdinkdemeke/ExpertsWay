@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 import '../api/google_signin_api.dart';
 import '../api/shared_preference/shared_preference.dart';
-import '../ui/pages/navmenu/menu_dashboard_layout.dart';
 import '../ui/widgets/gradient_button.dart';
 import '../utils/color.dart';
 import 'package:get/get.dart';
@@ -42,25 +40,25 @@ class _LoginPageState extends State<LoginPage> {
         child: Padding(
           padding: const EdgeInsets.only(top: 80),
           child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: Column(children: [
                     Image.asset('assets/images/splash.png'),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    Text(
+                    const Text(
                       "Hey there,",
                       style: TextStyle(
                         fontSize: 17,
                         color: Colors.black,
                       ),
                     ),
-                    Text(
+                    const Text(
                       "Welcome Back",
                       style: TextStyle(
                         fontSize: 20,
@@ -70,16 +68,16 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ]),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(horizontal: 50),
+                  padding: const EdgeInsets.symmetric(horizontal: 50),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
                       Material(
@@ -90,9 +88,9 @@ class _LoginPageState extends State<LoginPage> {
                         child: TextFormField(
                           controller: emailController,
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.mail_outline),
+                            prefixIcon: const Icon(Icons.mail_outline),
                             hintText: "Email",
-                            hintStyle: TextStyle(fontSize: 14),
+                            hintStyle: const TextStyle(fontSize: 14),
                             filled: true,
                             border: inputBorder,
                             enabledBorder: inputBorder,
@@ -127,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                                   : const Icon(Icons.visibility_off_outlined),
                             ),
                             hintText: "Password",
-                            hintStyle: TextStyle(fontSize: 14),
+                            hintStyle: const TextStyle(fontSize: 14),
                             filled: true,
                             border: inputBorder,
                             enabledBorder: inputBorder,
@@ -140,8 +138,8 @@ class _LoginPageState extends State<LoginPage> {
                           textInputAction: TextInputAction.done,
                         ),
                       ),
-                      SizedBox(height: 20),
-                      Align(
+                      const SizedBox(height: 20),
+                      const Align(
                         alignment: Alignment.center,
                         child: Text(
                           "Forgot your password?",
@@ -155,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
                 GradientBtn(
@@ -170,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                   width: 280,
                   height: 52,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
                 Padding(
@@ -178,31 +176,31 @@ class _LoginPageState extends State<LoginPage> {
                   child: Row(
                     children: [
                       Flexible(
+                        flex: 1,
                         child: Container(
                           color: Colors.grey,
                           height: 1,
                         ),
-                        flex: 1,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
-                      Text(
+                      const Text(
                         "Or",
                         style: TextStyle(
                             color: Colors.grey,
                             fontWeight: FontWeight.w600,
                             fontSize: 17),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Flexible(
+                        flex: 1,
                         child: Container(
                           color: Colors.grey,
                           height: 1,
                         ),
-                        flex: 1,
                       )
                     ],
                   ),
@@ -217,23 +215,24 @@ class _LoginPageState extends State<LoginPage> {
                         child: Container(
                             width: 50,
                             height: 50,
-                            padding: EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
                                 border: Border.all(
                                     width: 2,
-                                    color: Color.fromARGB(208, 178, 178, 178))),
+                                    color: const Color.fromARGB(
+                                        208, 178, 178, 178))),
                             child: Image.asset("assets/images/google.png")),
                       )
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 60,
                 ),
                 RichText(
                   text: TextSpan(children: [
-                    TextSpan(
+                    const TextSpan(
                         text: "Don't have an account?",
                         style: TextStyle(
                             color: Colors.black,
@@ -243,7 +242,7 @@ class _LoginPageState extends State<LoginPage> {
                         recognizer: TapGestureRecognizer()
                           ..onTap = widget.onClickedLogIn,
                         text: " Register",
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: maincolor,
                             fontSize: 17,
                             fontWeight: FontWeight.w700))
@@ -273,7 +272,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     // ignore: use_build_context_synchronously
-  //   Navigator.of(context).pushReplacement(
-  //       MaterialPageRoute(builder: (context) => (const MenuDashboardLayout())));
-   }
+    //   Navigator.of(context).pushReplacement(
+    //       MaterialPageRoute(builder: (context) => (const MenuDashboardLayout())));
+  }
 }

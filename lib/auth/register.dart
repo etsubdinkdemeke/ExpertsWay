@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../api/google_signin_api.dart';
 import '../api/shared_preference/shared_preference.dart';
@@ -46,11 +44,11 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Padding(
           padding: const EdgeInsets.only(top: 80),
           child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Column(children: [
+                Column(children: const [
                   SizedBox(
                     height: 20,
                   ),
@@ -70,16 +68,16 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                 ]),
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(horizontal: 50),
+                  padding: const EdgeInsets.symmetric(horizontal: 50),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
                       Material(
@@ -90,9 +88,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: TextField(
                           controller: firstnameController,
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.account_circle_outlined),
+                            prefixIcon:
+                                const Icon(Icons.account_circle_outlined),
                             hintText: "First name",
-                            hintStyle: TextStyle(fontSize: 14),
+                            hintStyle: const TextStyle(fontSize: 14),
                             filled: true,
                             border: inputBorder,
                             enabledBorder: inputBorder,
@@ -104,7 +103,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           textInputAction: TextInputAction.next,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Material(
@@ -115,9 +114,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: TextField(
                           controller: lastnameController,
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.account_circle_outlined),
+                            prefixIcon:
+                                const Icon(Icons.account_circle_outlined),
                             hintText: "Last name",
-                            hintStyle: TextStyle(fontSize: 14),
+                            hintStyle: const TextStyle(fontSize: 14),
                             filled: true,
                             border: inputBorder,
                             enabledBorder: inputBorder,
@@ -129,7 +129,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           textInputAction: TextInputAction.next,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Material(
@@ -140,9 +140,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: TextField(
                           controller: emailController,
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.mail_outline),
+                            prefixIcon: const Icon(Icons.mail_outline),
                             hintText: "Email",
-                            hintStyle: TextStyle(fontSize: 14),
+                            hintStyle: const TextStyle(fontSize: 14),
                             filled: true,
                             border: inputBorder,
                             enabledBorder: inputBorder,
@@ -154,7 +154,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           textInputAction: TextInputAction.next,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Material(
@@ -177,7 +177,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   : const Icon(Icons.visibility_off_outlined),
                             ),
                             hintText: "Password",
-                            hintStyle: TextStyle(fontSize: 14),
+                            hintStyle: const TextStyle(fontSize: 14),
                             filled: true,
                             border: inputBorder,
                             enabledBorder: inputBorder,
@@ -205,10 +205,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                   checkPolicy = !checkPolicy;
                                 });
                               }),
-                          Container(
+                          SizedBox(
                             width: MediaQuery.of(context).size.width / 1.6,
                             height: 70,
-                            child: Text(
+                            child: const Text(
                               "By continuing you accept our Privacy Policy and Terms of Use",
                               overflow: TextOverflow.ellipsis,
                               maxLines: 3,
@@ -223,7 +223,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 GradientBtn(
@@ -234,7 +234,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   width: 280,
                   height: 52,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Padding(
@@ -242,31 +242,31 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: Row(
                     children: [
                       Flexible(
+                        flex: 1,
                         child: Container(
                           color: Colors.grey,
                           height: 1,
                         ),
-                        flex: 1,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
-                      Text(
+                      const Text(
                         "Or",
                         style: TextStyle(
                             color: Colors.grey,
                             fontWeight: FontWeight.w600,
                             fontSize: 17),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Flexible(
+                        flex: 1,
                         child: Container(
                           color: Colors.grey,
                           height: 1,
                         ),
-                        flex: 1,
                       )
                     ],
                   ),
@@ -281,23 +281,24 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: Container(
                             width: 50,
                             height: 50,
-                            padding: EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
                                 border: Border.all(
                                     width: 2,
-                                    color: Color.fromARGB(208, 178, 178, 178))),
+                                    color: const Color.fromARGB(
+                                        208, 178, 178, 178))),
                             child: Image.asset("assets/images/google.png")),
                       )
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 RichText(
                   text: TextSpan(children: [
-                    TextSpan(
+                    const TextSpan(
                         text: "Already have an account?",
                         style: TextStyle(
                             color: Colors.black,
@@ -307,7 +308,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         recognizer: TapGestureRecognizer()
                           ..onTap = widget.onClickedRegister,
                         text: " Login",
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: maincolor,
                             fontSize: 17,
                             fontWeight: FontWeight.w700))
