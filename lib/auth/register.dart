@@ -56,7 +56,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     "Let's get you set up,",
                     style: TextStyle(
                       fontSize: 17,
-                      color: Colors.black,
                     ),
                   ),
                   Text(
@@ -64,7 +63,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
                     ),
                   ),
                 ]),
@@ -205,10 +203,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                   checkPolicy = !checkPolicy;
                                 });
                               }),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.6,
-                            height: 70,
-                            child: const Text(
+                          const Expanded(
+                            // width: MediaQuery.of(context).size.width / 1.6,
+                            // height: 70,
+                            child: Text(
                               "By continuing you accept our Privacy Policy and Terms of Use",
                               overflow: TextOverflow.ellipsis,
                               maxLines: 3,
@@ -242,11 +240,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: Row(
                     children: [
                       Flexible(
-                        flex: 1,
                         child: Container(
                           color: Colors.grey,
                           height: 1,
                         ),
+                        flex: 1,
                       ),
                       const SizedBox(
                         width: 10,
@@ -262,11 +260,11 @@ class _RegisterPageState extends State<RegisterPage> {
                         width: 10,
                       ),
                       Flexible(
-                        flex: 1,
                         child: Container(
                           color: Colors.grey,
                           height: 1,
                         ),
+                        flex: 1,
                       )
                     ],
                   ),
@@ -301,9 +299,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     const TextSpan(
                         text: "Already have an account?",
                         style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontWeight: FontWeight.w400)),
+                            fontSize: 17, fontWeight: FontWeight.w400)),
                     TextSpan(
                         recognizer: TapGestureRecognizer()
                           ..onTap = widget.onClickedRegister,
