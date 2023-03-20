@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:learncoding/theme/config.dart' as config;
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:configurable_expansion_tile_null_safety/configurable_expansion_tile_null_safety.dart';
 
 import '../../db/course_database.dart';
 import '../../models/lesson.dart';
@@ -57,20 +58,21 @@ class CoursePagePageState extends State<CourseDetailPage> {
     super.dispose();
   }
 
-  List sectionList(lessonData) {
-    var seen = [];
+  List<String> sectionList(lessonData) {
+    var seen = <String>[];
     for (var lesson in lessonData) {
-      seen.add(lesson.section);
+      seen.add(lesson.section as String);
     }
     final sectionList = seen.toSet().toList();
     return sectionList;
   }
 
-  List lessonList(lessonData, section) {
-    var seen = [];
+  List<LessonElement> lessonList(
+      List<LessonElement> lessonData, String section) {
+    var seen = <LessonElement>[];
     for (var lesson in lessonData) {
       if (lesson.section == section) {
-        seen.add(lesson.title);
+        seen.add(lesson);
       }
     }
     return seen;
@@ -297,10 +299,14 @@ class CoursePagePageState extends State<CourseDetailPage> {
                                     CupertinoPageRoute(
                                       builder: (context) => LessonPage(
                                         // sorry for the bad namimg here X)
-                                        lesson: lessonData[index],    // this is the current lessonElement
-                                        lessonData: lessonData,       // this is a list of lessonElements, passed to go to the next lesson
-                                        contents: lessoncontent,      // this is a list of lessonContents, read from database
-                                        courseData: widget.courseData,  // this is the course element that contains this lesson.
+                                        lesson: lessonData[
+                                            index], // this is the current lessonElement
+                                        lessonData:
+                                            lessonData, // this is a list of lessonElements, passed to go to the next lesson
+                                        contents:
+                                            lessoncontent, // this is a list of lessonContents, read from database
+                                        courseData: widget
+                                            .courseData, // this is the course element that contains this lesson.
                                       ),
                                     ),
                                   );
@@ -476,35 +482,19 @@ class CoursePagePageState extends State<CourseDetailPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Padding(
+                        const SizedBox(height: 4),
+                        Container(
+                          height: 44,
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Row(
-                            children: <Widget>[
-                              const Text(
+                            children: const <Widget>[
+                              Text(
                                 "Description",
                                 style: TextStyle(
                                     color: Color.fromARGB(255, 138, 138, 138),
                                     fontSize: 14),
                               ),
-                              const Spacer(),
-                              CupertinoButton(
-                                padding: const EdgeInsets.all(4),
-                                child: const Icon(
-                                  Icons.comment_outlined,
-                                  size: 20,
-                                ),
-                                onPressed:
-                                    () {}, // TODO: implement this method: showing comments for this course
-                              ),
-                              CupertinoButton(
-                                padding: const EdgeInsets.all(4),
-                                child: const Icon(
-                                  Icons.bookmark_outline,
-                                  size: 20,
-                                ),
-                                onPressed:
-                                    () {}, // TODO: implement this method: bookmarking this course
-                              )
+                              Spacer(),
                             ],
                           ),
                         ),
@@ -591,7 +581,8 @@ class CoursePagePageState extends State<CourseDetailPage> {
 
                                 return Container();
                               })
-                          : buildUniformLessonList();
+                          : buildLessonGroups();
+                      // buildUniformLessonList();
                     }),
                   ),
                 ],
@@ -600,6 +591,166 @@ class CoursePagePageState extends State<CourseDetailPage> {
           ),
         ],
       ),
+    );
+  }
+
+  buildLessonGroups() {
+    var sections = sectionList(lessonData);
+    return Column(
+      children: [
+        for (int i = 0; i < sections.length; i++)
+          Builder(builder: (context) {
+            var lessonsUnderSection = lessonList(lessonData, sections[i]);
+
+            return ConfigurableExpansionTile(
+              header: Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 0),
+                        title: Text(
+                          sections[i],
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 17,
+                          ),
+                        ),
+                        trailing: const Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          size: 30,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Container(
+                        color: Colors.grey[300],
+                        width: MediaQuery.of(context).size.width - 36,
+                        height: 1,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              headerExpanded: Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 0),
+                        title: Text(
+                          sections[i],
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 17,
+                          ),
+                        ),
+                        trailing: const Icon(
+                          Icons.keyboard_arrow_up_rounded,
+                          size: 30,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(10)),
+                        width: MediaQuery.of(context).size.width - 36,
+                        height: 4,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              childrenBody: Column(
+                children: [
+                  for (int j = 0; j < lessonsUnderSection.length; j++)
+                    GestureDetector(
+                      onTap: (i == 0 && j == 0) // only the very first lesson will be unlocked
+                          ? () async {
+                              
+                              var lessonContents = await CourseDatabase.instance
+                                  .readLessonContets(
+                                      lessonsUnderSection[j].lessonId);
+                              // again, we're making the very last lesson locked.
+                              // ignore: use_build_context_synchronously
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (context) => LessonPage(
+                                    lessonData: lessonData,
+                                    lesson: lessonsUnderSection[j],
+                                    contents: lessonContents,
+                                    courseData: widget.courseData,
+                                  ),
+                                ),
+                              );
+                            }
+                          : null,
+                      child: ListTile(
+                        title: Text(
+                          lessonsUnderSection[j].title,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        subtitle: Text(
+                          lessonsUnderSection[j].shortDescription.isNotEmpty
+                              ? lessonsUnderSection[j].shortDescription
+                              : "Lorem ipsum is a pseudo-Latin text used in web design, typography, layout, and printing in place of English to emphasise design elements over content. It's also called placeholder (or filler) text.",
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        trailing: (i == 0 && j == 0)
+                            ? Builder(
+                                builder: (_) {
+                                  // we're generating a lot of random booleans here for demonstration purposes
+                                  // all these boolean flags should be received from the database or API in the future.
+                                  // TODO: change the following code to make it work with real data
+                                  var isLessonCompleted = Random().nextBool();
+                                  if (isLessonCompleted) {
+                                    var testResult = Random().nextInt(101);
+                                    return CircleAvatar(
+                                      radius: 20,
+                                      foregroundColor: Colors.white,
+                                      backgroundColor: testResult > 60
+                                          ? Colors.green[300]
+                                          : (testResult > 30
+                                              ? Colors.yellow[400]
+                                              : Colors.red[300]),
+                                      child: Text(testResult.toString()),
+                                    );
+                                  } else {
+                                    var progress = Random()
+                                        .nextDouble(); // how much the user has progressed with the lesson
+                                    // the widget below is from a 3rd party package named 'percent indicator'. check it out on 'pub.dev'
+                                    return CircularPercentIndicator(
+                                      radius: 20,
+                                      lineWidth: 3,
+                                      percent: progress,
+                                      progressColor: Colors.blue,
+                                    );
+                                  }
+                                },
+                              )
+                            : CircleAvatar(
+                                radius: 16,
+                                backgroundColor: Colors.blue[50],
+                                child: const Icon(
+                                  Icons.lock_outline,
+                                  color: Colors.blue,
+                                  size: 18,
+                                ),
+                              ),
+                      ),
+                    ),
+                ],
+              ),
+            );
+          }),
+      ],
     );
   }
 }
