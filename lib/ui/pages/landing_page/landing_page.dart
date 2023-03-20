@@ -2,11 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:learncoding/routes/routing_constants.dart';
+import 'package:learncoding/theme/box_icons_icons.dart';
 import 'package:learncoding/ui/pages/course_detail.dart';
 import 'package:learncoding/ui/pages/landing_page/index.dart';
+import 'package:learncoding/ui/pages/setting.dart';
 import 'package:learncoding/ui/widgets/gradient_button.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:learncoding/ui/pages/notification.dart' as notificationPage;
 
 class LandingPage extends GetView<LandingPageController> {
   const LandingPage({super.key});
@@ -15,14 +19,86 @@ class LandingPage extends GetView<LandingPageController> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Scaffold(
-      body: SafeArea(
-        child: Obx(() {
-          return controller.loading.value
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Padding(
+    return Obx(() {
+      return controller.loading.value
+          ? const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            )
+          : Scaffold(
+              key: controller.scaffoldKey,
+              drawer: Drawer(
+                elevation: 1,
+                backgroundColor: Colors.white,
+                child: SafeArea(
+                  child: ListView(
+                    children: [
+                      _DrawerHeader(controller, theme),
+                      _DrawerButton(
+                        onPress: () {
+                          controller.scaffoldKey.currentState?.closeDrawer();
+                          Get.toNamed(AppRoute.landingPage);
+                        },
+                        theme: theme,
+                        icon: BoxIcons.bx_home,
+                        name: 'Home',
+                      ),
+                      _DrawerButton(
+                        onPress: () {},
+                        theme: theme,
+                        icon: BoxIcons.bx_notepad,
+                        name: 'To-do',
+                      ),
+                      _DrawerButton(
+                        onPress: () {},
+                        theme: theme,
+                        icon: Icons.play_arrow_outlined,
+                        name: 'Videos',
+                      ),
+                      _DrawerButton(
+                        onPress: () {},
+                        theme: theme,
+                        icon: BoxIcons.bx_line_chart,
+                        name: 'Leaderboard',
+                      ),
+                      _DrawerButton(
+                        onPress: () {},
+                        theme: theme,
+                        icon: BoxIcons.bx_calendar_week,
+                        name: 'calendar',
+                      ),
+                      _DrawerButton(
+                        onPress: () {},
+                        theme: theme,
+                        icon: BoxIcons.bx_message_square_dots,
+                        name: 'Forums',
+                      ),
+                      const Divider(),
+                      _DrawerButton(
+                        onPress: () => Get.to(() => const Settings()),
+                        theme: theme,
+                        icon: BoxIcons.bx_cog,
+                        name: 'Settings',
+                      ),
+                      _DrawerButton(
+                        onPress: () {},
+                        theme: theme,
+                        icon: BoxIcons.bx_help_circle,
+                        name: 'Help',
+                      ),
+                      _DrawerButton(
+                        onPress: () {},
+                        theme: theme,
+                        icon: BoxIcons.bx_log_out,
+                        name: 'Logout',
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              body: SafeArea(
+                child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 22),
                   child: CustomScrollView(
                     slivers: [
@@ -118,10 +194,10 @@ class LandingPage extends GetView<LandingPageController> {
                       // landing page header
                     ],
                   ),
-                );
-        }),
-      ),
-    );
+                ),
+              ),
+            );
+    });
   }
 }
 
@@ -218,7 +294,7 @@ class _Header extends StatelessWidget {
       children: [
         InkWell(
             onTap: () {
-              if (kDebugMode) print('drawer');
+              controller.scaffoldKey.currentState?.openDrawer();
             },
             child: Image.asset(
               'assets/images/drawer_icon.png',
@@ -234,15 +310,16 @@ class _Header extends StatelessWidget {
             ),
             Text(
               controller.profileName ?? 'User',
-              style: theme.textTheme.bodyLarge
-                  ?.copyWith(fontSize: 16, fontWeight: FontWeight.bold),
+              style: theme.textTheme.bodyLarge?.copyWith(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
           ],
         ),
         InkWell(
-          onTap: () {
-            if (kDebugMode) print('route to notification');
-          },
+          onTap: () => Get.to(() => const notificationPage.Notification()),
           borderRadius: BorderRadius.circular(20),
           child: Stack(
             children: const [
@@ -419,6 +496,110 @@ class _CardWidget extends StatelessWidget {
               ),
             )
         ],
+      ),
+    );
+  }
+}
+
+class _DrawerHeader extends StatelessWidget {
+  final LandingPageController controller;
+  final ThemeData theme;
+  const _DrawerHeader(this.controller, this.theme);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(100),
+            child: controller.profileImage == null
+                ? Image.asset(
+                    'assets/images/profile_placeholder.png',
+                    height: 60,
+                    width: 60,
+                  )
+                : CachedNetworkImage(
+                    imageUrl: controller.profileImage!,
+                    height: 60,
+                    width: 60,
+                  ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                controller.profileName ?? '',
+                style: theme.textTheme.displaySmall?.copyWith(fontSize: 16),
+              ),
+              Text(
+                'Student',
+                style: theme.textTheme.labelMedium,
+              ),
+            ],
+          ),
+          InkWell(
+            borderRadius: BorderRadius.circular(100),
+            onTap: () {
+              controller.scaffoldKey.currentState?.closeDrawer();
+            },
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Icon(
+                Icons.close,
+                size: 36,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _DrawerButton extends StatelessWidget {
+  final Function()? onPress;
+  final ThemeData theme;
+  final IconData icon;
+  final String name;
+  const _DrawerButton({
+    required this.onPress,
+    required this.theme,
+    required this.icon,
+    required this.name,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(15),
+        splashColor: const Color(0xff26B0FF),
+        onTap: onPress,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
+          child: Row(
+            children: [
+              CircleAvatar(
+                child: Icon(
+                  icon,
+                  weight: 0.3,
+                  color: const Color(0xff2E2E2E).withOpacity(0.8),
+                ),
+              ),
+              const SizedBox(width: 28),
+              Text(
+                name,
+                style: theme.textTheme.displaySmall
+                    ?.copyWith(color: const Color(0xff2E2E2E)),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

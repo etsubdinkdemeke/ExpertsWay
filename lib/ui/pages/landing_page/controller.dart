@@ -1,4 +1,5 @@
 // ignore: depend_on_referenced_packages
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:learncoding/db/course_database.dart';
 import 'package:learncoding/models/course.dart';
@@ -9,13 +10,16 @@ class LandingPageController extends GetxController {
   RxList<CourseElement> course = <CourseElement>[].obs;
 
   String? profileName = '';
+  String? profileImage = '';
 
   final loading = false.obs;
+
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void onInit() {
     getCourses();
-    getProfileName();
+    getProfileDetails();
     super.onInit();
   }
 
@@ -62,8 +66,9 @@ class LandingPageController extends GetxController {
   }
 
   // get  user profile
-  Future getProfileName() async {
+  Future getProfileDetails() async {
     final result = await SharedPreferences.getInstance();
     profileName = result.getString('name');
+    profileImage = result.getString('image');
   }
 }
