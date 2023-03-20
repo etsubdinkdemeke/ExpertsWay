@@ -2,13 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../api/google_signin_api.dart';
 import '../api/shared_preference/shared_preference.dart';
 import '../ui/pages/navmenu/menu_dashboard_layout.dart';
 import '../ui/widgets/gradient_button.dart';
 import '../utils/color.dart';
+import 'package:get/get.dart';
+import 'package:learncoding/routes/routing_constants.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback onClickedLogIn;
@@ -159,8 +160,9 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 GradientBtn(
                   onPressed: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => (const MenuDashboardLayout())));
+                    Get.toNamed(AppRoute.programmingOptions);
+                    // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    //     builder: (context) => (const MenuDashboardLayout())));
                   },
                   btnName: 'Login',
                   defaultBtn: true,
@@ -271,7 +273,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     // ignore: use_build_context_synchronously
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => (const MenuDashboardLayout())));
-  }
+  //   Navigator.of(context).pushReplacement(
+  //       MaterialPageRoute(builder: (context) => (const MenuDashboardLayout())));
+   }
 }
