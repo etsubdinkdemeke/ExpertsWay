@@ -203,7 +203,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                   checkPolicy = !checkPolicy;
                                 });
                               }),
+
                           const Expanded(
+
                             // width: MediaQuery.of(context).size.width / 1.6,
                             // height: 70,
                             child: Text(

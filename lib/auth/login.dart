@@ -55,7 +55,6 @@ class _LoginPageState extends State<LoginPage> {
                       "Hey there,",
                       style: TextStyle(
                         fontSize: 17,
-                        color: Colors.black,
                       ),
                     ),
                     const Text(
@@ -63,7 +62,6 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
                       ),
                     ),
                   ]),
@@ -235,9 +233,7 @@ class _LoginPageState extends State<LoginPage> {
                     const TextSpan(
                         text: "Don't have an account?",
                         style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontWeight: FontWeight.w400)),
+                            fontSize: 17, fontWeight: FontWeight.w400)),
                     TextSpan(
                         recognizer: TapGestureRecognizer()
                           ..onTap = widget.onClickedLogIn,
