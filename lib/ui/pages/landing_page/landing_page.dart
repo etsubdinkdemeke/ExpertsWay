@@ -587,7 +587,7 @@ class _DrawerButton extends StatelessWidget {
               CircleAvatar(
                 child: Icon(
                   icon,
-                  weight: 0.3,
+                  // weight: 0.3,
                   color: const Color(0xff2E2E2E).withOpacity(0.8),
                 ),
               ),
