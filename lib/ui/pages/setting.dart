@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 import 'package:learncoding/api/shared_preference/shared_preference.dart';
 import 'package:learncoding/main.dart';
 import 'package:learncoding/ui/pages/help.dart';
@@ -20,6 +21,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/user.dart';
 import '../../theme/box_icons_icons.dart';
 import '../../theme/theme.dart';
+import 'package:learncoding/theme/config.dart' as config;
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -52,15 +54,12 @@ class _SettingsState extends State<Settings> {
     pre.clear();
     GoogleSignInApi.logout();
 
-    Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => RestartWidget(child: (MyApp()))));
+    // Navigator.of(context).pushReplacement(MaterialPageRoute(
+    //     builder: (context) => RestartWidget(child: (MyApp()))));
   }
 
   @override
   Widget build(BuildContext context) {
-    final text = Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
-        ? 'DarkTheme'
-        : 'LightTheme';
     final themeProvider = Provider.of<ThemeProvider>(context);
     TextTheme textTheme = Theme.of(context).textTheme;
     Color backgroundColor = Theme.of(context).scaffoldBackgroundColor;
@@ -89,7 +88,7 @@ class _SettingsState extends State<Settings> {
                   child: Text(
                     'Settings',
                     textAlign: TextAlign.end,
-                    style: textTheme.headline3,
+                    style: textTheme.headline6,
                   ),
                 ),
                 Container(
@@ -157,68 +156,109 @@ class _SettingsState extends State<Settings> {
                     const SizedBox(
                       height: 25,
                     ),
-                    _container(BoxIcons.bx_user, 'Edit Profile', null,
-                        Icons.arrow_forward_ios, true, () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => EditProfile()),
-                      );
-                    }),
-                    _container(BoxIcons.bx_lock, 'Security', null,
-                        Icons.arrow_forward_ios, true, () {}),
                     _container(
-                        Icons.language,
-                        'Language',
-                        Container(
+                        context: context,
+                        leading: BoxIcons.bx_user,
+                        title: 'Edit Profile',
+                        info: null,
+                        trailing: Icons.arrow_forward_ios,
+                        splash: true,
+                        tapped: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditProfile()),
+                          );
+                        }),
+                    _container(
+                        context: context,
+                        leading: BoxIcons.bx_lock,
+                        title: 'Security',
+                        info: null,
+                        trailing: Icons.arrow_forward_ios,
+                        splash: true,
+                        tapped: () {}),
+                    _container(
+                        context: context,
+                        leading: Icons.language,
+                        title: 'Language',
+                        info: Container(
                             margin: EdgeInsets.only(right: 10),
                             child: Text(
                               "English(US)",
                               style: textTheme.bodyText2,
                             )),
-                        Icons.arrow_forward_ios,
-                        true, () {
-                      lightmode = !lightmode;
-                    }),
+                        trailing: Icons.arrow_forward_ios,
+                        splash: true,
+                        tapped: () {
+                          lightmode = !lightmode;
+                        }),
                     _container(
-                        Icons.cleaning_services,
-                        !themeProvider.isDarkMode ? 'Dark Mode' : 'Light Mode',
-                        Transform.scale(
+                        context: this.context,
+                        leading: Icons.cleaning_services,
+                        title: themeProvider.currentTheme == ThemeData.light()
+                            ? 'Dark Mode'
+                            : 'Light Mode',
+                        info: Transform.scale(
                           scale: 0.8,
                           child: CupertinoSwitch(
                             trackColor: Color.fromARGB(255, 217, 238, 247),
                             activeColor: Color.fromARGB(0, 76, 185, 22),
-                            thumbColor: !themeProvider.isDarkMode
-                                ? Colors.blue
-                                : Colors.grey[900],
-                            value: themeProvider.isDarkMode,
+                            thumbColor:
+                                themeProvider.currentTheme == ThemeData.light()
+                                    ? Colors.blue
+                                    : Colors.grey[900],
+                            value:
+                                themeProvider.currentTheme == ThemeData.dark(),
                             onChanged: (bool value) {
                               setState(() {
                                 final provider = Provider.of<ThemeProvider>(
                                     context,
                                     listen: false);
-                                provider.toggleTheme(value);
+                                print(value);
+                                provider.toggleTheme();
                               });
                               setState(() {});
                             },
                           ),
                         ),
-                        null,
-                        false, () {
-                      print("object");
-                    }),
+                        trailing: null,
+                        splash: false,
+                        tapped: () {
+                          print("object");
+                        }),
                     _container(
-                        Icons.notifications_none_rounded,
-                        'Notifications',
-                        null,
-                        Icons.arrow_forward_ios,
-                        true,
-                        () {}),
-                    _container(Icons.privacy_tip_outlined, 'Privacy Policy',
-                        null, Icons.arrow_forward_ios, true, () {}),
-                    _container(BoxIcons.bx_help_circle, 'Help', null,
-                        Icons.arrow_forward_ios, true, () {}),
-                    _container(BoxIcons.bx_share_alt, 'Invite Friends', null,
-                        Icons.arrow_forward_ios, true, () {}),
+                        context: context,
+                        leading: Icons.notifications_none_rounded,
+                        title: 'Notifications',
+                        info: null,
+                        trailing: Icons.arrow_forward_ios,
+                        splash: true,
+                        tapped: () {}),
+                    _container(
+                        context: context,
+                        leading: Icons.privacy_tip_outlined,
+                        title: 'Privacy Policy',
+                        info: null,
+                        trailing: Icons.arrow_forward_ios,
+                        splash: true,
+                        tapped: () {}),
+                    _container(
+                        context: context,
+                        leading: BoxIcons.bx_help_circle,
+                        title: 'Help',
+                        info: null,
+                        trailing: Icons.arrow_forward_ios,
+                        splash: true,
+                        tapped: () {}),
+                    _container(
+                        context: context,
+                        leading: BoxIcons.bx_share_alt,
+                        title: 'Invite Friends',
+                        info: null,
+                        trailing: Icons.arrow_forward_ios,
+                        splash: true,
+                        tapped: () {}),
                   ],
                 ),
               ),
@@ -229,8 +269,60 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  Widget _container(IconData leading, title, Widget? info, IconData? trailing,
-      bool splash, VoidCallback tapped) {
+  Widget buildImage() {
+    NetworkImage imagebuild = NetworkImage(image.toString());
+    ImageProvider<Object> alternativeImage =
+        AssetImage('assets/images/video.jpg');
+    return CircleAvatar(
+      radius: 45,
+      foregroundImage: image != null ? imagebuild : alternativeImage,
+      child: Material(
+        color: Color.fromARGB(0, 231, 6, 6), //
+      ),
+    );
+  }
+
+  Widget buildAddPhoto(Color color) {
+    IconThemeData icon = Theme.of(context).iconTheme;
+    return ClipOval(
+      child: Container(
+        padding: EdgeInsets.all(5),
+        color: color,
+        child: InkWell(
+            onTap: () {},
+            child: Icon(
+              Icons.mode_edit_outline_outlined,
+              color: icon.color,
+              size: 17,
+            )),
+      ),
+    );
+  }
+}
+
+class _container extends StatelessWidget {
+  const _container({
+    Key? key,
+    required this.context,
+    required this.leading,
+    required this.title,
+    required this.info,
+    required this.trailing,
+    required this.splash,
+    required this.tapped,
+  }) : super(key: key);
+
+  final BuildContext context;
+  final IconData leading;
+  final title;
+  final Widget? info;
+  final IconData? trailing;
+  final bool splash;
+  final VoidCallback tapped;
+
+  @override
+  Widget build(contextt) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     TextTheme textTheme = Theme.of(context).textTheme;
     Color secondbackgroundColor = Theme.of(context).backgroundColor;
     IconThemeData icon = Theme.of(context).iconTheme;
@@ -238,7 +330,9 @@ class _SettingsState extends State<Settings> {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: secondbackgroundColor,
+            color: themeProvider.currentTheme == ThemeData.light()
+                ? Colors.white
+                : secondbackgroundColor,
             boxShadow: const [
               BoxShadow(
                   blurRadius: 10,
@@ -284,7 +378,7 @@ class _SettingsState extends State<Settings> {
                   ),
                   Row(
                     children: [
-                      info == null ? Container() : info,
+                      info ?? Container(),
                       const SizedBox(
                         width: 10,
                       ),
@@ -309,36 +403,6 @@ class _SettingsState extends State<Settings> {
           height: 20,
         ),
       ],
-    );
-  }
-
-  Widget buildImage() {
-    NetworkImage imagebuild = NetworkImage(image.toString());
-    ImageProvider<Object> alternativeImage =
-        AssetImage('assets/images/video.jpg');
-    return CircleAvatar(
-      radius: 45,
-      foregroundImage: image != null ? imagebuild : alternativeImage,
-      child: Material(
-        color: Color.fromARGB(0, 231, 6, 6), //
-      ),
-    );
-  }
-
-  Widget buildAddPhoto(Color color) {
-    IconThemeData icon = Theme.of(context).iconTheme;
-    return ClipOval(
-      child: Container(
-        padding: EdgeInsets.all(5),
-        color: color,
-        child: InkWell(
-            onTap: () {},
-            child: Icon(
-              Icons.mode_edit_outline_outlined,
-              color: icon.color,
-              size: 17,
-            )),
-      ),
     );
   }
 }
