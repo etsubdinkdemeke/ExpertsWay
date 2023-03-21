@@ -1,17 +1,15 @@
-import 'dart:ffi';
+// ignore_for_file: unused_element, unused_local_variable, use_build_context_synchronously
+
 import 'dart:math';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:learncoding/api/shared_preference/shared_preference.dart';
 import 'package:learncoding/models/lesson.dart';
 import 'package:learncoding/models/user.dart';
-import 'package:learncoding/theme/box_icons_icons.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:learncoding/theme/config.dart' as config;
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:learncoding/utils/color.dart';
 import 'package:learncoding/utils/lesson_finish_message.dart';
-import 'package:get/get.dart';
 import '../../db/course_database.dart';
 import '../../models/course.dart';
 import '../../models/notification.dart';
@@ -244,7 +242,7 @@ class _LessonState extends State<LessonPage> {
             ),
           ),
           Material(
-            color: const Color(0xf5f6fb),
+            color: const Color(0xfff5f6fb),
             child: Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
@@ -375,8 +373,9 @@ class _LessonState extends State<LessonPage> {
         message: lessonFinished()[1].toString(),
         duration: const Duration(seconds: 5),
       ).show(context);
-    } else
+    } else {
       Container();
+    }
     index < getContent.length - 1
         ? setState(() {
             index++;

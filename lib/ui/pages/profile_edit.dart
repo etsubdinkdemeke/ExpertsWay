@@ -1,13 +1,10 @@
+// ignore_for_file: unused_local_variable, deprecated_member_use, unrelated_type_equality_checks
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/shims/dart_ui_real.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:intl/intl.dart';
-import 'package:learncoding/main.dart';
 import 'package:learncoding/theme/box_icons_icons.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -162,12 +159,18 @@ class _EditProfileState extends State<EditProfile> {
               isSaved = true;
             });
             if (isValidForm) {
-              print("valid");
+              if (kDebugMode) {
+                print("valid");
+              }
             }
-          }), Color(0xFF0396FF), Color.fromARGB(255, 110, 195, 255)),
+          }), const Color(0xFF0396FF),
+              const Color.fromARGB(255, 110, 195, 255)),
           const SizedBox(height: 30),
-          buildButton("Delete Account", () {}, Color.fromARGB(255, 255, 0, 0),
-              Color.fromARGB(255, 253, 47, 47))
+          buildButton(
+              "Delete Account",
+              () {},
+              const Color.fromARGB(255, 255, 0, 0),
+              const Color.fromARGB(255, 253, 47, 47))
         ]),
       ),
     );
@@ -181,7 +184,7 @@ class _EditProfileState extends State<EditProfile> {
       TextInputType? inputType,
       IconData icon,
       double iconSize,
-      String? Value,
+      String? value,
       String? type,
       VoidCallback onTap) {
     final themeProvider = Provider.of<ThemeProvider>(context);
@@ -190,15 +193,18 @@ class _EditProfileState extends State<EditProfile> {
     IconThemeData icontheme = Theme.of(context).iconTheme;
 
     String? hintText(String? inputType) {
-      if (inputType == "fname")
+      if (inputType == "fname") {
         return "First Name";
-      else if (inputType == "lname")
+      } else if (inputType == "lname") {
         return "Last Name";
-      else if (inputType == "email")
+      } else if (inputType == "email") {
         return "Email Address";
-      else if (inputType == "occupation")
+      } else if (inputType == "occupation") {
         return "Occupation";
-      else if (inputType == "birthDate") return "Birthdate";
+      } else if (inputType == "birthDate") {
+        return "Birthdate";
+      }
+      return null;
     }
 
     return Column(
@@ -213,7 +219,7 @@ class _EditProfileState extends State<EditProfile> {
                   offset: Offset(1, 1),
                   color: themeProvider.currentTheme == ThemeData.dark()
                       ? Colors.transparent
-                      : Color.fromARGB(54, 188, 187, 187),
+                      : const Color.fromARGB(54, 188, 187, 187),
                 )
               ],
               borderRadius: BorderRadius.circular(15),
@@ -238,21 +244,21 @@ class _EditProfileState extends State<EditProfile> {
                         hintStyle: TextStyle(color: Colors.grey[400]),
                         hintText: hintText(type),
                         errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.red),
+                          borderSide: const BorderSide(color: Colors.red),
                           borderRadius: BorderRadius.circular(15.0),
                         ),
-                        errorStyle: TextStyle(fontSize: 0.01),
-                        contentPadding:
-                            EdgeInsets.only(left: 25, top: 10, bottom: 10),
+                        errorStyle: const TextStyle(fontSize: 0.01),
+                        contentPadding: const EdgeInsets.only(
+                            left: 25, top: 10, bottom: 10),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue),
+                          borderSide: const BorderSide(color: Colors.blue),
                           borderRadius: BorderRadius.circular(15.0),
                         ),
                         border: InputBorder.none,
                         suffixIcon: Icon(
                           icon,
                           size: iconSize,
-                          color: Color.fromARGB(255, 172, 172, 171),
+                          color: const Color.fromARGB(255, 172, 172, 171),
                         )),
                     onTap: onTap,
                     onChanged: (value) {
@@ -352,7 +358,7 @@ Widget buildButton(
 Widget errorMessage(String? error) {
   return Container(
       alignment: Alignment.topLeft,
-      margin: EdgeInsets.only(top: 5, left: 2),
+      margin: const EdgeInsets.only(top: 5, left: 2),
       child: Text(
         error.toString(),
         style: const TextStyle(color: Colors.red),

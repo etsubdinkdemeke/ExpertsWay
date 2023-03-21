@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:learncoding/theme/config.dart' as config;
@@ -55,7 +57,7 @@ class Themes {
     backgroundColor: Colors.white,
     hintColor: config.Colors().mainColor(1),
     textTheme: TextTheme(
-      button: TextStyle(
+      button: const TextStyle(
         fontFamily: 'Red Hat Display',
         fontSize: 16,
         fontWeight: FontWeight.w800,
@@ -71,12 +73,12 @@ class Themes {
           fontFamily: "Red Hat Display",
           fontWeight: FontWeight.w500,
           color: config.Colors().accentColor(1)),
-      headline3: TextStyle(
+      headline3: const TextStyle(
           fontSize: 20,
           fontFamily: "Red Hat Display",
           fontWeight: FontWeight.w500,
           color: Colors.black),
-      headline2: TextStyle(
+      headline2: const TextStyle(
           fontSize: 24,
           fontFamily: "Red Hat Display",
           fontWeight: FontWeight.w500,
@@ -125,15 +127,16 @@ class Themes {
       // ),
     ),
     buttonTheme:
-        ButtonThemeData(buttonColor: Color.fromARGB(255, 182, 114, 246)),
+        const ButtonThemeData(buttonColor: Color.fromARGB(255, 182, 114, 246)),
   );
   static final darkTheme = ThemeData(
-    buttonTheme: ButtonThemeData(buttonColor: Color.fromARGB(255, 75, 51, 79)),
-    scaffoldBackgroundColor: Color.fromARGB(0, 38, 50, 56),
+    buttonTheme:
+        const ButtonThemeData(buttonColor: Color.fromARGB(255, 75, 51, 79)),
+    scaffoldBackgroundColor: const Color.fromARGB(0, 38, 50, 56),
     colorScheme: const ColorScheme.dark(),
     iconTheme: const IconThemeData(color: Colors.white),
     canvasColor: Colors.transparent,
-    primaryColor: Color.fromARGB(0, 38, 50, 56),
+    primaryColor: const Color.fromARGB(0, 38, 50, 56),
     primarySwatch: Colors.blue,
     brightness: Brightness.dark,
     accentColor: config.Colors().accentDarkColor(1),
@@ -141,9 +144,9 @@ class Themes {
     hintColor: config.Colors().secondDarkColor(1),
     backgroundColor: config.Colors().secondDarkColor(1),
     accentTextTheme:
-        TextTheme(headline6: TextStyle(fontFamily: "Red Hat Display")),
+        const TextTheme(headline6: TextStyle(fontFamily: "Red Hat Display")),
     textTheme: TextTheme(
-      button: TextStyle(
+      button: const TextStyle(
         fontFamily: 'Red Hat Display',
         fontSize: 16,
         fontWeight: FontWeight.w800,
@@ -159,12 +162,12 @@ class Themes {
           fontFamily: "Red Hat Display",
           fontWeight: FontWeight.w500,
           color: config.Colors().accentDarkColor(1)),
-      headline3: TextStyle(
+      headline3: const TextStyle(
           fontSize: 20,
           fontFamily: "Red Hat Display",
           fontWeight: FontWeight.w500,
           color: Colors.white),
-      headline2: TextStyle(
+      headline2: const TextStyle(
           fontSize: 24,
           fontFamily: "Red Hat Display",
           fontWeight: FontWeight.w500,
@@ -186,7 +189,7 @@ class Themes {
         color: config.Colors().accentDarkColor(.85),
         fontFamily: "Red Hat Display",
       ),
-      bodyText2: TextStyle(
+      bodyText2: const TextStyle(
         fontFamily: 'Red Hat Display',
         fontSize: 15,
         fontWeight: FontWeight.w400,

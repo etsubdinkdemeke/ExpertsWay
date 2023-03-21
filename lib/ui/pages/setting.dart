@@ -1,6 +1,7 @@
-import 'dart:io';
+// ignore_for_file: use_build_context_synchronously, unused_local_variable, deprecated_member_use
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -8,17 +9,12 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:learncoding/api/shared_preference/shared_preference.dart';
 import 'package:learncoding/main.dart';
-import 'package:learncoding/ui/pages/help.dart';
-import 'package:learncoding/ui/pages/onboarding1.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:learncoding/api/google_signin_api.dart';
 import 'package:learncoding/ui/pages/profile_edit.dart';
-import 'package:learncoding/ui/widgets/header.dart';
 import 'package:learncoding/utils/color.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../models/user.dart';
 import '../../theme/box_icons_icons.dart';
 import '../../theme/theme.dart';
 import 'package:learncoding/theme/config.dart' as config;
@@ -69,12 +65,12 @@ class _SettingsState extends State<Settings> {
       body: Column(
         children: [
           Container(
-            margin: EdgeInsets.only(top: 40, left: 5, right: 15),
+            margin: const EdgeInsets.only(top: 40, left: 5, right: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CupertinoButton(
-                  padding: EdgeInsets.all(0),
+                  padding: const EdgeInsets.all(0),
                   child: Icon(
                     Icons.chevron_left,
                     color: icon.color,
@@ -98,7 +94,7 @@ class _SettingsState extends State<Settings> {
                       color: Colors.lightBlue[100],
                       borderRadius: BorderRadius.circular(100)),
                   child: CupertinoButton(
-                    padding: EdgeInsets.only(left: 3),
+                    padding: const EdgeInsets.only(left: 3),
                     child: const Icon(
                       Icons.logout,
                       color: Colors.blue,
@@ -126,7 +122,7 @@ class _SettingsState extends State<Settings> {
             ],
           ),
           Container(
-            margin: EdgeInsets.only(top: 10),
+            margin: const EdgeInsets.only(top: 10),
             alignment: Alignment.center,
             child: Column(
               children: [
@@ -143,7 +139,7 @@ class _SettingsState extends State<Settings> {
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(20, 25, 20, 0),
+            margin: const EdgeInsets.fromLTRB(20, 25, 20, 0),
             height: 2,
             color: Colors.grey[200],
           ),
@@ -346,10 +342,10 @@ class _container extends StatelessWidget {
             child: InkWell(
               onTap: tapped,
               highlightColor: splash
-                  ? Color.fromARGB(132, 135, 208, 245)
+                  ? const Color.fromARGB(132, 135, 208, 245)
                   : Colors.transparent,
               splashColor: splash
-                  ? Color.fromARGB(61, 231, 231, 231)
+                  ? const Color.fromARGB(61, 231, 231, 231)
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(radius),
               child: Row(
@@ -358,7 +354,8 @@ class _container extends StatelessWidget {
                   Row(
                     children: [
                       Container(
-                        margin: EdgeInsets.only(left: 15, top: 10, bottom: 10),
+                        margin: const EdgeInsets.only(
+                            left: 15, top: 10, bottom: 10),
                         width: 30,
                         height: 30,
                         decoration: BoxDecoration(
@@ -370,7 +367,7 @@ class _container extends StatelessWidget {
                           size: 18,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 20,
                       ),
                       Text(title, style: textTheme.bodyText2), //15
@@ -385,7 +382,7 @@ class _container extends StatelessWidget {
                       trailing == null
                           ? Container()
                           : Container(
-                              margin: EdgeInsets.only(right: 15),
+                              margin: const EdgeInsets.only(right: 15),
                               child: Icon(
                                 trailing,
                                 color: icon.color,
@@ -403,6 +400,36 @@ class _container extends StatelessWidget {
           height: 20,
         ),
       ],
+    );
+  }
+
+  Widget buildImage() {
+    NetworkImage imagebuild = NetworkImage(image.toString());
+    ImageProvider<Object> alternativeImage =
+        const AssetImage('assets/images/video.jpg');
+    return CircleAvatar(
+      radius: 45,
+      foregroundImage: image != null ? imagebuild : alternativeImage,
+      child: const Material(
+        color: Color.fromARGB(0, 231, 6, 6), //
+      ),
+    );
+  }
+
+  Widget buildAddPhoto(Color color) {
+    IconThemeData icon = Theme.of(context).iconTheme;
+    return ClipOval(
+      child: Container(
+        padding: const EdgeInsets.all(5),
+        color: color,
+        child: InkWell(
+            onTap: () {},
+            child: Icon(
+              Icons.mode_edit_outline_outlined,
+              color: icon.color,
+              size: 17,
+            )),
+      ),
     );
   }
 }
