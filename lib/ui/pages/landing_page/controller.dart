@@ -14,8 +14,6 @@ class LandingPageController extends GetxController {
 
   final loading = false.obs;
 
-  final loadingFromDb = false.obs;
-
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -61,9 +59,9 @@ class LandingPageController extends GetxController {
   //fetch the course from local database
   Future getCoursesFromDatabase() async {
     try {
-      loadingFromDb.value = true;
+      loading.value = true;
       course.value = await CourseDatabase.instance.readAllCourse();
-      loadingFromDb.value = false;
+      loading.value = false;
     } catch (e) {
       Get.log(e.toString());
     }
