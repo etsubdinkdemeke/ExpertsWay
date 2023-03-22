@@ -18,8 +18,12 @@ class LandingPageController extends GetxController {
 
   @override
   void onInit() {
-    getCourses();
+    if (course.isEmpty) {
+      getCourses();
+    }
     getProfileDetails();
+    getCoursesFromDatabase();
+
     super.onInit();
   }
 
@@ -45,8 +49,6 @@ class LandingPageController extends GetxController {
           }
         }
       }
-
-      getCoursesFromDatabase();
 
       loading.value = false;
     } catch (e) {
