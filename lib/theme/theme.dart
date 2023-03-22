@@ -3,24 +3,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:learncoding/theme/config.dart' as config;
+import 'package:shared_preferences/shared_preferences.dart';
 
 // IMPOTANT: We are not using this themeData anywhere in the app.
 // the theme to the cupertino app is provided in the main.dart file.
 // and the font family 'Red Hat Display' is no longer suppoted in this codebase.
 class ThemeProvider extends ChangeNotifier {
-  ThemeMode themeMode = ThemeMode.system;
-
+  // ThemeMode themeMode = ThemeMode.system;
+  ThemeData _currentTheme = ThemeData.light();
+  ThemeData get currentTheme => _currentTheme;
   bool get isDarkMode {
-    if (themeMode == ThemeMode.system) {
-      final brightness = SchedulerBinding.instance.window.platformBrightness;
+    if (_currentTheme == ThemeMode.system) {
+      final brightness = SchedulerBinding.instance?.window.platformBrightness;
       return brightness == Brightness.dark;
     } else {
-      return themeMode == ThemeMode.dark;
+      return _currentTheme == ThemeMode.dark;
     }
   }
 
-  void toggleTheme(bool isOn) {
-    themeMode = isOn ? ThemeMode.dark : ThemeMode.light;
+  ThemeProvider(bool isDark) {
+    if (isDark) {
+      _currentTheme = ThemeData.dark();
+    } else {
+      _currentTheme = ThemeData.light();
+    }
+  }
+
+  void toggleTheme() async {
+    SharedPreferences sharedPreferennces =
+        await SharedPreferences.getInstance();
+    if (_currentTheme == ThemeData.light()) {
+      _currentTheme = ThemeData.dark();
+      sharedPreferennces.setBool('is_dark', true);
+    } else {
+      _currentTheme = ThemeData.light();
+      sharedPreferennces.setBool('is_dark', false);
+    }
     notifyListeners();
   }
 }
@@ -37,6 +55,7 @@ class Themes {
     primarySwatch: Colors.blue,
     brightness: Brightness.light,
     backgroundColor: Colors.white,
+    hintColor: config.Colors().mainColor(1),
     textTheme: TextTheme(
       button: const TextStyle(
         fontFamily: 'Red Hat Display',

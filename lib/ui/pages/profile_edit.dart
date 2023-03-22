@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../theme/theme.dart';
+import 'package:learncoding/theme/config.dart' as config;
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -42,9 +43,10 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    final text = Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
-        ? 'DarkTheme'
-        : 'LightTheme';
+    final text =
+        Provider.of<ThemeProvider>(context).currentTheme == ThemeMode.dark
+            ? 'DarkTheme'
+            : 'LightTheme';
     TextTheme textTheme = Theme.of(context).textTheme;
     Color backgroundColor = Theme.of(context).scaffoldBackgroundColor;
     return Scaffold(
@@ -69,7 +71,7 @@ class _EditProfileState extends State<EditProfile> {
                 Text(
                   'Edit Profile',
                   textAlign: TextAlign.end,
-                  style: textTheme.headline3,
+                  style: textTheme.headline6,
                 ),
                 const SizedBox(
                   width: 35,
@@ -79,91 +81,75 @@ class _EditProfileState extends State<EditProfile> {
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Theme(
-              data: Theme.of(context).copyWith(
-                dividerColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-              ),
-              child: Form(
-                  key: _formKey,
-                  autovalidateMode: AutovalidateMode.always,
-                  child: Column(children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    _container(context, false, null, namee, TextInputType.name,
-                        BoxIcons.bx_user, 20, firstName, "fname", (() {})),
-                    fnameError != null && isSaved
-                        ? errorMessage(fnameError.toString())
-                        : Container(),
-                    _container(
-                        context,
-                        false,
-                        null,
-                        lastName,
-                        TextInputType.name,
-                        BoxIcons.bx_user,
-                        20,
-                        lastName,
-                        "lname",
-                        (() {})),
-                    lnameError != null && isSaved
-                        ? errorMessage(lnameError.toString())
-                        : Container(),
-                    _container(
-                        context,
-                        true,
-                        dateInputController,
-                        null,
-                        TextInputType.none,
-                        Icons.cake_outlined,
-                        21,
-                        birthdate,
-                        "birthDate", () async {
-                      var dateFormat = DateFormat('d-MM-yyyy');
-                      DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1950),
-                          lastDate: DateTime(2050));
-                      if (pickedDate != null) {
-                        dateInputController.text =
-                            dateFormat.format(pickedDate).toString();
-                        birthdate = dateFormat.format(pickedDate).toString();
-                      }
-                    }),
-                    _container(
-                        context,
-                        false,
-                        null,
-                        email,
-                        TextInputType.emailAddress,
-                        Icons.mail_outline,
-                        21,
-                        email,
-                        "email",
-                        (() {})),
-                    emailError != null && isSaved
-                        ? errorMessage(emailError.toString())
-                        : Container(),
-                    _container(
+            child: Form(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.always,
+                child: Column(children: [
+                  SizedBox(
+                    height: 10,
+                  ),
+                  _container(context, false, null, namee, TextInputType.name,
+                      BoxIcons.bx_user, 20, firstName, "fname", (() {})),
+                  fnameError != null && isSaved
+                      ? errorMessage(fnameError.toString())
+                      : Container(),
+                  _container(context, false, null, lastName, TextInputType.name,
+                      BoxIcons.bx_user, 20, lastName, "lname", (() {})),
+                  lnameError != null && isSaved
+                      ? errorMessage(lnameError.toString())
+                      : Container(),
+                  _container(
+                      context,
+                      true,
+                      dateInputController,
+                      null,
+                      TextInputType.none,
+                      Icons.cake_outlined,
+                      21,
+                      birthdate,
+                      "birthDate", () async {
+                    var dateFormat = DateFormat('d-MM-yyyy');
+                    DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1950),
+                        lastDate: DateTime(2050));
+                    if (pickedDate != null) {
+                      dateInputController.text =
+                          dateFormat.format(pickedDate).toString();
+                      birthdate = dateFormat.format(pickedDate).toString();
+                    }
+                  }),
+                  _container(
                       context,
                       false,
                       null,
-                      occupation,
-                      TextInputType.name,
-                      BoxIcons.bx_briefcase,
+                      email,
+                      TextInputType.emailAddress,
+                      Icons.mail_outline,
                       21,
-                      occupation,
-                      "occupation",
-                      (() {}),
-                    ),
-                    occupationError != null && isSaved
-                        ? errorMessage(occupationError.toString())
-                        : Container(),
-                  ])),
-            ),
+                      email,
+                      "email",
+                      (() {})),
+                  emailError != null && isSaved
+                      ? errorMessage(emailError.toString())
+                      : Container(),
+                  _container(
+                    context,
+                    false,
+                    null,
+                    occupation,
+                    TextInputType.name,
+                    BoxIcons.bx_briefcase,
+                    21,
+                    occupation,
+                    "occupation",
+                    (() {}),
+                  ),
+                  occupationError != null && isSaved
+                      ? errorMessage(occupationError.toString())
+                      : Container(),
+                ])),
           ),
           const SizedBox(height: 50),
           buildButton("Save", (() {
@@ -230,8 +216,8 @@ class _EditProfileState extends State<EditProfile> {
               boxShadow: [
                 BoxShadow(
                   blurRadius: 10,
-                  offset: const Offset(1, 1),
-                  color: themeProvider.isDarkMode
+                  offset: Offset(1, 1),
+                  color: themeProvider.currentTheme == ThemeData.dark()
                       ? Colors.transparent
                       : const Color.fromARGB(54, 188, 187, 187),
                 )
@@ -251,7 +237,10 @@ class _EditProfileState extends State<EditProfile> {
                     textAlignVertical: TextAlignVertical.center,
                     decoration: InputDecoration(
                         filled: true,
-                        fillColor: secondbackgroundColor,
+                        fillColor:
+                            themeProvider.currentTheme == ThemeData.light()
+                                ? Colors.white
+                                : secondbackgroundColor,
                         hintStyle: TextStyle(color: Colors.grey[400]),
                         hintText: hintText(type),
                         errorBorder: OutlineInputBorder(

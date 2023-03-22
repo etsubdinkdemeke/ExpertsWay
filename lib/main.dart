@@ -1,9 +1,9 @@
-// ignore_for_file: unused_local_variable
-
+import 'package:learncoding/models/course.dart';
 import 'package:learncoding/routes/page.dart';
 import 'package:learncoding/theme/theme.dart';
 import 'package:learncoding/ui/pages/navmenu/menu_dashboard_layout.dart';
 import 'package:learncoding/ui/pages/onboarding1.dart';
+import 'package:learncoding/ui/pages/setting.dart';
 import 'package:learncoding/ui/pages/undefined_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,20 +22,25 @@ late SharedPreferences prefs;
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  SharedPreferences sharedPreferennces = await SharedPreferences.getInstance();
+  final isDark = sharedPreferennces.getBool('is_dark') ?? false;
   // await Firebase.initializeApp();
   SharedPreferences.getInstance().then((prefs) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
         .then((value) => runApp(
-              const RestartWidget(
-                child: MyApp(),
+              RestartWidget(
+                child: MyApp(isDark: isDark),
               ),
             ));
   });
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final bool isDark;
+  const MyApp({
+    super.key,
+    required this.isDark,
+  });
 
   @override
   MyAppState createState() => MyAppState();
@@ -66,17 +71,18 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
+      create: (context) => ThemeProvider(widget.isDark),
       builder: (context, _) {
         final themeProvider = Provider.of<ThemeProvider>(context);
+        final settings = context.read<ThemeProvider>();
         return GetMaterialApp(
           localizationsDelegates: const [
             DefaultMaterialLocalizations.delegate,
             DefaultCupertinoLocalizations.delegate,
             DefaultWidgetsLocalizations.delegate,
           ],
-          themeMode: themeProvider.themeMode,
-          theme: Themes.lightTheme,
+          // themeMode: themeProvider.currentTheme,
+          theme: themeProvider.currentTheme,
           darkTheme: Themes.darkTheme,
           onGenerateRoute: router.generateRoute,
           onUnknownRoute: (settings) => CupertinoPageRoute(
@@ -127,9 +133,9 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final text = Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
-        ? 'DarkTheme'
-        : 'LightTheme';
+    // final text = Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
+    //     ? 'DarkTheme'
+    //     : 'LightTheme';
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
