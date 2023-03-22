@@ -1,4 +1,5 @@
-import 'dart:math';
+import 'dart:math' hide log;
+import 'dart:developer' show log;
 
 import 'package:flutter/foundation.dart';
 import 'package:learncoding/models/course.dart';
@@ -11,14 +12,14 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:configurable_expansion_tile_null_safety/configurable_expansion_tile_null_safety.dart';
 
-import '../../db/course_database.dart';
+import '../../db/course_database.dart' hide courseProgress;
 import '../../models/lesson.dart';
 import '../../utils/color.dart';
 
 class CourseDetailPage extends StatefulWidget {
   final CourseElement courseData;
 
-  const CourseDetailPage({
+  CourseDetailPage({
     Key? key,
     required this.courseData,
   }) : super(key: key);
@@ -30,18 +31,27 @@ class CourseDetailPage extends StatefulWidget {
 class CoursePagePageState extends State<CourseDetailPage> {
   late List<LessonElement> lessonData = [];
   late List<LessonContent> lessoncontent = [];
+  late CourseProgressElement courseProgress;
   bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    refreshLesson();
+    refreshLessonAndProgress();
   }
 
-  Future refreshLesson() async {
+  Future refreshLessonAndProgress() async {
     setState(() => isLoading = true);
     lessonData =
         await CourseDatabase.instance.readLesson(widget.courseData.slug);
+    // let's also read the course progress here
+    courseProgress = await CourseDatabase.instance
+            .readCourseProgress(widget.courseData.courseId!.toString()) ??
+        await CourseDatabase.instance
+            .createCourseProgressElement(CourseProgressElement(
+          courseId: widget.courseData.courseId.toString(),
+          lessonNumber: 3,
+        ));
     if (kDebugMode) {
       print("....lesson length ....${lessonData.length}");
     }
@@ -67,12 +77,13 @@ class CoursePagePageState extends State<CourseDetailPage> {
     return sectionList;
   }
 
-  List<LessonElement> lessonList(
+  Map<LessonElement, bool> mapOfLessons(
       List<LessonElement> lessonData, String section) {
-    var seen = <LessonElement>[];
-    for (var lesson in lessonData) {
-      if (lesson.section == section) {
-        seen.add(lesson);
+        /// this method returns a map with all the lessons as keys and a boolean (if open or locked) as the value
+    var seen = <LessonElement, bool>{};
+    for (int i = 0; i < lessonData.length; i++) {
+      if (lessonData[i].section == section) {
+        seen[lessonData[i]] = i <= courseProgress.lessonNumber;
       }
     }
     return seen;
@@ -151,62 +162,6 @@ class CoursePagePageState extends State<CourseDetailPage> {
     );
   }
 
-  Widget buildlesson() {
-    // Currently, this method is not used. But I didn't want to remove it 'cause
-    // there's a lot of effort put in making this. I chose to keep it just in case ...
-    return FutureBuilder<lesson.Lesson>(
-        future: ApiProvider().retrieveLessons(widget.courseData.slug),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final lessonData = snapshot.data!.lessons;
-            List sections = sectionList(lessonData);
-            return Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(8, 8, 8, 10),
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: const Text(
-                    "Lessons",
-                    style: TextStyle(color: Color(0xFF343434), fontSize: 24),
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.865,
-                  margin: const EdgeInsets.only(bottom: 70),
-                  foregroundDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: const Color.fromARGB(255, 215, 214, 214),
-                    ),
-                  ),
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: sections.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            buildLessonList(lessonData, sections[index]),
-                            index < sections.length
-                                ? const Divider(
-                                    color: Color.fromARGB(255, 215, 214, 214),
-                                    thickness: 1,
-                                    height: 1,
-                                  )
-                                : Container()
-                          ],
-                        );
-                      }),
-                ),
-              ],
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        });
-  }
-
   List lessonListId(lessonData, section) {
     // Currently, this method is not used. But I didn't want to remove it 'cause
     // there's a lot of effort put in making this. I chose to keep it just in case ...
@@ -219,150 +174,6 @@ class CoursePagePageState extends State<CourseDetailPage> {
     return id;
   }
 
-  Widget buildLessonList(lessonData, section) {
-    // Currently, this method is not used. But I didn't want to remove it 'cause
-    // there's a lot of effort put in making this. I chose to keep it just in case ...
-    return Material(
-      color: config.Colors().secondColor(1),
-      child: Theme(
-        data: Theme.of(context).copyWith(
-          dividerColor: const Color.fromARGB(0, 208, 57, 57),
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          iconTheme: const IconThemeData(
-            color: Color.fromARGB(255, 172, 172, 172),
-            size: 35,
-          ),
-        ),
-        child: ExpansionTile(
-          title: Flexible(
-            child: Text(
-              section,
-              style: const TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.w500,
-                color: Color.fromARGB(255, 121, 121, 123),
-              ),
-            ),
-          ),
-          tilePadding: const EdgeInsets.fromLTRB(15, 1, 10, 1),
-          iconColor: const Color.fromARGB(255, 172, 172, 172),
-          collapsedIconColor: const Color.fromARGB(255, 172, 172, 172),
-          children: <Widget>[
-            const Divider(
-              color: Color.fromARGB(255, 215, 214, 214),
-              thickness: 1,
-              height: 1,
-            ),
-            const SizedBox(height: 10),
-            ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                itemCount: null == lessonData
-                    ? 0
-                    : lessonList(lessonData, section).length,
-                itemBuilder: (context, index) {
-                  List lessonTitle = lessonList(lessonData, section);
-                  return Container(
-                    padding: const EdgeInsets.fromLTRB(17, 0, 15, 0),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Icon(Icons.check_circle_outlined,
-                                size: 25,
-                                color: index <= 2 ? Colors.blue : Colors.grey),
-                            const SizedBox(
-                              width: 17,
-                            ),
-                            GestureDetector(
-                              child: Text(
-                                lessonTitle[index],
-                                style: TextStyle(
-                                  color: index == 2 ? Colors.blue : Colors.grey,
-                                  fontSize: 17.0,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              onTap: () async {
-                                List lessonIds =
-                                    lessonListId(lessonData, section);
-                                // ignore: unused_local_variable
-                                String lessonIndex =
-                                    (lessonIds[index]).toString();
-
-                                lessoncontent = await CourseDatabase.instance
-                                    .readLessonContets(lessonIds[index]);
-                                if (lessoncontent.isNotEmpty) {
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.push(
-                                    context,
-                                    CupertinoPageRoute(
-                                      builder: (context) => LessonPage(
-                                        // sorry for the bad namimg here X)
-                                        lesson: lessonData[
-                                            index], // this is the current lessonElement
-                                        lessonData:
-                                            lessonData, // this is a list of lessonElements, passed to go to the next lesson
-                                        contents:
-                                            lessoncontent, // this is a list of lessonContents, read from database
-                                        courseData: widget
-                                            .courseData, // this is the course element that contains this lesson.
-                                      ),
-                                    ),
-                                  );
-                                }
-                              },
-                            )
-                          ],
-                        ),
-                        Container(
-                            padding: const EdgeInsets.only(left: 12),
-                            alignment: Alignment.topLeft,
-                            child: index < lessonTitle.length - 1
-                                ? Container(
-                                    height: 30,
-                                    width: 1,
-                                    color: Colors.grey,
-                                  )
-                                : Container())
-                      ],
-                    ),
-                  );
-                }),
-            const SizedBox(height: 10),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildLessonCard() {
-    // Currently, this method is not used. But I didn't want to remove it 'cause
-    // there's a lot of effort put in making this. I chose to keep it just in case ...
-    List sections = sectionList(lessonData);
-
-    return ListView.builder(
-        shrinkWrap: true,
-        padding: const EdgeInsets.all(0),
-        itemCount: sections.length,
-        itemBuilder: (context, index) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              buildLessonList(lessonData, sections[index]),
-              index < sections.length
-                  ? const Divider(
-                      color: Color.fromARGB(255, 215, 214, 214),
-                      thickness: 1,
-                      height: 1,
-                    )
-                  : Container()
-            ],
-          );
-        });
-  }
 
   Widget buildUniformLessonList() {
     return Material(
@@ -576,7 +387,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
 
                                   WidgetsBinding.instance
                                       .addPostFrameCallback((_) {
-                                    refreshLesson();
+                                    refreshLessonAndProgress();
                                   });
                                 }
 
@@ -601,7 +412,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
       children: [
         for (int i = 0; i < sections.length; i++)
           Builder(builder: (context) {
-            var lessonsUnderSection = lessonList(lessonData, sections[i]);
+            var lessonsUnderSection = mapOfLessons(lessonData, sections[i]);
 
             return ConfigurableExpansionTile(
               header: Expanded(
@@ -668,86 +479,87 @@ class CoursePagePageState extends State<CourseDetailPage> {
               ),
               childrenBody: Column(
                 children: [
-                  for (int j = 0; j < lessonsUnderSection.length; j++)
-                    GestureDetector(
-                      onTap: (i == 0 &&
-                              j ==
-                                  0) // only the very first lesson will be unlocked
-                          ? () async {
-                              var lessonContents = await CourseDatabase.instance
-                                  .readLessonContets(
-                                      lessonsUnderSection[j].lessonId);
-                              // again, we're making the very last lesson locked.
-                              // ignore: use_build_context_synchronously
-                              Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                  builder: (context) => LessonPage(
-                                    lessonData: lessonData,
-                                    lesson: lessonsUnderSection[j],
-                                    contents: lessonContents,
-                                    courseData: widget.courseData,
+                  for (LessonElement lesson in lessonsUnderSection.keys)
+                    Builder(builder: (context) {
+                      return GestureDetector(
+                        onTap: (lessonsUnderSection[lesson]!) // we look at the associated boolean with the lesson to know it it's locked
+                            ? () async {
+                                var lessonContents = await CourseDatabase
+                                    .instance
+                                    .readLessonContets(
+                                        lesson.lessonId);
+                                // again, we're making the very last lesson locked.
+                                // ignore: use_build_context_synchronously
+                                Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) => LessonPage(
+                                      lessonData: lessonData,
+                                      lesson: lesson,
+                                      contents: lessonContents,
+                                      courseData: widget.courseData,
+                                    ),
+                                  ),
+                                );
+                              }
+                            : null,
+                        child: ListTile(
+                          title: Text(
+                            lesson.title,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          subtitle: Text(
+                            lesson.shortDescription.isNotEmpty
+                                ? lesson.shortDescription
+                                : "Lorem ipsum is a pseudo-Latin text used in web design, typography, layout, and printing in place of English to emphasise design elements over content. It's also called placeholder (or filler) text.",
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          trailing: (lessonsUnderSection[lesson]!) // we look at the associated boolean with the lesson to know it it's locked
+                              ? Builder(
+                                  builder: (_) {
+                                    // we're generating a lot of random booleans here for demonstration purposes
+                                    // all these boolean flags should be received from the database or API in the future.
+                                    // TODO: change the following code to make it work with real data
+                                    var isLessonCompleted = Random().nextBool();
+                                    if (isLessonCompleted) {
+                                      var testResult = Random().nextInt(101);
+                                      return CircleAvatar(
+                                        radius: 20,
+                                        foregroundColor: Colors.white,
+                                        backgroundColor: testResult > 60
+                                            ? Colors.green[300]
+                                            : (testResult > 30
+                                                ? Colors.yellow[400]
+                                                : Colors.red[300]),
+                                        child: Text(testResult.toString()),
+                                      );
+                                    } else {
+                                      var progress = Random()
+                                          .nextDouble(); // how much the user has progressed with the lesson
+                                      // the widget below is from a 3rd party package named 'percent indicator'. check it out on 'pub.dev'
+                                      return CircularPercentIndicator(
+                                        radius: 20,
+                                        lineWidth: 3,
+                                        percent: progress,
+                                        progressColor: Colors.blue,
+                                      );
+                                    }
+                                  },
+                                )
+                              : CircleAvatar(
+                                  radius: 16,
+                                  backgroundColor: Colors.blue[50],
+                                  child: const Icon(
+                                    Icons.lock_outline,
+                                    color: Colors.blue,
+                                    size: 18,
                                   ),
                                 ),
-                              );
-                            }
-                          : null,
-                      child: ListTile(
-                        title: Text(
-                          lessonsUnderSection[j].title,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                          ),
                         ),
-                        subtitle: Text(
-                          lessonsUnderSection[j].shortDescription.isNotEmpty
-                              ? lessonsUnderSection[j].shortDescription
-                              : "Lorem ipsum is a pseudo-Latin text used in web design, typography, layout, and printing in place of English to emphasise design elements over content. It's also called placeholder (or filler) text.",
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        trailing: (i == 0 && j == 0)
-                            ? Builder(
-                                builder: (_) {
-                                  // we're generating a lot of random booleans here for demonstration purposes
-                                  // all these boolean flags should be received from the database or API in the future.
-                                  // TODO: change the following code to make it work with real data
-                                  var isLessonCompleted = Random().nextBool();
-                                  if (isLessonCompleted) {
-                                    var testResult = Random().nextInt(101);
-                                    return CircleAvatar(
-                                      radius: 20,
-                                      foregroundColor: Colors.white,
-                                      backgroundColor: testResult > 60
-                                          ? Colors.green[300]
-                                          : (testResult > 30
-                                              ? Colors.yellow[400]
-                                              : Colors.red[300]),
-                                      child: Text(testResult.toString()),
-                                    );
-                                  } else {
-                                    var progress = Random()
-                                        .nextDouble(); // how much the user has progressed with the lesson
-                                    // the widget below is from a 3rd party package named 'percent indicator'. check it out on 'pub.dev'
-                                    return CircularPercentIndicator(
-                                      radius: 20,
-                                      lineWidth: 3,
-                                      percent: progress,
-                                      progressColor: Colors.blue,
-                                    );
-                                  }
-                                },
-                              )
-                            : CircleAvatar(
-                                radius: 16,
-                                backgroundColor: Colors.blue[50],
-                                child: const Icon(
-                                  Icons.lock_outline,
-                                  color: Colors.blue,
-                                  size: 18,
-                                ),
-                              ),
-                      ),
-                    ),
+                      );
+                    }),
                 ],
               ),
             );

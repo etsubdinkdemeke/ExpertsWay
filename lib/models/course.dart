@@ -204,3 +204,51 @@ class Section {
         SectionFields.level: level ?? '',
       };
 }
+
+class CourseProgressFields {
+  static List<String> fieldValues = [
+    progId,
+    courseId,
+    lessonNumber,
+  ];
+  static const String progId = '_id';
+  static const String courseId = 'courseId';
+  static const String lessonNumber = 'lessonNumber';
+}
+
+class CourseProgressElement {
+  final int? progId; // TODO: CONSIDER MAKING THIS FIELD NON-NULLABLE
+  final String courseId;
+  final int lessonNumber;
+
+  CourseProgressElement({
+    this.progId,
+    required this.courseId,
+    required this.lessonNumber,
+  });
+
+  CourseProgressElement.fromMap(Map<String, dynamic> map)
+      : progId = map[CourseProgressFields.progId] as int?,
+        courseId = map[CourseProgressFields.courseId],
+        lessonNumber = map[CourseProgressFields.lessonNumber];
+
+  Map<String, dynamic> toJson() {
+    return {
+      CourseProgressFields.progId: progId,
+      CourseProgressFields.courseId: courseId,
+      CourseProgressFields.lessonNumber: lessonNumber,
+    };
+  }
+
+  CourseProgressElement copy({
+    int? newProgId,
+    String? newCourseId,
+    int? newLessonNumber,
+  }) {
+    return CourseProgressElement(
+      progId: newProgId ?? this.progId,
+      courseId: newCourseId ?? this.courseId,
+      lessonNumber: newLessonNumber ?? this.lessonNumber,
+    );
+  }
+}

@@ -13,6 +13,7 @@ const String tablesections = 'sections';
 const String lessontable = 'lessons';
 const String lessonContnentTable = 'lessonsContent';
 const String progress = 'progress';
+const String courseProgress = 'courseProgress';
 const String notification = 'notification';
 
 class CourseDatabase {
@@ -105,6 +106,15 @@ CREATE TABLE $progress (
       ${ProgressFields.contentId} $textTypeNull,
       ${ProgressFields.pageNum} $intTypeNull,
       ${ProgressFields.userProgress} $textTypeNull
+    )
+    ''');
+
+// COURSE PROGRESS TABLE
+    await db.execute('''
+CREATE TABLE $courseProgress (
+      ${CourseProgressFields.progId} $idType,
+      ${CourseProgressFields.courseId} $textTypeNull,
+      ${CourseProgressFields.lessonNumber} $intType
     )
     ''');
 
@@ -222,6 +232,23 @@ CREATE TABLE $notification (
       ],
     );
     return progressElement.copy(progId: id);
+  }
+
+  Future<CourseProgressElement> createCourseProgressElement(
+      CourseProgressElement courseProgressElement) async {
+    final db = await instance.database;
+    final json = courseProgressElement.toJson();
+    const columns =
+        '${CourseProgressFields.progId},${CourseProgressFields.courseId},${CourseProgressFields.lessonNumber}';
+    int id = await db.rawInsert(
+      'INSERT INTO $courseProgress ($columns) VALUES (?,?,?)',
+      [
+        json[CourseProgressFields.progId],
+        json[CourseProgressFields.courseId],
+        json[CourseProgressFields.lessonNumber],
+      ],
+    );
+    return courseProgressElement.copy(newProgId: id);
   }
 
   Future<void> createNotification(
@@ -406,6 +433,21 @@ CREATE TABLE $notification (
     }
   }
 
+  Future<CourseProgressElement?> readCourseProgress(String courseId) async {
+    final db = await instance.database;
+    final maps = await db.query(
+      courseProgress,
+      columns: CourseProgressFields.fieldValues,
+      where: '${CourseProgressFields.courseId} = ?',
+      whereArgs: [courseId],
+    );
+    if (maps.isNotEmpty) {
+      return CourseProgressElement.fromMap(maps.first);
+    } else {
+      return null;
+    }
+  }
+
   Future<List<NotificationElement>> readAllNotification() async {
     final db = await instance.database;
 
@@ -426,6 +468,21 @@ CREATE TABLE $notification (
         progressElement.lessonId,
       ],
     );
+  }
+
+// UPDATE DATA'
+  Future<int?> updateCourseProgress(
+      CourseProgressElement courseProgressElement) async {
+    final db = await instance.database;
+    int id = await db.update(
+      courseProgress,
+      courseProgressElement.toJson(),
+      where: '${CourseProgressFields.progId}= ?',
+      whereArgs: [
+        courseProgressElement.progId,
+      ],
+    );
+    return id;
   }
 
 // DELETE DATA
