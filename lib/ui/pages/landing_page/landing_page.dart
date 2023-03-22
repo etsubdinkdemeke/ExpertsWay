@@ -103,7 +103,7 @@ class LandingPage extends GetView<LandingPageController> {
                   backgroundColor: theme.colorScheme.background,
                   content: Text(
                     'Press back button again to exit'.tr,
-                    style: theme.textTheme.headlineMedium
+                    style: theme.textTheme.bodySmall
                         ?.copyWith(color: theme.shadowColor),
                   ),
                 ),
