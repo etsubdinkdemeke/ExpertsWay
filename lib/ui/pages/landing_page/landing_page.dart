@@ -75,22 +75,22 @@ class LandingPage extends GetView<LandingPageController> {
                         borderRadius: BorderRadius.circular(20),
                         child: Stack(
                           children: [
-                            Icon(
-                              Icons.notifications_none_rounded,
-                              size: 28,
-                              color:
-                                  themeProvider.currentTheme == ThemeData.dark()
-                                      ? const Color.fromARGB(255, 221, 221, 221)
-                                      : Color.fromARGB(255, 63, 63, 63)
-                                          .withOpacity(0.8),
-                            ),
+                            Icon(Icons.notifications_none_rounded,
+                                size: 28,
+                                color: themeProvider.currentTheme ==
+                                        ThemeData.dark()
+                                    ? const Color.fromARGB(255, 221, 221, 221)
+                                    : Color.fromARGB(255, 63, 63, 63)
+                                        .withOpacity(0.8)),
                             const Positioned(
                                 top: 4,
                                 right: 4,
                                 child: CircleAvatar(
                                   maxRadius: 5,
                                   backgroundColor: Colors.white,
-                                  child: CircleAvatar(maxRadius: 4),
+                                  child: CircleAvatar(
+                                      maxRadius: 4,
+                                      backgroundColor: Colors.blue),
                                 ))
                           ],
                         ),
@@ -216,7 +216,7 @@ class LandingPage extends GetView<LandingPageController> {
                                 shrinkWrap: true,
                                 mainAxisSpacing: 20,
                                 crossAxisCount: 2,
-                                crossAxisSpacing: 10,
+                                crossAxisSpacing: 30,
                                 itemCount: controller.course.length,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, index) {
@@ -249,7 +249,7 @@ class LandingPage extends GetView<LandingPageController> {
                                 shrinkWrap: true,
                                 mainAxisSpacing: 20,
                                 crossAxisCount: 2,
-                                crossAxisSpacing: 10,
+                                crossAxisSpacing: 30,
                                 itemCount: controller.course.length,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, index) {
@@ -287,6 +287,9 @@ class _ListOfProgrammingLanguages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    TextTheme textTheme = Theme.of(context).textTheme;
+    Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -304,6 +307,7 @@ class _ListOfProgrammingLanguages extends StatelessWidget {
                   btnName: item.name,
                   iconUrl: item.icon,
                   defaultBtn: false,
+                  borderRadius: 20,
                 ),
               ))
         ],
@@ -317,14 +321,22 @@ class _SerachTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    TextTheme textTheme = Theme.of(context).textTheme;
+    Color backgroundColor = Theme.of(context).cardColor;
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(10)),
+          color: backgroundColor, borderRadius: BorderRadius.circular(10)),
       child: TextField(
+        textAlignVertical: TextAlignVertical.center,
         decoration: InputDecoration(
+          hintStyle: textTheme.headline3
+              ?.copyWith(fontSize: 17, fontWeight: FontWeight.w400),
           hintText: 'Search any course',
           prefixIcon: const Icon(Icons.search),
-          prefixIconColor: Colors.grey.shade400,
+          prefixIconColor: themeProvider.currentTheme == ThemeData.dark()
+              ? Color.fromARGB(255, 255, 255, 255)
+              : Color.fromARGB(90, 46, 46, 46),
           border: InputBorder.none,
         ),
         onChanged: (val) {
@@ -344,6 +356,9 @@ class _LanguageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    TextTheme textTheme = Theme.of(context).textTheme;
+    Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
@@ -351,8 +366,7 @@ class _LanguageHeader extends StatelessWidget {
         children: [
           Text(
             title,
-            style: theme.textTheme.titleMedium
-                ?.copyWith(color: Colors.grey.shade600),
+            style: textTheme.bodyText2?.copyWith(fontSize: 16),
           ),
           if (showButton)
             TextButton(onPressed: () {}, child: const Text('See all'))
@@ -414,14 +428,19 @@ class _CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    TextTheme textTheme = Theme.of(context).textTheme;
+    Color backgroundColor = Theme.of(context).cardColor;
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: backgroundColor,
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
                 blurRadius: 20,
-                color: Colors.grey.shade300,
+                color: themeProvider.currentTheme == ThemeData.light()
+                    ? Colors.grey.shade300
+                    : Colors.transparent,
                 spreadRadius: -6,
                 offset: const Offset(-1, 8))
           ]),

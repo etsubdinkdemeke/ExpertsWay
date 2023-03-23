@@ -51,10 +51,10 @@ class Themes {
     // colorScheme: const ColorScheme.light(),
     canvasColor: Colors.transparent,
     iconTheme: const IconThemeData(color: Colors.black),
-    primaryColor: Colors.white,
+    primaryColor: Colors.white, cardColor: Colors.white,
     primarySwatch: Colors.blue,
     brightness: Brightness.light,
-    backgroundColor: Colors.white,
+    backgroundColor: Color.fromARGB(255, 255, 255, 255),
     hintColor: config.Colors().mainColor(1),
     textTheme: TextTheme(
       button: const TextStyle(
@@ -73,11 +73,12 @@ class Themes {
           fontFamily: "Red Hat Display",
           fontWeight: FontWeight.w500,
           color: config.Colors().accentColor(1)),
-      headline3: const TextStyle(
-          fontSize: 20,
-          fontFamily: "Red Hat Display",
-          fontWeight: FontWeight.w500,
-          color: Colors.white),
+      headline3: TextStyle(
+        fontSize: 20,
+        fontFamily: "Red Hat Display",
+        fontWeight: FontWeight.w500,
+        color: Colors.white.withOpacity(0.4),
+      ),
       headline2: const TextStyle(
           fontSize: 24,
           fontFamily: "Red Hat Display",
@@ -143,7 +144,8 @@ class Themes {
     accentColor: config.Colors().accentDarkColor(1),
     focusColor: config.Colors().mainDarkColor(1),
     hintColor: config.Colors().secondDarkColor(1),
-    backgroundColor: const Color.fromARGB(0, 38, 50, 56),
+    cardColor: const Color.fromARGB(26, 255, 255, 255),
+    backgroundColor: const Color.fromARGB(26, 255, 255, 255),
     accentTextTheme:
         const TextTheme(headline6: TextStyle(fontFamily: "Red Hat Display")),
     textTheme: TextTheme(

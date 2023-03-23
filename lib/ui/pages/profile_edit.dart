@@ -189,7 +189,7 @@ class _EditProfileState extends State<EditProfile> {
       VoidCallback onTap) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     TextTheme textTheme = Theme.of(context).textTheme;
-    Color secondbackgroundColor = Theme.of(context).backgroundColor;
+    Color secondbackgroundColor = Theme.of(context).cardColor;
     IconThemeData icontheme = Theme.of(context).iconTheme;
 
     String? hintText(String? inputType) {
@@ -237,10 +237,7 @@ class _EditProfileState extends State<EditProfile> {
                     textAlignVertical: TextAlignVertical.center,
                     decoration: InputDecoration(
                         filled: true,
-                        fillColor:
-                            themeProvider.currentTheme == ThemeData.light()
-                                ? Colors.white
-                                : secondbackgroundColor,
+                        fillColor: secondbackgroundColor,
                         hintStyle: TextStyle(color: Colors.grey[400]),
                         hintText: hintText(type),
                         errorBorder: OutlineInputBorder(
