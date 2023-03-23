@@ -62,7 +62,7 @@ class ProgrammingOptions extends GetView<ProgrammingOptionsController> {
                 opacity: controller.pickedLanguages.length > 2 ? 1 : 0.3,
                 child: GradientBtn(
                   onPressed: () {
-                    Get.toNamed(AppRoute.landingPage);
+                    Get.offAllNamed(AppRoute.landingPage);
                   },
                   btnName: 'Get Started',
                   defaultBtn: true,
