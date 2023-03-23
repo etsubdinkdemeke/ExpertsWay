@@ -47,8 +47,8 @@ class Themes {
   static final lightTheme = ThemeData(
     // appBarTheme:
     //     AppBarTheme(backgroundColor: Color.fromARGB(255, 124, 61, 200)),
-    scaffoldBackgroundColor: Colors.white,
-    colorScheme: const ColorScheme.light(),
+    scaffoldBackgroundColor: Colors.white, shadowColor: Colors.transparent,
+    // colorScheme: const ColorScheme.light(),
     canvasColor: Colors.transparent,
     iconTheme: const IconThemeData(color: Colors.black),
     primaryColor: Colors.white,
@@ -77,7 +77,7 @@ class Themes {
           fontSize: 20,
           fontFamily: "Red Hat Display",
           fontWeight: FontWeight.w500,
-          color: Colors.black),
+          color: Colors.white),
       headline2: const TextStyle(
           fontSize: 24,
           fontFamily: "Red Hat Display",
@@ -97,14 +97,14 @@ class Themes {
       ),
       headline6: TextStyle(
         fontSize: 13.0,
-        color: Colors.white.withOpacity(.85),
+        color: Colors.grey[500],
         fontFamily: "Red Hat Display",
       ),
       bodyText2: TextStyle(
         fontFamily: 'Red Hat Display',
         fontSize: 15,
         fontWeight: FontWeight.w500,
-        color: Colors.grey[900],
+        color: Colors.grey[800],
       ),
       // bodyMedium: TextStyle(
       //   fontFamily: 'Red Hat Display',
@@ -132,6 +132,7 @@ class Themes {
   static final darkTheme = ThemeData(
     buttonTheme:
         const ButtonThemeData(buttonColor: Color.fromARGB(255, 75, 51, 79)),
+    shadowColor: Colors.transparent,
     scaffoldBackgroundColor: const Color.fromARGB(0, 38, 50, 56),
     colorScheme: const ColorScheme.dark(),
     iconTheme: const IconThemeData(color: Colors.white),
@@ -142,7 +143,7 @@ class Themes {
     accentColor: config.Colors().accentDarkColor(1),
     focusColor: config.Colors().mainDarkColor(1),
     hintColor: config.Colors().secondDarkColor(1),
-    backgroundColor: config.Colors().secondDarkColor(1),
+    backgroundColor: const Color.fromARGB(0, 38, 50, 56),
     accentTextTheme:
         const TextTheme(headline6: TextStyle(fontFamily: "Red Hat Display")),
     textTheme: TextTheme(
@@ -186,7 +187,7 @@ class Themes {
       ),
       headline6: TextStyle(
         fontSize: 14.0,
-        color: config.Colors().accentDarkColor(.85),
+        color: Colors.white,
         fontFamily: "Red Hat Display",
       ),
       bodyText2: const TextStyle(

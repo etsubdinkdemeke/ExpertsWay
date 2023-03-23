@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../auth/auth.dart';
+import '../../theme/theme.dart';
 
 class Onboarding extends StatefulWidget {
   const Onboarding({super.key});
@@ -82,6 +84,10 @@ class OnboardingState extends State<Onboarding> {
   }
 
   Widget buildMessage(String mainMessage, String subMessage) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    TextTheme textTheme = Theme.of(context).textTheme;
+    Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
+
     return SizedBox(
       key: UniqueKey(),
       height: 150,
@@ -92,21 +98,16 @@ class OnboardingState extends State<Onboarding> {
             Text(
               mainMessage,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
-              ),
+              style: textTheme.headline6
+                  ?.copyWith(fontSize: 24, fontWeight: FontWeight.w600),
             ),
             const Spacer(),
             Text(
               subMessage,
               overflow: TextOverflow.fade,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 14,
-              ),
+              style: textTheme.headline6
+                  ?.copyWith(fontSize: 14, fontWeight: FontWeight.w400),
             ),
           ],
         ),

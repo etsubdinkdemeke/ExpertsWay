@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:learncoding/routes/routing_constants.dart';
 import 'package:learncoding/theme/box_icons_icons.dart';
@@ -11,6 +12,9 @@ import 'package:learncoding/ui/widgets/gradient_button.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:learncoding/ui/pages/notification.dart' as notificationPage;
+import 'package:provider/provider.dart';
+
+import '../../../theme/theme.dart';
 
 class LandingPage extends GetView<LandingPageController> {
   const LandingPage({super.key});
@@ -18,6 +22,9 @@ class LandingPage extends GetView<LandingPageController> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    TextTheme textTheme = Theme.of(context).textTheme;
+    Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
 
     return Obx(() {
       return controller.loading.value
@@ -26,173 +33,236 @@ class LandingPage extends GetView<LandingPageController> {
                 child: CircularProgressIndicator(),
               ),
             )
-          : Scaffold(
-              key: controller.scaffoldKey,
-              drawer: Drawer(
-                elevation: 1,
-                backgroundColor: Colors.white,
-                child: SafeArea(
-                  child: ListView(
-                    children: [
-                      _DrawerHeader(controller, theme),
-                      _DrawerButton(
-                        onPress: () {
-                          controller.scaffoldKey.currentState?.closeDrawer();
-                          Get.toNamed(AppRoute.landingPage);
-                        },
-                        theme: theme,
-                        icon: BoxIcons.bx_home,
-                        name: 'Home',
-                      ),
-                      _DrawerButton(
-                        onPress: () {},
-                        theme: theme,
-                        icon: BoxIcons.bx_notepad,
-                        name: 'To-do',
-                      ),
-                      _DrawerButton(
-                        onPress: () {},
-                        theme: theme,
-                        icon: Icons.play_arrow_outlined,
-                        name: 'Videos',
-                      ),
-                      _DrawerButton(
-                        onPress: () {},
-                        theme: theme,
-                        icon: BoxIcons.bx_line_chart,
-                        name: 'Leaderboard',
-                      ),
-                      _DrawerButton(
-                        onPress: () {},
-                        theme: theme,
-                        icon: BoxIcons.bx_calendar_week,
-                        name: 'calendar',
-                      ),
-                      _DrawerButton(
-                        onPress: () {},
-                        theme: theme,
-                        icon: BoxIcons.bx_message_square_dots,
-                        name: 'Forums',
-                      ),
-                      const Divider(),
-                      _DrawerButton(
-                        onPress: () => Get.to(() => const Settings()),
-                        theme: theme,
-                        icon: BoxIcons.bx_cog,
-                        name: 'Settings',
-                      ),
-                      _DrawerButton(
-                        onPress: () {},
-                        theme: theme,
-                        icon: BoxIcons.bx_help_circle,
-                        name: 'Help',
-                      ),
-                      _DrawerButton(
-                        onPress: () {},
-                        theme: theme,
-                        icon: BoxIcons.bx_log_out,
-                        name: 'Logout',
-                      ),
-                    ],
-                  ),
+          : Theme(
+              data: Theme.of(context).copyWith(
+                buttonTheme: ButtonThemeData(
+                  buttonColor: themeProvider.currentTheme == ThemeData.dark()
+                      ? Colors.white
+                      : Colors.black,
                 ),
               ),
-              body: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 22),
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverList(
-                          delegate: SliverChildListDelegate([
-                        _Header(
-                          theme: theme,
-                          controller: controller,
+              child: Scaffold(
+                key: controller.scaffoldKey,
+                appBar: AppBar(
+                  automaticallyImplyLeading: false,
+                  backgroundColor: scaffoldBackgroundColor,
+                  shadowColor: Colors.transparent,
+                  centerTitle: true,
+                  leading: Builder(builder: (context) {
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 25),
+                      child: InkWell(
+                          onTap: () {
+                            controller.scaffoldKey.currentState?.openDrawer();
+                          },
+                          child: Image.asset(
+                            'assets/images/drawer_icon.png',
+                          )),
+                    );
+                  }),
+                  leadingWidth: 60,
+                  title: _Header(
+                    theme: theme,
+                    controller: controller,
+                  ),
+                  actions: [
+                    Container(
+                      padding: EdgeInsets.only(right: 10, top: 15),
+                      child: InkWell(
+                        onTap: () =>
+                            Get.to(() => const notificationPage.Notification()),
+                        borderRadius: BorderRadius.circular(20),
+                        child: Stack(
+                          children: [
+                            Icon(
+                              Icons.notifications_none_rounded,
+                              size: 28,
+                              color:
+                                  themeProvider.currentTheme == ThemeData.dark()
+                                      ? const Color.fromARGB(255, 221, 221, 221)
+                                      : Color.fromARGB(255, 63, 63, 63)
+                                          .withOpacity(0.8),
+                            ),
+                            const Positioned(
+                                top: 4,
+                                right: 4,
+                                child: CircleAvatar(
+                                  maxRadius: 5,
+                                  backgroundColor: Colors.white,
+                                  child: CircleAvatar(maxRadius: 4),
+                                ))
+                          ],
                         ),
-                        const SizedBox(height: 12),
-
-                        // search input field
-                        const _SerachTextField(),
-
-                        // header
-                        _LanguageHeader(
+                      ),
+                    ),
+                  ],
+                ),
+                drawer: Drawer(
+                  elevation: 1,
+                  backgroundColor: scaffoldBackgroundColor,
+                  child: SafeArea(
+                    child: ListView(
+                      children: [
+                        _DrawerHeader(controller, theme),
+                        _DrawerButton(
+                          onPress: () {
+                            controller.scaffoldKey.currentState?.closeDrawer();
+                            Get.toNamed(AppRoute.landingPage);
+                          },
                           theme: theme,
-                          showButton: true,
-                          title: 'Popular languages',
+                          icon: BoxIcons.bx_home,
+                          name: 'Home',
                         ),
-
-                        _ListOfProgrammingLanguages(controller),
-
-                        const SizedBox(height: 12),
-
-                        // header
-                        _LanguageHeader(
+                        _DrawerButton(
+                          onPress: () {},
                           theme: theme,
-                          showButton: false,
-                          title: 'Recommended courses',
+                          icon: BoxIcons.bx_notepad,
+                          name: 'To-do',
                         ),
-
-                        const SizedBox(height: 12),
-
-                        AlignedGridView.count(
-                            shrinkWrap: true,
-                            mainAxisSpacing: 20,
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 10,
-                            itemCount: controller.course.length,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return InkWell(
-                                onTap: () {
-                                  Get.to(
-                                    () => CourseDetailPage(
-                                      courseData: controller.course[index],
-                                    ),
-                                  );
-                                },
-                                child: _CardWidget(
-                                    percent: null,
-                                    index: index,
-                                    theme: theme,
-                                    controller: controller),
-                              );
-                            }),
-                        const SizedBox(height: 12),
-
-                        _LanguageHeader(
+                        _DrawerButton(
+                          onPress: () {},
                           theme: theme,
-                          showButton: false,
-                          title: 'Your Courses',
+                          icon: Icons.play_arrow_outlined,
+                          name: 'Videos',
                         ),
+                        _DrawerButton(
+                          onPress: () {},
+                          theme: theme,
+                          icon: BoxIcons.bx_line_chart,
+                          name: 'Leaderboard',
+                        ),
+                        _DrawerButton(
+                          onPress: () {},
+                          theme: theme,
+                          icon: BoxIcons.bx_calendar_week,
+                          name: 'calendar',
+                        ),
+                        _DrawerButton(
+                          onPress: () {},
+                          theme: theme,
+                          icon: BoxIcons.bx_message_square_dots,
+                          name: 'Forums',
+                        ),
+                        const Divider(),
+                        _DrawerButton(
+                          onPress: () => Get.to(() => const Settings()),
+                          theme: theme,
+                          icon: BoxIcons.bx_cog,
+                          name: 'Settings',
+                        ),
+                        _DrawerButton(
+                          onPress: () {},
+                          theme: theme,
+                          icon: BoxIcons.bx_help_circle,
+                          name: 'Help',
+                        ),
+                        _DrawerButton(
+                          onPress: () {},
+                          theme: theme,
+                          icon: BoxIcons.bx_log_out,
+                          name: 'Logout',
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                body: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 22),
+                    child: CustomScrollView(
+                      slivers: [
+                        SliverList(
+                            delegate: SliverChildListDelegate([
+                          // _Header(
+                          //   theme: theme,
+                          //   controller: controller,
+                          // ),
+                          const SizedBox(height: 12),
 
-                        const SizedBox(height: 12),
+                          // search input field
+                          const _SerachTextField(),
 
-                        AlignedGridView.count(
-                            shrinkWrap: true,
-                            mainAxisSpacing: 20,
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 10,
-                            itemCount: controller.course.length,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return InkWell(
-                                onTap: () {
-                                  Get.to(
-                                    () => CourseDetailPage(
-                                      courseData: controller.course[index],
-                                    ),
-                                  );
-                                },
-                                child: _CardWidget(
-                                    percent: 60,
-                                    index: index,
-                                    theme: theme,
-                                    controller: controller),
-                              );
-                            })
-                      ])),
+                          // header
+                          _LanguageHeader(
+                            theme: theme,
+                            showButton: true,
+                            title: 'Popular languages',
+                          ),
 
-                      // landing page header
-                    ],
+                          _ListOfProgrammingLanguages(controller),
+
+                          const SizedBox(height: 12),
+
+                          // header
+                          _LanguageHeader(
+                            theme: theme,
+                            showButton: false,
+                            title: 'Recommended courses',
+                          ),
+
+                          const SizedBox(height: 12),
+
+                          AlignedGridView.count(
+                              shrinkWrap: true,
+                              mainAxisSpacing: 20,
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10,
+                              itemCount: controller.course.length,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    Get.to(
+                                      () => CourseDetailPage(
+                                        courseData: controller.course[index],
+                                      ),
+                                    );
+                                  },
+                                  child: _CardWidget(
+                                      percent: null,
+                                      index: index,
+                                      theme: theme,
+                                      controller: controller),
+                                );
+                              }),
+                          const SizedBox(height: 12),
+
+                          _LanguageHeader(
+                            theme: theme,
+                            showButton: false,
+                            title: 'Your Courses',
+                          ),
+
+                          const SizedBox(height: 12),
+
+                          AlignedGridView.count(
+                              shrinkWrap: true,
+                              mainAxisSpacing: 20,
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10,
+                              itemCount: controller.course.length,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    Get.to(
+                                      () => CourseDetailPage(
+                                        courseData: controller.course[index],
+                                      ),
+                                    );
+                                  },
+                                  child: _CardWidget(
+                                      percent: 60,
+                                      index: index,
+                                      theme: theme,
+                                      controller: controller),
+                                );
+                              })
+                        ])),
+
+                        // landing page header
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -289,54 +359,30 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    TextTheme textTheme = Theme.of(context).textTheme;
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        InkWell(
-            onTap: () {
-              controller.scaffoldKey.currentState?.openDrawer();
-            },
-            child: Image.asset(
-              'assets/images/drawer_icon.png',
-              height: 17,
-              width: 40,
-            )),
+        SizedBox(
+          width: (MediaQuery.of(context).size.width - 300) / 2,
+        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Welcome Back',
-              style: theme.textTheme.bodySmall?.copyWith(fontSize: 12),
+              style: textTheme.bodyText2
+                  ?.copyWith(fontSize: 15, fontWeight: FontWeight.w300),
             ),
             Text(
               controller.profileName ?? 'User',
-              style: theme.textTheme.bodyLarge?.copyWith(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+              style: textTheme.headline6
+                  ?.copyWith(fontSize: 18, fontWeight: FontWeight.w500),
             ),
           ],
         ),
-        InkWell(
-          onTap: () => Get.to(() => const notificationPage.Notification()),
-          borderRadius: BorderRadius.circular(20),
-          child: Stack(
-            children: const [
-              Icon(
-                Icons.notifications_none_rounded,
-                size: 28,
-              ),
-              Positioned(
-                  top: 4,
-                  right: 4,
-                  child: CircleAvatar(
-                    maxRadius: 5,
-                    backgroundColor: Colors.white,
-                    child: CircleAvatar(maxRadius: 4),
-                  ))
-            ],
-          ),
+        SizedBox(
+          width: (MediaQuery.of(context).size.width - 300) / 2,
         ),
       ],
     );
@@ -508,6 +554,7 @@ class _DrawerHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextTheme textTheme = Theme.of(context).textTheme;
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Row(
@@ -533,11 +580,14 @@ class _DrawerHeader extends StatelessWidget {
             children: [
               Text(
                 controller.profileName ?? '',
-                style: theme.textTheme.displaySmall?.copyWith(fontSize: 16),
+                style: textTheme.headline6
+                    ?.copyWith(fontSize: 19, fontWeight: FontWeight.w400),
               ),
+              SizedBox(height: 5),
               Text(
                 'Student',
-                style: theme.textTheme.labelMedium,
+                style: textTheme.headline6
+                    ?.copyWith(fontSize: 16, fontWeight: FontWeight.w400),
               ),
             ],
           ),
@@ -574,28 +624,37 @@ class _DrawerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    TextTheme textTheme = Theme.of(context).textTheme;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: InkWell(
         borderRadius: BorderRadius.circular(15),
-        splashColor: const Color(0xff26B0FF),
+        splashColor: themeProvider.currentTheme == ThemeData.dark()
+            ? Color.fromARGB(64, 38, 176, 255)
+            : const Color(0xff26B0FF),
         onTap: onPress,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
           child: Row(
             children: [
               CircleAvatar(
+                backgroundColor: themeProvider.currentTheme == ThemeData.dark()
+                    ? Color.fromARGB(64, 38, 176, 255)
+                    : Colors.lightBlue[100],
                 child: Icon(
                   icon,
-                  // weight: 0.3,
-                  color: const Color(0xff2E2E2E).withOpacity(0.8),
+                  size: 20,
+                  color: themeProvider.currentTheme == ThemeData.dark()
+                      ? const Color.fromARGB(255, 221, 221, 221)
+                      : Color.fromARGB(255, 63, 63, 63).withOpacity(0.8),
                 ),
               ),
               const SizedBox(width: 28),
               Text(
                 name,
-                style: theme.textTheme.displaySmall
-                    ?.copyWith(color: const Color(0xff2E2E2E)),
+                style: textTheme.headline6
+                    ?.copyWith(fontSize: 18, fontWeight: FontWeight.w400),
               ),
             ],
           ),
