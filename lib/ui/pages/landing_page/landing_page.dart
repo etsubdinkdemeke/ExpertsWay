@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -97,102 +98,112 @@ class LandingPage extends GetView<LandingPageController> {
                   ),
                 ),
               ),
-              body: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 22),
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverList(
-                          delegate: SliverChildListDelegate([
-                        _Header(
-                          theme: theme,
-                          controller: controller,
-                        ),
-                        const SizedBox(height: 12),
+              body: DoubleBackToCloseApp(
+                snackBar: SnackBar(
+                  backgroundColor: theme.colorScheme.background,
+                  content: Text(
+                    'Press back button again to exit'.tr,
+                    style: theme.textTheme.bodySmall
+                        ?.copyWith(color: theme.shadowColor),
+                  ),
+                ),
+                child: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 22),
+                    child: CustomScrollView(
+                      slivers: [
+                        SliverList(
+                            delegate: SliverChildListDelegate([
+                          _Header(
+                            theme: theme,
+                            controller: controller,
+                          ),
+                          const SizedBox(height: 12),
 
-                        // search input field
-                        const _SerachTextField(),
+                          // search input field
+                          const _SerachTextField(),
 
-                        // header
-                        _LanguageHeader(
-                          theme: theme,
-                          showButton: true,
-                          title: 'Popular languages',
-                        ),
+                          // header
+                          _LanguageHeader(
+                            theme: theme,
+                            showButton: true,
+                            title: 'Popular languages',
+                          ),
 
-                        _ListOfProgrammingLanguages(controller),
+                          _ListOfProgrammingLanguages(controller),
 
-                        const SizedBox(height: 12),
+                          const SizedBox(height: 12),
 
-                        // header
-                        _LanguageHeader(
-                          theme: theme,
-                          showButton: false,
-                          title: 'Recommended courses',
-                        ),
+                          // header
+                          _LanguageHeader(
+                            theme: theme,
+                            showButton: false,
+                            title: 'Recommended courses',
+                          ),
 
-                        const SizedBox(height: 12),
+                          const SizedBox(height: 12),
 
-                        AlignedGridView.count(
-                            shrinkWrap: true,
-                            mainAxisSpacing: 20,
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 10,
-                            itemCount: controller.course.length,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return InkWell(
-                                onTap: () {
-                                  Get.to(
-                                    () => CourseDetailPage(
-                                      courseData: controller.course[index],
-                                    ),
-                                  );
-                                },
-                                child: _CardWidget(
-                                    percent: null,
-                                    index: index,
-                                    theme: theme,
-                                    controller: controller),
-                              );
-                            }),
-                        const SizedBox(height: 12),
+                          AlignedGridView.count(
+                              shrinkWrap: true,
+                              mainAxisSpacing: 20,
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10,
+                              itemCount: controller.course.length,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    Get.to(
+                                      () => CourseDetailPage(
+                                        courseData: controller.course[index],
+                                      ),
+                                    );
+                                  },
+                                  child: _CardWidget(
+                                      percent: null,
+                                      index: index,
+                                      theme: theme,
+                                      controller: controller),
+                                );
+                              }),
+                          const SizedBox(height: 12),
 
-                        _LanguageHeader(
-                          theme: theme,
-                          showButton: false,
-                          title: 'Your Courses',
-                        ),
+                          _LanguageHeader(
+                            theme: theme,
+                            showButton: false,
+                            title: 'Your Courses',
+                          ),
 
-                        const SizedBox(height: 12),
+                          const SizedBox(height: 12),
 
-                        AlignedGridView.count(
-                            shrinkWrap: true,
-                            mainAxisSpacing: 20,
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 10,
-                            itemCount: controller.course.length,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return InkWell(
-                                onTap: () {
-                                  Get.to(
-                                    () => CourseDetailPage(
-                                      courseData: controller.course[index],
-                                    ),
-                                  );
-                                },
-                                child: _CardWidget(
-                                    percent: 60,
-                                    index: index,
-                                    theme: theme,
-                                    controller: controller),
-                              );
-                            })
-                      ])),
+                          AlignedGridView.count(
+                              shrinkWrap: true,
+                              mainAxisSpacing: 20,
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10,
+                              itemCount: controller.course.length,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    Get.to(
+                                      () => CourseDetailPage(
+                                        courseData: controller.course[index],
+                                      ),
+                                    );
+                                  },
+                                  child: _CardWidget(
+                                      percent: 60,
+                                      index: index,
+                                      theme: theme,
+                                      controller: controller),
+                                );
+                              })
+                        ])),
 
-                      // landing page header
-                    ],
+                        // landing page header
+                      ],
+                    ),
                   ),
                 ),
               ),
