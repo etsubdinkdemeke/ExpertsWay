@@ -16,7 +16,7 @@ import '../../models/notification.dart';
 import 'package:learncoding/ui/pages/comment.dart';
 
 class LessonPage extends StatefulWidget {
-  final List<LessonElement?> lessonData;
+  final List<List> lessonData;
   final List<LessonContent?> contents;
   // final String section;
   // final String lesson;
@@ -185,10 +185,10 @@ class _LessonState extends State<LessonPage> {
     bool lessonFound = false;
     for (var element in lessonData) {
       if (lessonFound) {
-        nextLessonTitle = element.title;
+        nextLessonTitle = element[0].title;
         break;
       }
-      if (element.title == lesson && element.section == section) {
+      if (element[0].title == lesson && element[0].section == section) {
         lessonFound = true;
       }
     }

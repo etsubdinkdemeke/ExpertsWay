@@ -28,7 +28,7 @@ class CourseDetailPage extends StatefulWidget {
 }
 
 class CoursePagePageState extends State<CourseDetailPage> {
-  late List<LessonElement> lessonData = [];
+  late List<List> lessonData = [];
   late List<LessonContent> lessoncontent = [];
   bool isLoading = false;
 
@@ -40,12 +40,25 @@ class CoursePagePageState extends State<CourseDetailPage> {
 
   Future refreshLesson() async {
     setState(() => isLoading = true);
-    lessonData =
+    var lessonDataUnprocessed =
         await CourseDatabase.instance.readLesson(widget.courseData.slug);
+
+    lessonData = lessonDataUnprocessed.map((e) => [e, false]).toList();
     if (kDebugMode) {
       print("....lesson length ....${lessonData.length}");
     }
+    applyProgressOnLessons();
     setState(() => isLoading = false);
+  }
+
+  Future applyProgressOnLessons() async {
+    CourseProgressElement? courseProgress = await CourseDatabase.instance
+        .readCourseProgress(widget.courseData.courseId.toString());
+    if (courseProgress != null) {
+      for (int i = 0; i < courseProgress.lessonNumber; i++) {
+        lessonData[i][1] = true;
+      }
+    }
   }
 
   @override
@@ -58,21 +71,20 @@ class CoursePagePageState extends State<CourseDetailPage> {
     super.dispose();
   }
 
-  List<String> sectionList(lessonData) {
+  List<String> sectionList(List<List> lessonData) {
     var seen = <String>[];
-    for (var lesson in lessonData) {
-      seen.add(lesson.section as String);
+    for (var element in lessonData) {
+      seen.add(element[0].section as String);
     }
     final sectionList = seen.toSet().toList();
     return sectionList;
   }
 
-  List<LessonElement> lessonList(
-      List<LessonElement> lessonData, String section) {
-    var seen = <LessonElement>[];
-    for (var lesson in lessonData) {
-      if (lesson.section == section) {
-        seen.add(lesson);
+  List<List> lessonList(List<List> lessonData, String section) {
+    var seen = <List>[];
+    for (var element in lessonData) {
+      if (element[0].section == section) {
+        seen.add(element);
       }
     }
     return seen;
@@ -148,319 +160,6 @@ class CoursePagePageState extends State<CourseDetailPage> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget buildlesson() {
-    // Currently, this method is not used. But I didn't want to remove it 'cause
-    // there's a lot of effort put in making this. I chose to keep it just in case ...
-    return FutureBuilder<lesson.Lesson>(
-        future: ApiProvider().retrieveLessons(widget.courseData.slug),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final lessonData = snapshot.data!.lessons;
-            List sections = sectionList(lessonData);
-            return Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(8, 8, 8, 10),
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: const Text(
-                    "Lessons",
-                    style: TextStyle(color: Color(0xFF343434), fontSize: 24),
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.865,
-                  margin: const EdgeInsets.only(bottom: 70),
-                  foregroundDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: const Color.fromARGB(255, 215, 214, 214),
-                    ),
-                  ),
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: sections.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            buildLessonList(lessonData, sections[index]),
-                            index < sections.length
-                                ? const Divider(
-                                    color: Color.fromARGB(255, 215, 214, 214),
-                                    thickness: 1,
-                                    height: 1,
-                                  )
-                                : Container()
-                          ],
-                        );
-                      }),
-                ),
-              ],
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        });
-  }
-
-  List lessonListId(lessonData, section) {
-    // Currently, this method is not used. But I didn't want to remove it 'cause
-    // there's a lot of effort put in making this. I chose to keep it just in case ...
-    var id = [];
-    for (var lesson in lessonData) {
-      if (lesson.section == section) {
-        id.add(lesson.lessonId);
-      }
-    }
-    return id;
-  }
-
-  Widget buildLessonList(lessonData, section) {
-    // Currently, this method is not used. But I didn't want to remove it 'cause
-    // there's a lot of effort put in making this. I chose to keep it just in case ...
-    return Material(
-      color: config.Colors().secondColor(1),
-      child: Theme(
-        data: Theme.of(context).copyWith(
-          dividerColor: const Color.fromARGB(0, 208, 57, 57),
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          iconTheme: const IconThemeData(
-            color: Color.fromARGB(255, 172, 172, 172),
-            size: 35,
-          ),
-        ),
-        child: ExpansionTile(
-          title: Flexible(
-            child: Text(
-              section,
-              style: const TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.w500,
-                color: Color.fromARGB(255, 121, 121, 123),
-              ),
-            ),
-          ),
-          tilePadding: const EdgeInsets.fromLTRB(15, 1, 10, 1),
-          iconColor: const Color.fromARGB(255, 172, 172, 172),
-          collapsedIconColor: const Color.fromARGB(255, 172, 172, 172),
-          children: <Widget>[
-            const Divider(
-              color: Color.fromARGB(255, 215, 214, 214),
-              thickness: 1,
-              height: 1,
-            ),
-            const SizedBox(height: 10),
-            ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                itemCount: null == lessonData
-                    ? 0
-                    : lessonList(lessonData, section).length,
-                itemBuilder: (context, index) {
-                  List lessonTitle = lessonList(lessonData, section);
-                  return Container(
-                    padding: const EdgeInsets.fromLTRB(17, 0, 15, 0),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Icon(Icons.check_circle_outlined,
-                                size: 25,
-                                color: index <= 2 ? Colors.blue : Colors.grey),
-                            const SizedBox(
-                              width: 17,
-                            ),
-                            GestureDetector(
-                              child: Text(
-                                lessonTitle[index],
-                                style: TextStyle(
-                                  color: index == 2 ? Colors.blue : Colors.grey,
-                                  fontSize: 17.0,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              onTap: () async {
-                                List lessonIds =
-                                    lessonListId(lessonData, section);
-                                // ignore: unused_local_variable
-                                String lessonIndex =
-                                    (lessonIds[index]).toString();
-
-                                lessoncontent = await CourseDatabase.instance
-                                    .readLessonContets(lessonIds[index]);
-                                if (lessoncontent.isNotEmpty) {
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.push(
-                                    context,
-                                    CupertinoPageRoute(
-                                      builder: (context) => LessonPage(
-                                        // sorry for the bad namimg here X)
-                                        lesson: lessonData[
-                                            index], // this is the current lessonElement
-                                        lessonData:
-                                            lessonData, // this is a list of lessonElements, passed to go to the next lesson
-                                        contents:
-                                            lessoncontent, // this is a list of lessonContents, read from database
-                                        courseData: widget
-                                            .courseData, // this is the course element that contains this lesson.
-                                      ),
-                                    ),
-                                  );
-                                }
-                              },
-                            )
-                          ],
-                        ),
-                        Container(
-                            padding: const EdgeInsets.only(left: 12),
-                            alignment: Alignment.topLeft,
-                            child: index < lessonTitle.length - 1
-                                ? Container(
-                                    height: 30,
-                                    width: 1,
-                                    color: Colors.grey,
-                                  )
-                                : Container())
-                      ],
-                    ),
-                  );
-                }),
-            const SizedBox(height: 10),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildLessonCard() {
-    // Currently, this method is not used. But I didn't want to remove it 'cause
-    // there's a lot of effort put in making this. I chose to keep it just in case ...
-    List sections = sectionList(lessonData);
-
-    return ListView.builder(
-        shrinkWrap: true,
-        padding: const EdgeInsets.all(0),
-        itemCount: sections.length,
-        itemBuilder: (context, index) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              buildLessonList(lessonData, sections[index]),
-              index < sections.length
-                  ? const Divider(
-                      color: Color.fromARGB(255, 215, 214, 214),
-                      thickness: 1,
-                      height: 1,
-                    )
-                  : Container()
-            ],
-          );
-        });
-  }
-
-  Widget buildUniformLessonList() {
-    return Material(
-      color: config.Colors().secondColor(1),
-      child: Column(
-        children: <Widget>[
-          for (var index = 0; index < lessonData.length; index++)
-            Column(
-              children: [
-                GestureDetector(
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                    title: Text(
-                      lessonData[index].title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    // TODO: change the dummy subtitle with a real one (once we can get the lesson contents along with the lessons from the database)
-                    subtitle: Text(
-                      lessonData[index].shortDescription.isNotEmpty
-                          ? lessonData[index].shortDescription
-                          : "Lorem ipsum is a pseudo-Latin text used in web design, typography, layout, and printing in place of English to emphasise design elements over content. It's also called placeholder (or filler) text.",
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    trailing: index !=
-                            lessonData.length - 1 // we're making only the very
-                        // last lesson locked. (b/c, for now, we want to display what a locked
-                        // lesson looks like. we'll change this when we have data about the
-                        // progress of the user. the user progress will determine which lessons
-                        // are open and which are locked.)
-                        ? Builder(builder: (_) {
-                            // we're generating a lot of random booleans here for demonstration purposes
-                            // all these boolean flags should be received from the database or API in the future.
-                            // TODO: change the following code to make it work with real data
-                            var isLessonCompleted = Random().nextBool();
-                            if (isLessonCompleted) {
-                              var testResult = Random().nextInt(101);
-                              return CircleAvatar(
-                                radius: 20,
-                                foregroundColor: Colors.white,
-                                backgroundColor: testResult > 60
-                                    ? Colors.green[300]
-                                    : (testResult > 30
-                                        ? Colors.yellow[400]
-                                        : Colors.red[300]),
-                                child: Text(testResult.toString()),
-                              );
-                            } else {
-                              var progress = Random()
-                                  .nextDouble(); // how much the user has progressed with the lesson
-                              // the widget below is from a 3rd party package named 'percent indicator'. check it out on 'pub.dev'
-                              return CircularPercentIndicator(
-                                radius: 20,
-                                lineWidth: 3,
-                                percent: progress,
-                                progressColor: Colors.blue,
-                              );
-                            }
-                          })
-                        : CircleAvatar(
-                            radius: 16,
-                            backgroundColor: Colors.blue[50],
-                            child: const Icon(
-                              Icons.lock_outline,
-                              color: Colors.blue,
-                              size: 18,
-                            ),
-                          ),
-                  ),
-                  onTap: () async {
-                    var lessonContents = await CourseDatabase.instance
-                        .readLessonContets(lessonData[index].lessonId);
-                    if (lessonContents.isNotEmpty &&
-                        index != lessonData.length - 1) {
-                      // again, we're making the very last lesson locked.
-                      // ignore: use_build_context_synchronously
-                      Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) => LessonPage(
-                            lessonData: lessonData,
-                            lesson: lessonData[index],
-                            contents: lessonContents,
-                            courseData: widget.courseData,
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                ),
-                Divider(
-                  color: Colors.grey[400],
-                )
-              ],
-            )
-        ],
-      ),
     );
   }
 
@@ -568,10 +267,10 @@ class CoursePagePageState extends State<CourseDetailPage> {
                                   for (var i = 0;
                                       i < snapshot.data!.lessons.length;
                                       i++) {
-                                    final lessonData =
+                                    final fetchedLesson =
                                         snapshot.data!.lessons[i];
                                     CourseDatabase.instance
-                                        .createLessons(lessonData!);
+                                        .createLessons(fetchedLesson!);
                                   }
 
                                   WidgetsBinding.instance
@@ -670,13 +369,12 @@ class CoursePagePageState extends State<CourseDetailPage> {
                 children: [
                   for (int j = 0; j < lessonsUnderSection.length; j++)
                     GestureDetector(
-                      onTap: (i == 0 &&
-                              j ==
-                                  0) // only the very first lesson will be unlocked
+                      onTap: (lessonsUnderSection[j][
+                              1]) // only the very first lesson will be unlocked
                           ? () async {
                               var lessonContents = await CourseDatabase.instance
                                   .readLessonContets(
-                                      lessonsUnderSection[j].lessonId);
+                                      lessonsUnderSection[j][0].lessonId);
                               // again, we're making the very last lesson locked.
                               // ignore: use_build_context_synchronously
                               Navigator.push(
@@ -684,7 +382,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
                                 CupertinoPageRoute(
                                   builder: (context) => LessonPage(
                                     lessonData: lessonData,
-                                    lesson: lessonsUnderSection[j],
+                                    lesson: lessonsUnderSection[j][0],
                                     contents: lessonContents,
                                     courseData: widget.courseData,
                                   ),
@@ -694,18 +392,18 @@ class CoursePagePageState extends State<CourseDetailPage> {
                           : null,
                       child: ListTile(
                         title: Text(
-                          lessonsUnderSection[j].title,
+                          lessonsUnderSection[j][0].title,
                           style: const TextStyle(
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                         subtitle: Text(
-                          lessonsUnderSection[j].shortDescription.isNotEmpty
-                              ? lessonsUnderSection[j].shortDescription
+                          lessonsUnderSection[j][0].shortDescription.isNotEmpty
+                              ? lessonsUnderSection[j][0].shortDescription
                               : "Lorem ipsum is a pseudo-Latin text used in web design, typography, layout, and printing in place of English to emphasise design elements over content. It's also called placeholder (or filler) text.",
                           overflow: TextOverflow.ellipsis,
                         ),
-                        trailing: (i == 0 && j == 0)
+                        trailing: (lessonsUnderSection[j][1])
                             ? Builder(
                                 builder: (_) {
                                   // we're generating a lot of random booleans here for demonstration purposes
