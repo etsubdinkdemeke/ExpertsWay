@@ -98,7 +98,7 @@ class OnboardingState extends State<Onboarding> {
             Text(
               mainMessage,
               textAlign: TextAlign.center,
-              style: textTheme.headline6
+              style: textTheme.bodyText2
                   ?.copyWith(fontSize: 24, fontWeight: FontWeight.w600),
             ),
             const Spacer(),
@@ -106,8 +106,8 @@ class OnboardingState extends State<Onboarding> {
               subMessage,
               overflow: TextOverflow.fade,
               textAlign: TextAlign.center,
-              style: textTheme.headline6
-                  ?.copyWith(fontSize: 14, fontWeight: FontWeight.w400),
+              style: textTheme.bodyText2
+                  ?.copyWith(fontSize: 15, fontWeight: FontWeight.w400),
             ),
           ],
         ),
@@ -196,7 +196,11 @@ class OnboardingState extends State<Onboarding> {
     // we will maintain the same layout-forming column but switch the
     // contained widgets in order to show the 3 different "pages"
     createWidgets();
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
+      backgroundColor: themeProvider.currentTheme == ThemeData.light()
+          ? Colors.white
+          : const Color.fromARGB(255, 25, 32, 36),
       body: Column(
         children: <Widget>[
           const Spacer(flex: 3),

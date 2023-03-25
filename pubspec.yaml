@@ -87,6 +87,7 @@ flutter:
     - assets/images/Capture.PNG
     - assets/images/p1.jpg
     - assets/images/p2.jpg
+    - assets/images/drawer_icon_white.png
 
   fonts:
     - family: Poppins
