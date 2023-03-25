@@ -1,7 +1,6 @@
 // ignore_for_file: unused_element, unused_local_variable, use_build_context_synchronously
 
-import 'dart:math' hide log;
-import 'dart:developer' show log;
+import 'dart:math';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:learncoding/api/shared_preference/shared_preference.dart';
 import 'package:learncoding/models/lesson.dart';
@@ -17,7 +16,7 @@ import '../../models/notification.dart';
 import 'package:learncoding/ui/pages/comment.dart';
 
 class LessonPage extends StatefulWidget {
-  final List<List> lessonData;
+  final List<LessonElement?> lessonData;
   final List<LessonContent?> contents;
   // final String section;
   // final String lesson;
@@ -42,8 +41,6 @@ class LessonPage extends StatefulWidget {
 class _LessonState extends State<LessonPage> {
   static ProgressElement? progressElement;
   static CourseElement? courseElement;
-  bool lessonComplete =
-      false; // this flag is set true if we reach the end of the lesson. it always starts false
   bool isLoading = false;
 
   @override
@@ -184,29 +181,30 @@ class _LessonState extends State<LessonPage> {
     return encouragementMessage;
   }
 
-  nextLesson(List<List> lessonData, lesson, section) {
+  nextLesson(lessonData, lesson, section) {
     bool lessonFound = false;
     for (var element in lessonData) {
       if (lessonFound) {
-        nextLessonTitle = element[0].title;
+        nextLessonTitle = element.title;
         break;
       }
-      if (element[0].title == lesson && element[0].section == section) {
+      if (element.title == lesson && element.section == section) {
         lessonFound = true;
       }
     }
   }
 
-  lessonContent(List<List> lessonData, lesson, section) {
+  lessonContent(lessonData, lesson, section) {
     for (var element in lessonData) {
-      if (element[0].title == lesson && element[0].section == section) {
-        final lessonHtml = element[0].content;
+      if (element.title == lesson && element.section == section) {
+        final lessonHtml = element.content;
         return lessonHtml;
       }
     }
     return null;
   }
 
+  bool finishLesson = false;
   String nextLessonTitle = "";
   bool showFlushbar = true;
   String? name;
@@ -220,111 +218,105 @@ class _LessonState extends State<LessonPage> {
     nextLesson(widget.lessonData, widget.lesson, widget.lesson.section);
     // String lesson = lessonHtml[index];
     String lesson = getContent[index];
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pop(context, lessonComplete);
-        return lessonComplete;
-      },
-      child: CupertinoPageScaffold(
-        backgroundColor: const Color.fromARGB(255, 250, 250, 250),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    buildCoverImage(),
-                    const SizedBox(height: 30),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Material(
-                        child: Html(
-                          data: lesson,
-                        ),
+    return CupertinoPageScaffold(
+      backgroundColor: const Color.fromARGB(255, 250, 250, 250),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  buildCoverImage(),
+                  const SizedBox(height: 30),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Material(
+                      child: Html(
+                        data: lesson,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            Material(
-              color: const Color(0xfff5f6fb),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: OutlinedButton(
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all(
-                            const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 12),
-                          ),
-                          side: MaterialStateBorderSide.resolveWith((states) {
-                            if (states.contains(MaterialState.disabled)) {
-                              return const BorderSide(color: Colors.grey);
-                            }
-                            return const BorderSide(color: Colors.blue);
-                          }),
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
+          ),
+          Material(
+            color: const Color(0xfff5f6fb),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: OutlinedButton(
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all(
+                          const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
                         ),
-                        onPressed: index <= 0
-                            ? null
-                            : () {
-                                setState(() {
-                                  index--;
-                                });
-                              },
-                        child: const Text("Prev"),
-                      ),
-                    ),
-                    Expanded(
-                        flex: 2,
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 200),
-                          child: buildProgressBar(),
-                        )),
-                    Expanded(
-                      flex: 2,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [
-                              Color.fromARGB(255, 32, 130, 209),
-                              Color.fromARGB(255, 79, 170, 255)
-                            ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
+                        side: MaterialStateBorderSide.resolveWith((states) {
+                          if (states.contains(MaterialState.disabled)) {
+                            return const BorderSide(color: Colors.grey);
+                          }
+                          return const BorderSide(color: Colors.blue);
+                        }),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
-                            onTap: index < getContent.length - 1
-                                ? nextButtonHandler
-                                : launchTest,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 12),
-                              child: Center(
-                                child: Text(
-                                  index < widget.contents.length - 1
-                                      ? "Next"
-                                      : "Take test",
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                  ),
+                          ),
+                        ),
+                      ),
+                      onPressed: index <= 0
+                          ? null
+                          : () {
+                              setState(() {
+                                index--;
+                              });
+                            },
+                      child: const Text("Prev"),
+                    ),
+                  ),
+                  Expanded(
+                      flex: 2,
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 200),
+                        child: buildProgressBar(),
+                      )),
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color.fromARGB(255, 32, 130, 209),
+                            Color.fromARGB(255, 79, 170, 255)
+                          ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(10),
+                          onTap: index < getContent.length - 1
+                              ? nextButtonHandler
+                              : launchTest,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
+                            child: Center(
+                              child: Text(
+                                index < widget.contents.length - 1
+                                    ? "Next"
+                                    : "Take test",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
                                 ),
                               ),
                             ),
@@ -332,12 +324,12 @@ class _LessonState extends State<LessonPage> {
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -389,14 +381,12 @@ class _LessonState extends State<LessonPage> {
             index++;
           })
         : setState(() {
+            finishLesson = true;
             showFlushbar = false;
           });
     if (index < getContent.length - 1) {
       await addOrupdateProgress();
       refreshProgress();
-    }
-    if (index == getContent.length - 1) {
-      lessonComplete = true;
     }
   }
 
