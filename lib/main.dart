@@ -27,30 +27,6 @@ Future main() async {
   final isDark = sharedPreferennces.getBool('is_dark') ?? false;
   // await Firebase.initializeApp();
 
-  // doing some debugging here
-
-  // let's make a new courseProgress
-  CourseProgressElement newCPE =
-      await CourseDatabase.instance.createCourseProgressElement(
-    CourseProgressElement(courseId: "Python", lessonNumber: 6),
-  );
-  print(
-      "Here is the newly created courseProgressElement: \n${newCPE.toJson()}");
-
-  // let's read the previously created courseProgress
-  CourseProgressElement? readCourseProgress =
-      await CourseDatabase.instance.readCourseProgress("Python");
-  print("Here's the now read courseProgress: ${readCourseProgress?.toJson()}");
-
-  // // let's update the new courseProgress here
-  await CourseDatabase.instance
-      .updateCourseProgress(readCourseProgress!.copy(newLessonNumber: 4));
-
-  // // then, let's read and see the newly updated courseProgress.
-  CourseProgressElement? updated =
-      await CourseDatabase.instance.readCourseProgress("Python");
-  print("Here's the courseProgress after the update: ${updated?.toJson()}");
-
   SharedPreferences.getInstance().then((prefs) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
         .then((value) => runApp(
