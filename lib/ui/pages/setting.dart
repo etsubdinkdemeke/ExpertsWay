@@ -320,7 +320,7 @@ class _container extends StatelessWidget {
   Widget build(contextt) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     TextTheme textTheme = Theme.of(context).textTheme;
-    Color secondbackgroundColor = Theme.of(context).backgroundColor;
+    Color secondbackgroundColor = Theme.of(context).cardColor;
     IconThemeData icon = Theme.of(context).iconTheme;
     return Column(
       children: [
@@ -329,11 +329,14 @@ class _container extends StatelessWidget {
             color: themeProvider.currentTheme == ThemeData.light()
                 ? Colors.white
                 : secondbackgroundColor,
-            boxShadow: const [
+            boxShadow: [
               BoxShadow(
-                  blurRadius: 10,
-                  offset: Offset(1, 1),
-                  color: Color.fromARGB(54, 188, 187, 187))
+                blurRadius: 10,
+                offset: Offset(1, 1),
+                color: themeProvider.currentTheme == ThemeData.light()
+                    ? Color.fromARGB(54, 188, 187, 187)
+                    : Colors.transparent,
+              )
             ],
             borderRadius: BorderRadius.circular(radius),
           ),
