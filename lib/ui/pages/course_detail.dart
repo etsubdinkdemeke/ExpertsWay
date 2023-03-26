@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:configurable_expansion_tile_null_safety/configurable_expansion_tile_null_safety.dart';
 
-import '../../db/course_database.dart';
+import '../../db/course_database.dart' hide courseProgress;
 import '../../models/lesson.dart';
 import '../../utils/color.dart';
 
@@ -30,6 +30,7 @@ class CourseDetailPage extends StatefulWidget {
 class CoursePagePageState extends State<CourseDetailPage> {
   late List<List> lessonData = [];
   late List<LessonContent> lessoncontent = [];
+  CourseProgressElement? courseProgress;
   bool isLoading = false;
 
   @override
@@ -42,22 +43,33 @@ class CoursePagePageState extends State<CourseDetailPage> {
     setState(() => isLoading = true);
     var lessonDataUnprocessed =
         await CourseDatabase.instance.readLesson(widget.courseData.slug);
-
+    // we temporarily set all lessons as locked. if there is a progress on this
+    // course, some of the lessons will be unlocked later when the progress is read from database.
     lessonData = lessonDataUnprocessed.map((e) => [e, false]).toList();
+    lessonData[0][1] =
+        true; // even if there's no progress, we want the first lesson open.
     if (kDebugMode) {
       print("....lesson length ....${lessonData.length}");
     }
-    applyProgressOnLessons();
+    // here we're reading the progress and applying it on the lessons if it exists
+    // (applying it on lessons means setting some locked and some unlocked based on the progress)
+    CourseDatabase.instance
+        .readCourseProgress(widget.courseData.courseId.toString())
+        .then((value) {
+      courseProgress = value;
+      applyProgressOnLessons();
+    });
     setState(() => isLoading = false);
   }
 
   Future applyProgressOnLessons() async {
-    CourseProgressElement? courseProgress = await CourseDatabase.instance
-        .readCourseProgress(widget.courseData.courseId.toString());
+    // here we're applying it on the lessons if it exists
+    // (applying it on lessons means setting some locked and some unlocked based on the progress)
     if (courseProgress != null) {
-      for (int i = 0; i < courseProgress.lessonNumber; i++) {
+      for (int i = 0; i < courseProgress!.lessonNumber; i++) {
         lessonData[i][1] = true;
       }
+      setState(() {});
     }
   }
 
@@ -375,9 +387,9 @@ class CoursePagePageState extends State<CourseDetailPage> {
                               var lessonContents = await CourseDatabase.instance
                                   .readLessonContets(
                                       lessonsUnderSection[j][0].lessonId);
-                              // again, we're making the very last lesson locked.
+                              // the LessonPage should return a boolean when it pops. (true if the lesson has been complete)
                               // ignore: use_build_context_synchronously
-                              Navigator.push(
+                              var _isLessonFinished = await Navigator.push(
                                 context,
                                 CupertinoPageRoute(
                                   builder: (context) => LessonPage(
@@ -388,6 +400,11 @@ class CoursePagePageState extends State<CourseDetailPage> {
                                   ),
                                 ),
                               );
+                              if (_isLessonFinished) {
+                                // we update the progress and unlock the next lesson
+                                // if the lesson on the lessonPage has been complete.
+                                unlockNextLesson(lessonsUnderSection[j]);
+                              }
                             }
                           : null,
                       child: ListTile(
@@ -452,5 +469,32 @@ class CoursePagePageState extends State<CourseDetailPage> {
           }),
       ],
     );
+  }
+
+  void unlockNextLesson(List lessonEntry) async {
+    /// we check if the next lesson is locked. if so, we unlock it by incrementing
+    /// the lessonNumber in the course progress
+    for (int i = 0; i < lessonData.length - 1; i++) {
+      if (lessonData[i][0].lessonId == lessonEntry[0].lessonId) {
+        var nextLessonEntry = lessonData[i + 1];
+        if (nextLessonEntry[1] == false) {
+          // now we know the next lesson is locked. let's unlock it.
+          if (courseProgress == null) {
+            courseProgress = await CourseDatabase.instance
+                .createCourseProgressElement(CourseProgressElement(
+                    courseId: widget.courseData.courseId.toString(),
+                    lessonNumber: 2));
+          } else {
+            CourseProgressElement newCourseProgress = courseProgress!.copy(
+              newLessonNumber: courseProgress!.lessonNumber + 1,
+            );
+            await CourseDatabase.instance
+                .updateCourseProgress(newCourseProgress);
+            courseProgress = newCourseProgress;
+          }
+          await applyProgressOnLessons();
+        }
+      }
+    }
   }
 }

@@ -40,6 +40,7 @@ class CourseDatabase {
     const idType = 'INTEGER PRIMARY KEY';
     // const idTextType = 'TEXT PRIMARY KEY';
     const textType = 'TEXT NOT NULL';
+    const textTypeUnique = 'TEXT NOT NULL UNIQUE';
     const fkCourse =
         'FOREIGN KEY (${LessonsElementFields.courseSlug}) REFERENCES $courseElement(${CourseElementFields.slug})';
     const fkLesson =
@@ -92,7 +93,7 @@ CREATE TABLE $lessontable (
 CREATE TABLE $lessonContnentTable (
       ${LessonsContentFields.id} $idType,
       ${LessonsContentFields.lessonId} $textTypeNull,
-      ${LessonsContentFields.content} $textTypeNull,
+      ${LessonsContentFields.content} $textTypeUnique,
       $fkLesson
     )
     ''');

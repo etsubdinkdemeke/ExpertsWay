@@ -41,6 +41,7 @@ class LessonPage extends StatefulWidget {
 class _LessonState extends State<LessonPage> {
   static ProgressElement? progressElement;
   static CourseElement? courseElement;
+  bool _isLessonFinished = false;
   bool isLoading = false;
 
   @override
@@ -218,105 +219,111 @@ class _LessonState extends State<LessonPage> {
     nextLesson(widget.lessonData, widget.lesson, widget.lesson.section);
     // String lesson = lessonHtml[index];
     String lesson = getContent[index];
-    return CupertinoPageScaffold(
-      backgroundColor: const Color.fromARGB(255, 250, 250, 250),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  buildCoverImage(),
-                  const SizedBox(height: 30),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Material(
-                      child: Html(
-                        data: lesson,
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.of(context).pop(_isLessonFinished);
+        return Future.value(true);  // this is required for the page to pop.
+      },
+      child: CupertinoPageScaffold(
+        backgroundColor: const Color.fromARGB(255, 250, 250, 250),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    buildCoverImage(),
+                    const SizedBox(height: 30),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Material(
+                        child: Html(
+                          data: lesson,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          Material(
-            color: const Color(0xfff5f6fb),
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: OutlinedButton(
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all(
-                          const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
-                        ),
-                        side: MaterialStateBorderSide.resolveWith((states) {
-                          if (states.contains(MaterialState.disabled)) {
-                            return const BorderSide(color: Colors.grey);
-                          }
-                          return const BorderSide(color: Colors.blue);
-                        }),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+            Material(
+              color: const Color(0xfff5f6fb),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: OutlinedButton(
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all(
+                            const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
+                          ),
+                          side: MaterialStateBorderSide.resolveWith((states) {
+                            if (states.contains(MaterialState.disabled)) {
+                              return const BorderSide(color: Colors.grey);
+                            }
+                            return const BorderSide(color: Colors.blue);
+                          }),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
                         ),
+                        onPressed: index <= 0
+                            ? null
+                            : () {
+                                setState(() {
+                                  index--;
+                                });
+                              },
+                        child: const Text("Prev"),
                       ),
-                      onPressed: index <= 0
-                          ? null
-                          : () {
-                              setState(() {
-                                index--;
-                              });
-                            },
-                      child: const Text("Prev"),
                     ),
-                  ),
-                  Expanded(
+                    Expanded(
+                        flex: 2,
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 200),
+                          child: buildProgressBar(),
+                        )),
+                    Expanded(
                       flex: 2,
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 200),
-                        child: buildProgressBar(),
-                      )),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [
-                            Color.fromARGB(255, 32, 130, 209),
-                            Color.fromARGB(255, 79, 170, 255)
-                          ],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color.fromARGB(255, 32, 130, 209),
+                              Color.fromARGB(255, 79, 170, 255)
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
                           borderRadius: BorderRadius.circular(10),
-                          onTap: index < getContent.length - 1
-                              ? nextButtonHandler
-                              : launchTest,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 12),
-                            child: Center(
-                              child: Text(
-                                index < widget.contents.length - 1
-                                    ? "Next"
-                                    : "Take test",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(10),
+                            onTap: index < getContent.length - 1
+                                ? nextButtonHandler
+                                : launchTest,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 12),
+                              child: Center(
+                                child: Text(
+                                  index < widget.contents.length - 1
+                                      ? "Next"
+                                      : "Take test",
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                  ),
                                 ),
                               ),
                             ),
@@ -324,12 +331,12 @@ class _LessonState extends State<LessonPage> {
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -384,6 +391,9 @@ class _LessonState extends State<LessonPage> {
             finishLesson = true;
             showFlushbar = false;
           });
+    if (index == getContent.length - 1) {
+      _isLessonFinished = true;
+    }
     if (index < getContent.length - 1) {
       await addOrupdateProgress();
       refreshProgress();
