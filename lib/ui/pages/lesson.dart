@@ -222,7 +222,7 @@ class _LessonState extends State<LessonPage> {
     return WillPopScope(
       onWillPop: () {
         Navigator.of(context).pop(_isLessonFinished);
-        return Future.value(true);  // this is required for the page to pop.
+        return Future.value(true); // this is required for the page to pop.
       },
       child: CupertinoPageScaffold(
         backgroundColor: const Color.fromARGB(255, 250, 250, 250),
@@ -394,7 +394,7 @@ class _LessonState extends State<LessonPage> {
     if (index == getContent.length - 1) {
       _isLessonFinished = true;
     }
-    if (index < getContent.length - 1) {
+    if (index < getContent.length) {
       await addOrupdateProgress();
       refreshProgress();
     }
