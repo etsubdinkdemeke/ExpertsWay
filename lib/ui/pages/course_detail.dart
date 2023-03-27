@@ -41,21 +41,17 @@ class CoursePagePageState extends State<CourseDetailPage> {
 
   Future refreshLesson() async {
     setState(() => isLoading = true);
-    var lessonDataUnprocessed =
-        await CourseDatabase.instance.readLesson(widget.courseData.slug);
+    var lessonDataUnprocessed = await CourseDatabase.instance.readLesson(widget.courseData.slug);
     // we temporarily set all lessons as locked. if there is a progress on this
     // course, some of the lessons will be unlocked later when the progress is read from database.
     lessonData = lessonDataUnprocessed.map((e) => [e, false]).toList();
-    lessonData[0][1] =
-        true; // even if there's no progress, we want the first lesson open.
+    lessonData[0][1] = true; // even if there's no progress, we want the first lesson open.
     if (kDebugMode) {
       print("....lesson length ....${lessonData.length}");
     }
     // here we're reading the progress and applying it on the lessons if it exists
     // (applying it on lessons means setting some locked and some unlocked based on the progress)
-    CourseDatabase.instance
-        .readCourseProgress(widget.courseData.courseId.toString())
-        .then((value) {
+    CourseDatabase.instance.readCourseProgress(widget.courseData.courseId.toString()).then((value) {
       courseProgress = value;
       applyProgressOnLessons();
     });
@@ -163,8 +159,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
                 child: IconButton(
                   icon: const Icon(Icons.arrow_back_ios_new),
                   iconSize: 14,
-                  constraints:
-                      const BoxConstraints(maxHeight: 60, maxWidth: 60),
+                  constraints: const BoxConstraints(maxHeight: 60, maxWidth: 60),
                   onPressed: () => Navigator.pop(context),
                 ),
               ),
@@ -202,9 +197,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
                             children: const <Widget>[
                               Text(
                                 "Description",
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 138, 138, 138),
-                                    fontSize: 14),
+                                style: TextStyle(color: Color.fromARGB(255, 138, 138, 138), fontSize: 14),
                               ),
                               Spacer(),
                             ],
@@ -244,11 +237,9 @@ class CoursePagePageState extends State<CourseDetailPage> {
                     child: Builder(builder: (context) {
                       return lessonData.isEmpty
                           ? FutureBuilder<Lesson>(
-                              future: ApiProvider()
-                                  .retrieveLessons(widget.courseData.slug),
+                              future: ApiProvider().retrieveLessons(widget.courseData.slug),
                               builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
                                   {
                                     return const Center(
                                       child: CircularProgressIndicator(
@@ -261,32 +252,23 @@ class CoursePagePageState extends State<CourseDetailPage> {
                                   return const Center(
                                       child: Text(
                                     "There is no Course",
-                                    style: TextStyle(
-                                        color:
-                                            Color.fromARGB(184, 138, 138, 138)),
+                                    style: TextStyle(color: Color.fromARGB(184, 138, 138, 138)),
                                   ));
                                 }
                                 if (snapshot.hasError) {
                                   return const Center(
                                       child: Text(
                                     "Unable to get the data",
-                                    style: TextStyle(
-                                        color:
-                                            Color.fromARGB(184, 138, 138, 138)),
+                                    style: TextStyle(color: Color.fromARGB(184, 138, 138, 138)),
                                   ));
                                 }
                                 if (snapshot.hasData) {
-                                  for (var i = 0;
-                                      i < snapshot.data!.lessons.length;
-                                      i++) {
-                                    final fetchedLesson =
-                                        snapshot.data!.lessons[i];
-                                    CourseDatabase.instance
-                                        .createLessons(fetchedLesson!);
+                                  for (var i = 0; i < snapshot.data!.lessons.length; i++) {
+                                    final fetchedLesson = snapshot.data!.lessons[i];
+                                    CourseDatabase.instance.createLessons(fetchedLesson!);
                                   }
 
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((_) {
+                                  WidgetsBinding.instance.addPostFrameCallback((_) {
                                     refreshLesson();
                                   });
                                 }
@@ -321,8 +303,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
                   child: Column(
                     children: [
                       ListTile(
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 0),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                         title: Text(
                           sections[i],
                           style: const TextStyle(
@@ -351,8 +332,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
                   child: Column(
                     children: [
                       ListTile(
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 0),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                         title: Text(
                           sections[i],
                           style: const TextStyle(
@@ -367,9 +347,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
                       ),
                       const SizedBox(height: 6),
                       Container(
-                        decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(10)),
+                        decoration: BoxDecoration(color: Colors.blue, borderRadius: BorderRadius.circular(10)),
                         width: MediaQuery.of(context).size.width - 36,
                         height: 4,
                       )
@@ -381,12 +359,9 @@ class CoursePagePageState extends State<CourseDetailPage> {
                 children: [
                   for (int j = 0; j < lessonsUnderSection.length; j++)
                     GestureDetector(
-                      onTap: (lessonsUnderSection[j][
-                              1]) // only the very first lesson will be unlocked
+                      onTap: (lessonsUnderSection[j][1]) // only the very first lesson will be unlocked
                           ? () async {
-                              var lessonContents = await CourseDatabase.instance
-                                  .readLessonContets(
-                                      lessonsUnderSection[j][0].lessonId);
+                              var lessonContents = await CourseDatabase.instance.readLessonContets(lessonsUnderSection[j][0].lessonId);
                               // the LessonPage should return a boolean when it pops. (true if the lesson has been complete)
                               // ignore: use_build_context_synchronously
                               var _isLessonFinished = await Navigator.push(
@@ -400,6 +375,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
                                   ),
                                 ),
                               );
+                              setState(() {});
                               if (_isLessonFinished) {
                                 // we update the progress and unlock the next lesson
                                 // if the lesson on the lessonPage has been complete.
@@ -421,36 +397,28 @@ class CoursePagePageState extends State<CourseDetailPage> {
                           overflow: TextOverflow.ellipsis,
                         ),
                         trailing: (lessonsUnderSection[j][1])
-                            ? Builder(
-                                builder: (_) {
-                                  // we're generating a lot of random booleans here for demonstration purposes
-                                  // all these boolean flags should be received from the database or API in the future.
-                                  // TODO: change the following code to make it work with real data
-                                  var isLessonCompleted = Random().nextBool();
-                                  if (isLessonCompleted) {
-                                    var testResult = Random().nextInt(101);
-                                    return CircleAvatar(
-                                      radius: 20,
-                                      foregroundColor: Colors.white,
-                                      backgroundColor: testResult > 60
-                                          ? Colors.green[300]
-                                          : (testResult > 30
-                                              ? Colors.yellow[400]
-                                              : Colors.red[300]),
-                                      child: Text(testResult.toString()),
-                                    );
-                                  } else {
-                                    var progress = Random()
-                                        .nextDouble(); // how much the user has progressed with the lesson
-                                    // the widget below is from a 3rd party package named 'percent indicator'. check it out on 'pub.dev'
-                                    return CircularPercentIndicator(
-                                      radius: 20,
-                                      lineWidth: 3,
-                                      percent: progress,
-                                      progressColor: Colors.blue,
-                                    );
-                                  }
-                                },
+                            ? SizedBox(
+                                width: 40,
+                                child: FutureBuilder<ProgressElement?>(
+                                  future: CourseDatabase.instance.readProgress(
+                                    widget.courseData.courseId!.toString(),
+                                    lessonsUnderSection[j][0].lessonId.toString(),
+                                  ),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.done) {
+                                      if (snapshot.hasError) {
+                                        throw Exception("Error reading progress from the database");
+                                      }
+                                      return CircularPercentIndicator(
+                                        radius: 20,
+                                        lineWidth: 3,
+                                        percent: double.parse(snapshot.data?.userProgress ?? "0") / 100,
+                                        progressColor: Colors.blue,
+                                      );
+                                    }
+                                    return Container();
+                                  },
+                                ),
                               )
                             : CircleAvatar(
                                 radius: 16,
@@ -481,15 +449,12 @@ class CoursePagePageState extends State<CourseDetailPage> {
           // now we know the next lesson is locked. let's unlock it.
           if (courseProgress == null) {
             courseProgress = await CourseDatabase.instance
-                .createCourseProgressElement(CourseProgressElement(
-                    courseId: widget.courseData.courseId.toString(),
-                    lessonNumber: 2));
+                .createCourseProgressElement(CourseProgressElement(courseId: widget.courseData.courseId.toString(), lessonNumber: 2));
           } else {
             CourseProgressElement newCourseProgress = courseProgress!.copy(
               newLessonNumber: courseProgress!.lessonNumber + 1,
             );
-            await CourseDatabase.instance
-                .updateCourseProgress(newCourseProgress);
+            await CourseDatabase.instance.updateCourseProgress(newCourseProgress);
             courseProgress = newCourseProgress;
           }
           await applyProgressOnLessons();
