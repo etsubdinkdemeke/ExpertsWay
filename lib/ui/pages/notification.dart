@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:learncoding/utils/color.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../db/course_database.dart';
 import '../../models/notification.dart';
 import '../../theme/box_icons_icons.dart';
+import '../../theme/theme.dart';
 import '../../utils/notification_message.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -129,6 +131,9 @@ class _NotificationState extends State<Notification> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    TextTheme textTheme = Theme.of(context).textTheme;
+    Color backgroundColor = Theme.of(context).scaffoldBackgroundColor;
     return Scaffold(
         backgroundColor: Colors.white,
         body: Column(
@@ -153,14 +158,10 @@ class _NotificationState extends State<Notification> {
                     alignment: Alignment.bottomCenter,
                     margin: EdgeInsets.only(
                         left: MediaQuery.of(context).size.width - 330),
-                    child: const Text(
-                      'Notifications',
-                      textAlign: TextAlign.end,
-                      style: TextStyle(
-                          fontFamily: 'Red Hat Display',
-                          fontWeight: FontWeight.w500,
-                          fontSize: 22),
-                    ),
+                    child: Text('Notifications',
+                        textAlign: TextAlign.end,
+                        style: textTheme.headline1?.copyWith(
+                            fontSize: 20, fontWeight: FontWeight.w500)),
                   ),
                 ],
               ),
@@ -202,7 +203,7 @@ class _NotificationState extends State<Notification> {
                                   text: 'no new ',
                                   style: TextStyle(
                                       color: Colors.grey, fontSize: 15)),
-                      const TextSpan(
+                      TextSpan(
                           text: "notifications",
                           style: TextStyle(color: Colors.grey, fontSize: 15)),
                     ])),

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:learncoding/routes/routing_constants.dart';
@@ -44,9 +45,15 @@ class LandingPage extends GetView<LandingPageController> {
               ),
               child: Scaffold(
                 key: controller.scaffoldKey,
+                backgroundColor: themeProvider.currentTheme == ThemeData.light()
+                    ? Colors.white
+                    : const Color.fromARGB(255, 25, 32, 36),
                 appBar: AppBar(
                   automaticallyImplyLeading: false,
-                  backgroundColor: scaffoldBackgroundColor,
+                  backgroundColor:
+                      themeProvider.currentTheme == ThemeData.light()
+                          ? Colors.white
+                          : Color.fromARGB(255, 25, 32, 36),
                   shadowColor: Colors.transparent,
                   centerTitle: true,
                   leading: Builder(builder: (context) {
@@ -57,7 +64,11 @@ class LandingPage extends GetView<LandingPageController> {
                             controller.scaffoldKey.currentState?.openDrawer();
                           },
                           child: Image.asset(
-                            'assets/images/drawer_icon.png',
+                            themeProvider.currentTheme == ThemeData.light()
+                                ? 'assets/images/drawer_icon.png'
+                                : 'assets/images/drawer_icon_white.png',
+                            height: 20,
+                            width: 20,
                           )),
                     );
                   }),
@@ -100,7 +111,10 @@ class LandingPage extends GetView<LandingPageController> {
                 ),
                 drawer: Drawer(
                   elevation: 1,
-                  backgroundColor: scaffoldBackgroundColor,
+                  backgroundColor:
+                      themeProvider.currentTheme == ThemeData.light()
+                          ? Colors.white
+                          : Color.fromARGB(255, 25, 32, 36),
                   child: SafeArea(
                     child: ListView(
                       children: [
@@ -324,19 +338,34 @@ class _SerachTextField extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
     TextTheme textTheme = Theme.of(context).textTheme;
     Color backgroundColor = Theme.of(context).cardColor;
+    IconThemeData icon = Theme.of(context).iconTheme;
     return Container(
       decoration: BoxDecoration(
-          color: backgroundColor, borderRadius: BorderRadius.circular(10)),
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+                blurRadius: 20,
+                color: themeProvider.currentTheme == ThemeData.light()
+                    ? Colors.grey.shade300
+                    : Colors.transparent,
+                spreadRadius: -6,
+                offset: const Offset(-1, 8))
+          ]),
       child: TextField(
         textAlignVertical: TextAlignVertical.center,
         decoration: InputDecoration(
-          hintStyle: textTheme.headline3
-              ?.copyWith(fontSize: 17, fontWeight: FontWeight.w400),
+          hintStyle: const TextStyle(
+              color: Color.fromARGB(90, 166, 165, 165),
+              fontSize: 18,
+              fontWeight: FontWeight.w400),
           hintText: 'Search any course',
-          prefixIcon: const Icon(Icons.search),
-          prefixIconColor: themeProvider.currentTheme == ThemeData.dark()
-              ? Color.fromARGB(255, 255, 255, 255)
-              : Color.fromARGB(90, 46, 46, 46),
+          prefixIcon: Icon(
+            Icons.search,
+            color: themeProvider.currentTheme == ThemeData.light()
+                ? Color.fromARGB(90, 45, 45, 45)
+                : Color.fromARGB(90, 183, 182, 182),
+          ),
           border: InputBorder.none,
         ),
         onChanged: (val) {
@@ -369,7 +398,15 @@ class _LanguageHeader extends StatelessWidget {
             style: textTheme.bodyText2?.copyWith(fontSize: 16),
           ),
           if (showButton)
-            TextButton(onPressed: () {}, child: const Text('See all'))
+            TextButton(
+                onPressed: () {},
+                child: const Text(
+                  'See all',
+                  style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14),
+                ))
         ],
       ),
     );
@@ -395,12 +432,12 @@ class _Header extends StatelessWidget {
           children: [
             Text(
               'Welcome Back',
-              style: textTheme.bodyText2
+              style: textTheme.headline2
                   ?.copyWith(fontSize: 15, fontWeight: FontWeight.w300),
             ),
             Text(
               controller.profileName ?? 'User',
-              style: textTheme.headline6
+              style: textTheme.headline1
                   ?.copyWith(fontSize: 18, fontWeight: FontWeight.w500),
             ),
           ],
@@ -461,7 +498,8 @@ class _CardWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
             child: Text(
               controller.course[index].name,
-              style: theme.textTheme.titleMedium,
+              style: textTheme.bodyText2
+                  ?.copyWith(fontSize: 15, fontWeight: FontWeight.w400),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
@@ -482,7 +520,8 @@ class _CardWidget extends StatelessWidget {
                     const SizedBox(width: 6),
                     Text(
                       'Beginner',
-                      style: theme.textTheme.bodySmall,
+                      style: textTheme.headline6
+                          ?.copyWith(fontSize: 12, fontWeight: FontWeight.w400),
                     ),
                   ],
                 ),
@@ -490,7 +529,8 @@ class _CardWidget extends StatelessWidget {
                   children: [
                     Text(
                       '20hr',
-                      style: theme.textTheme.bodySmall,
+                      style: textTheme.headline6
+                          ?.copyWith(fontSize: 12, fontWeight: FontWeight.w400),
                     ),
                     Icon(
                       Icons.timer_sharp,
@@ -517,12 +557,13 @@ class _CardWidget extends StatelessWidget {
                 children: [
                   Text(
                     'Completed',
-                    style: theme.textTheme.bodySmall,
+                    style: textTheme.headline6
+                        ?.copyWith(fontSize: 12, fontWeight: FontWeight.w400),
                   ),
                   Text(
                     '$percent%',
-                    style: theme.textTheme.bodySmall
-                        ?.copyWith(color: const Color(0xff26B0FF)),
+                    style: textTheme.headline6?.copyWith(
+                        fontSize: 12, color: const Color(0xff26B0FF)),
                   ),
                 ],
               ),
@@ -543,8 +584,8 @@ class _CardWidget extends StatelessWidget {
                       ),
                       Text(
                         '4.9',
-                        style:
-                            theme.textTheme.bodySmall?.copyWith(fontSize: 10),
+                        style: textTheme.headline6?.copyWith(
+                            fontSize: 12, fontWeight: FontWeight.w400),
                       ),
                     ],
                   ),
@@ -552,8 +593,8 @@ class _CardWidget extends StatelessWidget {
                     children: [
                       Text(
                         'Enroll Now',
-                        style:
-                            theme.textTheme.bodySmall?.copyWith(fontSize: 12),
+                        style: textTheme.headline6?.copyWith(
+                            fontSize: 12, fontWeight: FontWeight.w400),
                       ),
                       const SizedBox(width: 4),
                       const CircleAvatar(
@@ -609,13 +650,13 @@ class _DrawerHeader extends StatelessWidget {
             children: [
               Text(
                 controller.profileName ?? '',
-                style: textTheme.headline6
+                style: textTheme.headline1
                     ?.copyWith(fontSize: 19, fontWeight: FontWeight.w400),
               ),
               SizedBox(height: 5),
               Text(
                 'Student',
-                style: textTheme.headline6
+                style: textTheme.headline2
                     ?.copyWith(fontSize: 16, fontWeight: FontWeight.w400),
               ),
             ],
@@ -682,7 +723,7 @@ class _DrawerButton extends StatelessWidget {
               const SizedBox(width: 28),
               Text(
                 name,
-                style: textTheme.headline6
+                style: textTheme.headline2
                     ?.copyWith(fontSize: 18, fontWeight: FontWeight.w400),
               ),
             ],

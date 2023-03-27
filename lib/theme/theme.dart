@@ -53,7 +53,7 @@ class Themes {
     iconTheme: const IconThemeData(color: Colors.black),
     primaryColor: Colors.white, cardColor: Colors.white,
     primarySwatch: Colors.blue,
-    brightness: Brightness.light,
+    brightness: Brightness.dark,
     backgroundColor: Color.fromARGB(255, 255, 255, 255),
     hintColor: config.Colors().mainColor(1),
     textTheme: TextTheme(
@@ -65,7 +65,7 @@ class Themes {
       ),
       headline5: TextStyle(
         fontSize: 16.0,
-        color: Colors.white.withOpacity(1),
+        color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.9),
         fontFamily: "Red Hat Display",
       ),
       headline4: TextStyle(
@@ -79,14 +79,15 @@ class Themes {
         fontWeight: FontWeight.w500,
         color: Colors.white.withOpacity(0.4),
       ),
-      headline2: const TextStyle(
-          fontSize: 24,
-          fontFamily: "Red Hat Display",
-          fontWeight: FontWeight.w500,
-          color: Colors.black),
+      headline2: TextStyle(
+        fontSize: 24,
+        fontFamily: "Red Hat Display",
+        fontWeight: FontWeight.w500,
+        color: Color.fromARGB(255, 41, 40, 40).withOpacity(0.9),
+      ),
       headline1: TextStyle(
         fontFamily: 'Red Hat Display',
-        color: config.Colors().accentColor(1),
+        color: Color.fromARGB(255, 26, 26, 26).withOpacity(0.9),
         fontSize: 50,
         fontWeight: FontWeight.w600,
       ),

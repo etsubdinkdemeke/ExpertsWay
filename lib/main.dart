@@ -83,8 +83,10 @@ class MyAppState extends State<MyApp> {
             DefaultCupertinoLocalizations.delegate,
             DefaultWidgetsLocalizations.delegate,
           ],
-          // themeMode: themeProvider.currentTheme,
-          theme: themeProvider.currentTheme,
+          themeMode: themeProvider.currentTheme == ThemeData.light()
+              ? ThemeMode.light
+              : ThemeMode.dark,
+          theme: Themes.lightTheme,
           darkTheme: Themes.darkTheme,
           onGenerateRoute: router.generateRoute,
           onUnknownRoute: (settings) => CupertinoPageRoute(

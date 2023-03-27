@@ -47,10 +47,14 @@ class _EditProfileState extends State<EditProfile> {
         Provider.of<ThemeProvider>(context).currentTheme == ThemeMode.dark
             ? 'DarkTheme'
             : 'LightTheme';
+    final themeProvider = Provider.of<ThemeProvider>(context);
     TextTheme textTheme = Theme.of(context).textTheme;
     Color backgroundColor = Theme.of(context).scaffoldBackgroundColor;
+    IconThemeData icon = Theme.of(context).iconTheme;
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: themeProvider.currentTheme == ThemeData.light()
+          ? Colors.white
+          : const Color.fromARGB(255, 25, 32, 36),
       body: SingleChildScrollView(
         child: Column(children: [
           Container(
@@ -59,9 +63,9 @@ class _EditProfileState extends State<EditProfile> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton(
-                  child: const Icon(
+                  child: Icon(
                     Icons.chevron_left,
-                    color: Colors.grey,
+                    color: icon.color,
                     size: 35,
                   ),
                   onPressed: () {
@@ -71,7 +75,8 @@ class _EditProfileState extends State<EditProfile> {
                 Text(
                   'Edit Profile',
                   textAlign: TextAlign.end,
-                  style: textTheme.headline6,
+                  style: textTheme.headline1
+                      ?.copyWith(fontSize: 20, fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(
                   width: 35,
@@ -212,7 +217,7 @@ class _EditProfileState extends State<EditProfile> {
         const SizedBox(height: 20),
         Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: secondbackgroundColor,
               boxShadow: [
                 BoxShadow(
                   blurRadius: 10,
@@ -233,7 +238,8 @@ class _EditProfileState extends State<EditProfile> {
                     controller: controller,
                     initialValue: initialValue,
                     keyboardType: inputType,
-                    style: textTheme.bodyText2,
+                    style: textTheme.headline2
+                        ?.copyWith(fontSize: 15, fontWeight: FontWeight.w400),
                     textAlignVertical: TextAlignVertical.center,
                     decoration: InputDecoration(
                         filled: true,

@@ -61,7 +61,9 @@ class _SettingsState extends State<Settings> {
     Color backgroundColor = Theme.of(context).scaffoldBackgroundColor;
     IconThemeData icon = Theme.of(context).iconTheme;
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: themeProvider.currentTheme == ThemeData.light()
+          ? Colors.white
+          : const Color.fromARGB(255, 25, 32, 36),
       body: Column(
         children: [
           Container(
@@ -84,7 +86,8 @@ class _SettingsState extends State<Settings> {
                   child: Text(
                     'Settings',
                     textAlign: TextAlign.end,
-                    style: textTheme.headline6,
+                    style: textTheme.headline1
+                        ?.copyWith(fontSize: 20, fontWeight: FontWeight.w500),
                   ),
                 ),
                 Container(
@@ -199,7 +202,7 @@ class _SettingsState extends State<Settings> {
                           scale: 0.8,
                           child: CupertinoSwitch(
                             trackColor: Color.fromARGB(255, 217, 238, 247),
-                            activeColor: Color.fromARGB(0, 76, 185, 22),
+                            activeColor: Color.fromARGB(0, 78, 78, 78),
                             thumbColor:
                                 themeProvider.currentTheme == ThemeData.light()
                                     ? Colors.blue
