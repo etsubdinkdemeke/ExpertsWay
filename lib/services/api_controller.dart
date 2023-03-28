@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:learncoding/models/course.dart';
 import 'package:learncoding/models/lesson.dart';
+import 'package:learncoding/models/user_account.dart';
 import 'package:learncoding/utils/constants.dart';
+import 'package:http/http.dart' as http;
 
 class ApiProvider {
   Future<Course> retrieveCourses() async {
@@ -46,5 +50,76 @@ class ApiProvider {
     } else {
       throw Exception('Failed to load lesson');
     }
+  }
+
+  Future<String> registerUser(
+    String email,
+    String firstname,
+    String lastname,
+    String password,
+  ) async {
+    String res = "Some error is occured";
+    http.Response? response;
+    try {
+      UserAccount userAccount = UserAccount(
+          registed_with: "email_password",
+          email: email,
+          firstname: firstname,
+          lastname: lastname,
+          password: password);
+
+      response = await http.post(Uri.parse(AppUrl.userregisterUrl),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{
+            "registed_with": "email_password",
+            "email": email,
+            "first_name": firstname,
+            "last_name": lastname,
+            "password": password
+          }));
+      if (response.statusCode == 200) {
+        res = "success";
+      } else {
+        var temp = jsonDecode(response.body.toString());
+        String message = temp['message'];
+        res = message;
+      }
+    } on Exception catch (e) {
+      print(e.toString());
+    }
+
+    return res;
+  }
+
+  Future<String> verification(
+    String email,
+    int otp,
+  ) async {
+    String res = "Some error is occured";
+    http.Response? response;
+    try {
+      response = await http.post(Uri.parse(AppUrl.userregisterUrl),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{
+            "registed_with": "email_password",
+            "email": email,
+            "code": otp
+          }));
+      if (response.statusCode == 200) {
+        res = "success";
+      } else {
+        var temp = jsonDecode(response.body.toString());
+        String message = temp['message'];
+        res = message;
+      }
+    } on Exception catch (e) {
+      print(e.toString());
+    }
+
+    return res;
   }
 }

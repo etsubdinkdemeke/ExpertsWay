@@ -1,9 +1,13 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
-import '../api/google_signin_api.dart';
+import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../api/shared_preference/shared_preference.dart';
+import '../main.dart';
+import '../routes/routing_constants.dart';
+import '../services/api_controller.dart';
 import '../ui/pages/navmenu/menu_dashboard_layout.dart';
 import '../ui/widgets/gradient_button.dart';
 import '../utils/color.dart';
@@ -24,6 +28,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController passwordController = TextEditingController();
   bool isPressed = true;
   bool checkPolicy = false;
+  final formkey = GlobalKey<FormState>();
   @override
   void dispose() {
     firstnameController.dispose();
@@ -72,159 +77,178 @@ class _RegisterPageState extends State<RegisterPage> {
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Material(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        elevation: 4,
-                        shadowColor: Colors.black,
-                        child: TextField(
-                          controller: firstnameController,
-                          decoration: InputDecoration(
-                            prefixIcon:
-                                const Icon(Icons.account_circle_outlined),
-                            hintText: "First name",
-                            hintStyle: const TextStyle(fontSize: 14),
-                            filled: true,
-                            border: inputBorder,
-                            enabledBorder: inputBorder,
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
+                  child: Form(
+                    key: formkey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 15,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Material(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        elevation: 4,
-                        shadowColor: Colors.black,
-                        child: TextField(
-                          controller: lastnameController,
-                          decoration: InputDecoration(
-                            prefixIcon:
-                                const Icon(Icons.account_circle_outlined),
-                            hintText: "Last name",
-                            hintStyle: const TextStyle(fontSize: 14),
-                            filled: true,
-                            border: inputBorder,
-                            enabledBorder: inputBorder,
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
+                        Material(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          elevation: 4,
+                          shadowColor: Colors.black,
+                          child: TextFormField(
+                              controller: firstnameController,
+                              decoration: InputDecoration(
+                                prefixIcon:
+                                    const Icon(Icons.account_circle_outlined),
+                                hintText: "First name",
+                                hintStyle: const TextStyle(fontSize: 14),
+                                filled: true,
+                                border: inputBorder,
+                                enabledBorder: inputBorder,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.next,
+                              validator: (value) =>
+                                  value != null && value.isEmpty
+                                      ? 'Enter a first name'
+                                      : null),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Material(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        elevation: 4,
-                        shadowColor: Colors.black,
-                        child: TextField(
-                          controller: emailController,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.mail_outline),
-                            hintText: "Email",
-                            hintStyle: const TextStyle(fontSize: 14),
-                            filled: true,
-                            border: inputBorder,
-                            enabledBorder: inputBorder,
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                          keyboardType: TextInputType.emailAddress,
-                          textInputAction: TextInputAction.next,
+                        const SizedBox(
+                          height: 20,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Material(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        elevation: 4,
-                        shadowColor: Colors.black,
-                        child: TextField(
-                          controller: passwordController,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.lock_outline),
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  isPressed = !isPressed;
-                                });
+                        Material(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          elevation: 4,
+                          shadowColor: Colors.black,
+                          child: TextFormField(
+                              controller: lastnameController,
+                              decoration: InputDecoration(
+                                prefixIcon:
+                                    const Icon(Icons.account_circle_outlined),
+                                hintText: "Last name",
+                                hintStyle: const TextStyle(fontSize: 14),
+                                filled: true,
+                                border: inputBorder,
+                                enabledBorder: inputBorder,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.next,
+                              validator: (value) =>
+                                  value != null && value.isEmpty
+                                      ? 'Enter a last name'
+                                      : null),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Material(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          elevation: 4,
+                          shadowColor: Colors.black,
+                          child: TextFormField(
+                              controller: emailController,
+                              decoration: InputDecoration(
+                                prefixIcon: const Icon(Icons.mail_outline),
+                                hintText: "Email",
+                                hintStyle: const TextStyle(fontSize: 14),
+                                filled: true,
+                                border: inputBorder,
+                                enabledBorder: inputBorder,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
+                              validator: (value) =>
+                                  value != null && !value.contains('@') ||
+                                          !value!.contains('.')
+                                      ? 'Enter a valid Email'
+                                      : null),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Material(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            elevation: 4,
+                            shadowColor: Colors.black,
+                            child: TextFormField(
+                              controller: passwordController,
+                              decoration: InputDecoration(
+                                prefixIcon: const Icon(Icons.lock_outline),
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      isPressed = !isPressed;
+                                    });
+                                  },
+                                  icon: isPressed
+                                      ? const Icon(Icons.visibility_outlined)
+                                      : const Icon(
+                                          Icons.visibility_off_outlined),
+                                ),
+                                hintText: "Password",
+                                hintStyle: const TextStyle(fontSize: 14),
+                                filled: true,
+                                border: inputBorder,
+                                enabledBorder: inputBorder,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              keyboardType: TextInputType.text,
+                              obscureText: isPressed,
+                              textInputAction: TextInputAction.done,
+                              validator: (value) {
+                                if (value != null && value.isEmpty) {
+                                  return 'Entre a password';
+                                } else if (value!.length < 8) {
+                                  return 'passwprd length can\'t be lessthan 8';
+                                }
                               },
-                              icon: isPressed
-                                  ? const Icon(Icons.visibility_outlined)
-                                  : const Icon(Icons.visibility_off_outlined),
+                            )),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Checkbox(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5)),
+                                activeColor: maincolor,
+                                value: checkPolicy,
+                                onChanged: (onChanged) {
+                                  setState(() {
+                                    checkPolicy = !checkPolicy;
+                                  });
+                                }),
+                            const Expanded(
+                              child: Text(
+                                "By continuing you accept our Privacy Policy and Terms of Use",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 3,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 16,
+                                    color: Color.fromARGB(255, 165, 165, 165)),
+                              ),
                             ),
-                            hintText: "Password",
-                            hintStyle: const TextStyle(fontSize: 14),
-                            filled: true,
-                            border: inputBorder,
-                            enabledBorder: inputBorder,
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                          keyboardType: TextInputType.text,
-                          obscureText: isPressed,
-                          textInputAction: TextInputAction.done,
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Checkbox(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5)),
-                              activeColor: maincolor,
-                              value: checkPolicy,
-                              onChanged: (onChanged) {
-                                setState(() {
-                                  checkPolicy = !checkPolicy;
-                                });
-                              }),
-
-                          const Expanded(
-                            child: Text(
-                              "By continuing you accept our Privacy Policy and Terms of Use",
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 3,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 16,
-                                  color: Color.fromARGB(255, 165, 165, 165)),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(
                   height: 30,
                 ),
                 GradientBtn(
-                  onPressed: () {},
+                  onPressed: register,
                   btnName: 'Register',
                   defaultBtn: true,
                   isPcked: false,
@@ -319,21 +343,58 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future signin() async {
     try {
-      final user = await GoogleSignInApi.login();
-      String? name = user!.displayName;
-      String? image = user.photoUrl;
-
-      // SharedPreferences pref = await SharedPreferences.getInstance();
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      final user = await googleSignIn.signIn();
+      String? name = "";
+      String? image = "";
+      if (user!.displayName != null) {
+        name = user!.displayName;
+      }
+      if (user.photoUrl != null) {
+        image = user.photoUrl;
+      }
       UserPreferences.setuser(image!, name!);
+      Get.toNamed(AppRoute.programmingOptions);
     } catch (error) {
-      // console.error("Error during login: ", error);
-      UserPreferences.setuser(
-          "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
-          "testDisplayName");
+      print("Error during login: ");
+      print(error);
+      // UserPreferences.setuser("https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50", "testDisplayName");
+      // Get.toNamed(AppRoute.programmingOptions);
     }
-
-    // ignore: use_build_context_synchronously
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => (const MenuDashboardLayout())));
   }
-}
+
+   Future register() async {
+    final form = formkey.currentState!;
+    if (form.validate()) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => const Center(
+                child: CircularProgressIndicator(color: maincolor),
+              ));
+
+      String res = await ApiProvider().registerUser(
+          emailController.text,
+          firstnameController.text,
+          lastnameController.text,
+          passwordController.text);
+      navigatorKey.currentState!.popUntil((rout) => rout.isFirst);
+
+      if (res == "success") {
+       Get.toNamed('/verification',
+            arguments: {'email': emailController.value.text});
+      } else {
+        Flushbar(
+          flushbarPosition: FlushbarPosition.BOTTOM,
+          margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),
+          titleSize: 20,
+          messageSize: 17,
+          backgroundColor: maincolor,
+          borderRadius: BorderRadius.circular(8),
+          message: res,
+          duration: const Duration(seconds: 5),
+        ).show(context);
+      }
+    }
+  }
+  }
