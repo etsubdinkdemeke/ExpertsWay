@@ -252,19 +252,24 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future signin() async {
+  Future<void>  signin() async {
     try {
       final user = await GoogleSignInApi.login();
+      print("passed during login: ");
+
       String? name = user!.displayName;
       String? image = user.photoUrl;
 
       // SharedPreferences pref = await SharedPreferences.getInstance();
       UserPreferences.setuser(image!, name!);
+      // Get.toNamed(AppRoute.programmingOptions);
     } catch (error) {
-      // console.error("Error during login: ", error);
+      print("Error during login: ");
+      print(error);
       UserPreferences.setuser(
           "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
           "testDisplayName");
+      Get.toNamed(AppRoute.programmingOptions);
     }
 
     // ignore: use_build_context_synchronously
