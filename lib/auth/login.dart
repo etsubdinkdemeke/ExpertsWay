@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-import '../api/google_signin_api.dart';
 import '../api/shared_preference/shared_preference.dart';
 import '../ui/widgets/gradient_button.dart';
 import '../utils/color.dart';
@@ -252,28 +252,25 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void>  signin() async {
+  Future  signin() async {
     try {
-      final user = await GoogleSignInApi.login();
-      print("passed during login: ");
-
-      String? name = user!.displayName;
-      String? image = user.photoUrl;
-
-      // SharedPreferences pref = await SharedPreferences.getInstance();
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      final user = await googleSignIn.signIn();
+      String? name = "";
+      String? image = "";
+      if (user!.displayName != null) {
+        name = user!.displayName;
+      }
+      if (user.photoUrl != null) {
+        image = user.photoUrl;
+      }
       UserPreferences.setuser(image!, name!);
-      // Get.toNamed(AppRoute.programmingOptions);
+      Get.toNamed(AppRoute.programmingOptions);
     } catch (error) {
       print("Error during login: ");
       print(error);
-      UserPreferences.setuser(
-          "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
-          "testDisplayName");
-      Get.toNamed(AppRoute.programmingOptions);
+      // UserPreferences.setuser("https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50", "testDisplayName");
+      // Get.toNamed(AppRoute.programmingOptions);
     }
-
-    // ignore: use_build_context_synchronously
-    //   Navigator.of(context).pushReplacement(
-    //       MaterialPageRoute(builder: (context) => (const MenuDashboardLayout())));
   }
 }
