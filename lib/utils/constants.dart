@@ -6,9 +6,10 @@ class AppUrl {
   static var courseUrl = '$baseUrl/ds_lc/v1/courses';
   static var lessonUrl = '$baseUrl/ds_lc/v1/lesson';
   static var userregisterUrl = '$baseUrl/wp/v2/users/register';
+  static var activateaccount = '$baseUrl/wp/v2/users/activate';
+  static var loginUrl = '$baseUrl/wp/v2/users/login';
 }
 
 class Constant {
-  static const imagePlaceholder =
-      'https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png';
+  static const imagePlaceholder = 'https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png';
 }

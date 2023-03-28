@@ -61,12 +61,8 @@ class ApiProvider {
     String res = "Some error is occured";
     http.Response? response;
     try {
-      UserAccount userAccount = UserAccount(
-          registed_with: "email_password",
-          email: email,
-          firstname: firstname,
-          lastname: lastname,
-          password: password);
+      UserAccount userAccount =
+          UserAccount(registed_with: "email_password", email: email, firstname: firstname, lastname: lastname, password: password);
 
       response = await http.post(Uri.parse(AppUrl.userregisterUrl),
           headers: <String, String>{
@@ -100,15 +96,11 @@ class ApiProvider {
     String res = "Some error is occured";
     http.Response? response;
     try {
-      response = await http.post(Uri.parse(AppUrl.userregisterUrl),
+      response = await http.post(Uri.parse(AppUrl.activateaccount),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
-          body: jsonEncode(<String, dynamic>{
-            "registed_with": "email_password",
-            "email": email,
-            "code": otp
-          }));
+          body: jsonEncode(<String, dynamic>{"email": email, "code": otp}));
       if (response.statusCode == 200) {
         res = "success";
       } else {
@@ -117,7 +109,36 @@ class ApiProvider {
         res = message;
       }
     } on Exception catch (e) {
-      print(e.toString());
+       res = "Some error is occured";
+    }
+
+    return res;
+  }
+
+  Future<String> loginUser(
+    String email,
+    String password,
+  ) async {
+    String res = "Some error is occured";
+    http.Response? response;
+    try {
+     response = await http.post(Uri.parse(AppUrl.loginUrl),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'username': email,
+            'password': password,
+            'login_with': 'email_password',
+          },
+          body: jsonEncode(<String, dynamic>{}));
+      if (response.statusCode == 200) {
+        res = "success";
+      } else {
+        var temp = jsonDecode(response.body.toString());
+        String message = temp['message'];
+        res = message;
+      }
+    } on Exception catch (e) {
+      res = "Some error is occured";
     }
 
     return res;
