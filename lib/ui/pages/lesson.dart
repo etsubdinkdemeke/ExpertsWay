@@ -466,7 +466,7 @@ class _LessonState extends State<LessonPage> {
                   icon: const Icon(Icons.arrow_back_ios_new),
                   iconSize: 14,
                   constraints: const BoxConstraints(maxHeight: 60, maxWidth: 60),
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => Navigator.pop(context, _isLessonFinished),
                 ),
               ),
             ),
