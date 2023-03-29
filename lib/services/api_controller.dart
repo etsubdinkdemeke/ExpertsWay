@@ -109,7 +109,7 @@ class ApiProvider {
         res = message;
       }
     } on Exception catch (e) {
-       res = "Some error is occured";
+      res = "Some error is occured";
     }
 
     return res;
@@ -122,7 +122,7 @@ class ApiProvider {
     String res = "Some error is occured";
     http.Response? response;
     try {
-     response = await http.post(Uri.parse(AppUrl.loginUrl),
+      response = await http.post(Uri.parse(AppUrl.loginUrl),
           headers: {
             'Content-Type': 'application/json; charset=UTF-8',
             'username': email,

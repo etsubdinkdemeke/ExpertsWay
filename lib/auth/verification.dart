@@ -64,7 +64,7 @@ class _VerificationPageState extends State<VerificationPage> {
               ])),
               SizedBox(height: 60),
               GradientBtn(
-                onPressed: () => otp.length > 4 ? verify() : null,
+                onPressed: verify,
                 btnName: 'Verify',
                 defaultBtn: true,
                 isPcked: false,
@@ -93,6 +93,7 @@ class _VerificationPageState extends State<VerificationPage> {
             child: TextFormField(
               controller: pin1,
               cursorColor: maincolor,
+              style: TextStyle(color: Colors.grey),
               textAlign: TextAlign.center,
               autofocus: true,
               decoration: InputDecoration(
@@ -115,11 +116,12 @@ class _VerificationPageState extends State<VerificationPage> {
             child: TextFormField(
               controller: pin2,
               cursorColor: maincolor,
+              style: TextStyle(color: Colors.grey),
               textAlign: TextAlign.center,
               decoration: InputDecoration(
                   enabledBorder: inputBorder,
                   focusedBorder:
-                      OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: maincolor, width: 1))),
+                      OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: maincolor, width: 2))),
               keyboardType: TextInputType.number,
               inputFormatters: [LengthLimitingTextInputFormatter(1), FilteringTextInputFormatter.digitsOnly],
               onChanged: (value) {
@@ -136,6 +138,7 @@ class _VerificationPageState extends State<VerificationPage> {
             child: TextFormField(
               controller: pin3,
               cursorColor: maincolor,
+              style: TextStyle(color: Colors.grey),
               textAlign: TextAlign.center,
               decoration: InputDecoration(
                   enabledBorder: inputBorder,
@@ -157,11 +160,12 @@ class _VerificationPageState extends State<VerificationPage> {
             child: TextFormField(
               controller: pin4,
               cursorColor: maincolor,
+              style: TextStyle(color: Colors.grey),
               textAlign: TextAlign.center,
               decoration: InputDecoration(
                   enabledBorder: inputBorder,
                   focusedBorder:
-                      OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: maincolor, width: 1))),
+                      OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: maincolor, width: 2))),
               keyboardType: TextInputType.number,
               inputFormatters: [LengthLimitingTextInputFormatter(1), FilteringTextInputFormatter.digitsOnly],
               onChanged: (value) {
@@ -176,18 +180,19 @@ class _VerificationPageState extends State<VerificationPage> {
             height: 57,
             width: 54,
             child: TextFormField(
-              controller: pin4,
+              controller: pin5,
               cursorColor: maincolor,
               textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey),
               decoration: InputDecoration(
                   enabledBorder: inputBorder,
                   focusedBorder:
-                      OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: maincolor, width: 1))),
+                      OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: maincolor, width: 2))),
               keyboardType: TextInputType.number,
               inputFormatters: [LengthLimitingTextInputFormatter(1), FilteringTextInputFormatter.digitsOnly],
               onChanged: (value) {
                 if (value.length == 1) {
-                  otp.insert(3, int.parse(pin4.text));
+                  otp.insert(4, int.parse(pin5.text));
                   FocusScope.of(context).nextFocus();
                 }
               },
@@ -225,6 +230,8 @@ class _VerificationPageState extends State<VerificationPage> {
           duration: const Duration(seconds: 5),
         ).show(context);
       }
+    } else {
+      return null;
     }
   }
 }
