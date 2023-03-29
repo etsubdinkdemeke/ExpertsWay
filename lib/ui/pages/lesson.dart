@@ -467,8 +467,8 @@ class _LessonState extends State<LessonPage> {
         ),
         SafeArea(
           child: SizedBox(
-            height: 40,
-            width: 40,
+            // height: 40,
+            // width: 40,
             child: Container(
               margin: const EdgeInsets.only(left: 20, top: 10),
               height: 22,
