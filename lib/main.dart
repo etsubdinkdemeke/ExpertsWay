@@ -17,6 +17,8 @@ import 'package:get/get.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
+import 'auth/verification.dart';
+
 String? name;
 String? image;
 late SharedPreferences prefs;
@@ -48,6 +50,8 @@ class MyApp extends StatefulWidget {
   MyAppState createState() => MyAppState();
 }
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 class MyAppState extends State<MyApp> {
   void getLoginStatus() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -78,6 +82,7 @@ class MyAppState extends State<MyApp> {
         final themeProvider = Provider.of<ThemeProvider>(context);
         final settings = context.read<ThemeProvider>();
         return GetMaterialApp(
+          navigatorKey: navigatorKey,
           localizationsDelegates: const [
             DefaultMaterialLocalizations.delegate,
             DefaultCupertinoLocalizations.delegate,

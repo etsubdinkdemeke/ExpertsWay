@@ -7,9 +7,8 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:learncoding/api/shared_preference/shared_preference.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:learncoding/main.dart';
-import 'package:learncoding/api/google_signin_api.dart';
 import 'package:learncoding/ui/pages/profile_edit.dart';
 import 'package:learncoding/utils/color.dart';
 import 'package:provider/provider.dart';
@@ -48,10 +47,9 @@ class _SettingsState extends State<Settings> {
     await pre.remove('name');
     await pre.remove('image');
     pre.clear();
-    GoogleSignInApi.logout();
 
-    // Navigator.of(context).pushReplacement(MaterialPageRoute(
-    //     builder: (context) => RestartWidget(child: (MyApp()))));
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    await googleSignIn.disconnect();
   }
 
   @override

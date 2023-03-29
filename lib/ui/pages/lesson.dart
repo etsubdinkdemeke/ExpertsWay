@@ -58,8 +58,7 @@ class _LessonState extends State<LessonPage> {
   }
 
   Future<void> getCourseNameandIcon() async {
-    courseElement = await CourseDatabase.instance
-        .readCourseNameandIcon(widget.courseData.courseId!);
+    courseElement = await CourseDatabase.instance.readCourseNameandIcon(widget.courseData.courseId!);
   }
 
   Future addNotification() async {
@@ -165,18 +164,14 @@ class _LessonState extends State<LessonPage> {
     int randomNo3 = random.nextInt(encouragement.length);
 
     String message, greet;
-    if (greeting[randomNo1].startsWith("Congratulations") ||
-        greeting[randomNo2].startsWith("You did it") ||
-        greeting[randomNo3].startsWith("Wow")) {
+    if (greeting[randomNo1].startsWith("Congratulations") || greeting[randomNo2].startsWith("You did it") || greeting[randomNo3].startsWith("Wow")) {
       greet = "${greeting[randomNo1]} $name!";
     } else {
       greet = "${greeting[randomNo1]} $name";
     }
 
-    if (encouragement[randomNo3].endsWith(".") ||
-        encouragement[randomNo3].endsWith("!")) {
-      message =
-          "${completed[randomNo2]}${widget.lesson} in ${widget.lesson.section}. ${encouragement[randomNo3]}";
+    if (encouragement[randomNo3].endsWith(".") || encouragement[randomNo3].endsWith("!")) {
+      message = "${completed[randomNo2]}${widget.lesson} in ${widget.lesson.section}. ${encouragement[randomNo3]}";
     } else {
       message =
           "${completed[randomNo2]}${widget.lesson} in ${widget.lesson.section}. ${encouragement[randomNo3]} $nextLessonTitle in the next chapter.";
@@ -232,9 +227,7 @@ class _LessonState extends State<LessonPage> {
         return Future.value(true); // this is required for the page to pop.
       },
       child: Scaffold(
-        backgroundColor: themeProvider.currentTheme == ThemeData.light()
-            ? Colors.white
-            : Color.fromARGB(255, 25, 32, 36),
+        backgroundColor: themeProvider.currentTheme == ThemeData.light() ? Colors.white : Color.fromARGB(255, 25, 32, 36),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -257,12 +250,9 @@ class _LessonState extends State<LessonPage> {
               ),
             ),
             Material(
-              color: themeProvider.currentTheme == ThemeData.light()
-                  ? Colors.white
-                  : Color.fromARGB(255, 25, 32, 36),
+              color: themeProvider.currentTheme == ThemeData.light() ? Colors.white : Color.fromARGB(255, 25, 32, 36),
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -271,13 +261,11 @@ class _LessonState extends State<LessonPage> {
                       child: OutlinedButton(
                         style: ButtonStyle(
                           padding: MaterialStateProperty.all(
-                            const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 12),
+                            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                           ),
                           side: MaterialStateBorderSide.resolveWith((states) {
                             if (states.contains(MaterialState.disabled)) {
-                              return BorderSide(
-                                  color: Color.fromARGB(64, 38, 176, 255));
+                              return BorderSide(color: Color.fromARGB(64, 38, 176, 255));
                             }
                             return const BorderSide(color: Colors.blue);
                           }),
@@ -296,11 +284,7 @@ class _LessonState extends State<LessonPage> {
                               },
                         child: Text(
                           "Prev",
-                          style: TextStyle(
-                              color: index == 0
-                                  ? Color.fromARGB(64, 38, 176, 255)
-                                  : Colors.blue,
-                              fontWeight: FontWeight.w400),
+                          style: TextStyle(color: index == 0 ? Color.fromARGB(64, 38, 176, 255) : Colors.blue, fontWeight: FontWeight.w400),
                         ),
                       ),
                     ),
@@ -315,10 +299,7 @@ class _LessonState extends State<LessonPage> {
                       child: Container(
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
-                            colors: [
-                              Color.fromARGB(255, 32, 130, 209),
-                              Color.fromARGB(255, 79, 170, 255)
-                            ],
+                            colors: [Color.fromARGB(255, 32, 130, 209), Color.fromARGB(255, 79, 170, 255)],
                             begin: Alignment.centerLeft,
                             end: Alignment.centerRight,
                           ),
@@ -328,17 +309,12 @@ class _LessonState extends State<LessonPage> {
                           color: Colors.transparent,
                           child: InkWell(
                             borderRadius: BorderRadius.circular(10),
-                            onTap: index < getContent.length - 1
-                                ? nextButtonHandler
-                                : launchTest,
+                            onTap: index < getContent.length - 1 ? nextButtonHandler : launchTest,
                             child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 12),
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                               child: Center(
                                 child: Text(
-                                  index < widget.contents.length - 1
-                                      ? "Next"
-                                      : "Take test",
+                                  index < widget.contents.length - 1 ? "Next" : "Take test",
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 15,
@@ -365,8 +341,7 @@ class _LessonState extends State<LessonPage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TweenAnimationBuilder<double>(
-        tween:
-            Tween<double>(begin: 0, end: (index + 1) / widget.contents.length),
+        tween: Tween<double>(begin: 0, end: (index + 1) / widget.contents.length),
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,
         builder: (context, value, child) {
@@ -413,7 +388,7 @@ class _LessonState extends State<LessonPage> {
     if (index == getContent.length - 1) {
       _isLessonFinished = true;
     }
-    if (index < getContent.length - 1) {
+    if (index < getContent.length) {
       await addOrupdateProgress();
       refreshProgress();
     }
@@ -461,9 +436,7 @@ class _LessonState extends State<LessonPage> {
                     ),
                     const Spacer(),
                     CupertinoButton(
-                      color: themeProvider.currentTheme == ThemeData.light()
-                          ? Colors.white
-                          : const Color.fromARGB(255, 25, 32, 36),
+                      color: themeProvider.currentTheme == ThemeData.light() ? Colors.white : const Color.fromARGB(255, 25, 32, 36),
                       padding: const EdgeInsets.all(4),
                       child: const Icon(
                         Icons.comment_outlined,
@@ -472,23 +445,19 @@ class _LessonState extends State<LessonPage> {
                       ),
                       onPressed: () => Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const CommentSection()),
+                        MaterialPageRoute(builder: (context) => const CommentSection()),
                       ),
                     ),
                     const SizedBox(width: 5),
                     CupertinoButton(
-                      color: themeProvider.currentTheme == ThemeData.light()
-                          ? Colors.white
-                          : const Color.fromARGB(255, 25, 32, 36),
+                      color: themeProvider.currentTheme == ThemeData.light() ? Colors.white : const Color.fromARGB(255, 25, 32, 36),
                       padding: const EdgeInsets.all(4),
                       child: const Icon(
                         Icons.bookmark_outline,
                         color: Colors.blue,
                         size: 20,
                       ),
-                      onPressed:
-                          () {}, // TODO: implement this method: bookmarking this course
+                      onPressed: () {}, // TODO: implement this method: bookmarking this course
                     ),
                   ],
                 ),
@@ -498,22 +467,19 @@ class _LessonState extends State<LessonPage> {
         ),
         SafeArea(
           child: SizedBox(
-            // height: 40,
-            // width: 40,Container(
-
+            height: 40,
+            width: 40,
             child: Container(
               margin: const EdgeInsets.only(left: 20, top: 10),
               height: 22,
               width: 22,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(100)),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(100)),
               child: IconButton(
                 padding: EdgeInsets.only(left: 0),
                 icon: const Icon(Icons.arrow_back_ios_new, color: Colors.blue),
                 iconSize: 14,
                 constraints: const BoxConstraints(maxHeight: 60, maxWidth: 60),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => Navigator.pop(context, _isLessonFinished),
               ),
             ),
           ),
@@ -523,7 +489,7 @@ class _LessonState extends State<LessonPage> {
   }
 
   double getUserProgress() {
-    double status = (index * 100) / getContent.length;
+    double status = (index * 100) / (getContent.length - 1);
     return status;
   }
 }
