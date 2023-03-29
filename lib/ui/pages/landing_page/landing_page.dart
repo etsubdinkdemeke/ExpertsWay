@@ -661,19 +661,7 @@ class _DrawerHeader extends StatelessWidget {
               ),
             ],
           ),
-          InkWell(
-            borderRadius: BorderRadius.circular(100),
-            onTap: () {
-              controller.scaffoldKey.currentState?.closeDrawer();
-            },
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.close,
-                size: 36,
-              ),
-            ),
-          )
+          
         ],
       ),
     );
