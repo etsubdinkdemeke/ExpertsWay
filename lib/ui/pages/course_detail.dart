@@ -369,6 +369,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
                                   ),
                                 ),
                               );
+                              setState(() {});
                               if (_isLessonFinished) {
                                 // we update the progress and unlock the next lesson
                                 // if the lesson on the lessonPage has been complete.
@@ -389,31 +390,28 @@ class CoursePagePageState extends State<CourseDetailPage> {
                           style: textTheme.headline5?.copyWith(fontSize: 14, fontWeight: FontWeight.w400),
                         ),
                         trailing: (lessonsUnderSection[j][1])
-                            ? Builder(
-                                builder: (_) {
-                                  // we're generating a lot of random booleans here for demonstration purposes
-                                  // all these boolean flags should be received from the database or API in the future.
-                                  // TODO: change the following code to make it work with real data
-                                  var isLessonCompleted = Random().nextBool();
-                                  if (isLessonCompleted) {
-                                    var testResult = Random().nextInt(101);
-                                    return CircleAvatar(
-                                      radius: 20,
-                                      foregroundColor: Colors.white,
-                                      backgroundColor: testResult > 60 ? Colors.green[300] : (testResult > 30 ? Colors.yellow[400] : Colors.red[300]),
-                                      child: Text(testResult.toString()),
-                                    );
-                                  } else {
-                                    var progress = Random().nextDouble(); // how much the user has progressed with the lesson
-                                    // the widget below is from a 3rd party package named 'percent indicator'. check it out on 'pub.dev'
-                                    return CircularPercentIndicator(
-                                      radius: 20,
-                                      lineWidth: 3,
-                                      percent: progress,
-                                      progressColor: Colors.blue,
-                                    );
-                                  }
-                                },
+                            ? SizedBox(
+                                width: 40,
+                                child: FutureBuilder<ProgressElement?>(
+                                  future: CourseDatabase.instance.readProgress(
+                                    widget.courseData.courseId!.toString(),
+                                    lessonsUnderSection[j][0].lessonId.toString(),
+                                  ),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.done) {
+                                      if (snapshot.hasError) {
+                                        throw Exception("Error reading progress from the database");
+                                      }
+                                      return CircularPercentIndicator(
+                                        radius: 20,
+                                        lineWidth: 3,
+                                        percent: double.parse(snapshot.data?.userProgress ?? "0") / 100,
+                                        progressColor: Colors.blue,
+                                      );
+                                    }
+                                    return Container();
+                                  },
+                                ),
                               )
                             : CircleAvatar(
                                 radius: 16,
