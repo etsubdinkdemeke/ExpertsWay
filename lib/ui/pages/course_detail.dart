@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
 import 'package:learncoding/models/course.dart';
 import 'package:learncoding/models/lesson.dart' as lesson;
+import 'package:learncoding/ui/pages/landing_page/index.dart';
 import 'package:learncoding/ui/pages/lesson.dart';
 import 'package:learncoding/services/api_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -448,16 +450,21 @@ class CoursePagePageState extends State<CourseDetailPage> {
         if (nextLessonEntry[1] == false) {
           // now we know the next lesson is locked. let's unlock it.
           if (courseProgress == null) {
-            courseProgress = await CourseDatabase.instance
-                .createCourseProgressElement(CourseProgressElement(courseId: widget.courseData.courseId.toString(), lessonNumber: 2, percentage: 2/lessonData.length));
+            courseProgress = await CourseDatabase.instance.createCourseProgressElement(
+                CourseProgressElement(courseId: widget.courseData.courseId.toString(), lessonNumber: 2, percentage: 2 / lessonData.length));
           } else {
             CourseProgressElement newCourseProgress = courseProgress!.copy(
               newLessonNumber: courseProgress!.lessonNumber + 1,
-              newPercentage: (courseProgress!.lessonNumber + 1)/lessonData.length,
+              newPercentage: (courseProgress!.lessonNumber + 1) / lessonData.length,
             );
             await CourseDatabase.instance.updateCourseProgress(newCourseProgress);
             courseProgress = newCourseProgress;
           }
+          // let's update the progressList in the landing page controller (so that the landing page get's updated)
+          LandingPageController landingPageController = Get.find();
+          landingPageController.progressList.removeWhere((element) => element.courseId == widget.courseData.courseId.toString());
+          landingPageController.progressList.add(courseProgress!);
+          landingPageController.updateUserCourses();
           await applyProgressOnLessons();
         }
       }

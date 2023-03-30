@@ -232,7 +232,8 @@ CREATE TABLE $notification (
   Future<CourseProgressElement> createCourseProgressElement(CourseProgressElement courseProgressElement) async {
     final db = await instance.database;
     final json = courseProgressElement.toJson();
-    const columns = '${CourseProgressFields.progId},${CourseProgressFields.courseId},${CourseProgressFields.lessonNumber},${CourseProgressFields.percentage}';
+    const columns =
+        '${CourseProgressFields.progId},${CourseProgressFields.courseId},${CourseProgressFields.lessonNumber},${CourseProgressFields.percentage}';
     int id = await db.rawInsert(
       'INSERT INTO $courseProgress ($columns) VALUES (?,?,?,?)',
       [

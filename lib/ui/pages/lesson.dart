@@ -100,7 +100,7 @@ class _LessonState extends State<LessonPage> {
       pageNum: index,
       userProgress: getUserProgress().toString(),
     );
-    String res = await CourseDatabase.instance.updateProgress(progress);
+    await CourseDatabase.instance.updateProgress(progress);
   }
 
   Future refreshProgress() async {
