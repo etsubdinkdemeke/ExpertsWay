@@ -52,7 +52,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
       print("....lesson length ....${lessonData.length}");
     }
     // here we're reading the progress and applying it on the lessons if it exists
-    // (applying it on lessons means setting some locked and some unlocked based on the progress)
+    // (applying it on lessons means setting some lessons locked and some unlocked based on the progress)
     CourseDatabase.instance.readCourseProgress(widget.courseData.courseId.toString()).then((value) {
       courseProgress = value;
       applyProgressOnLessons();
@@ -297,7 +297,6 @@ class CoursePagePageState extends State<CourseDetailPage> {
         for (int i = 0; i < sections.length; i++)
           Builder(builder: (context) {
             var lessonsUnderSection = lessonList(lessonData, sections[i]);
-
             return ConfigurableExpansionTile(
               header: Expanded(
                 child: Padding(
@@ -364,6 +363,23 @@ class CoursePagePageState extends State<CourseDetailPage> {
                       onTap: (lessonsUnderSection[j][1]) // only the very first lesson will be unlocked
                           ? () async {
                               var lessonContents = await CourseDatabase.instance.readLessonContets(lessonsUnderSection[j][0].lessonId);
+                              // if we're on the very first lesson, we want to record a progress. This is a special case to mark
+                              // that the user has started learning this course. We can't wait for the lesson page to pop with the lesson complete. that's why.
+                              if (i == 0 && j == 0 && courseProgress == null) {
+                                // write a courseProgress with the lesson number 1
+                                CourseDatabase.instance
+                                    .createCourseProgressElement(
+                                  CourseProgressElement(
+                                    courseId: widget.courseData.courseId.toString(),
+                                    lessonNumber: 1,
+                                    percentage: 1 / lessonData.length,
+                                  ),
+                                )
+                                    .then((value) {
+                                  courseProgress = value;
+                                  updateProgressOnLandingPage();
+                                });
+                              }
                               // the LessonPage should return a boolean when it pops. (true if the lesson has been complete)
                               // ignore: use_build_context_synchronously
                               var _isLessonFinished = await Navigator.push(
@@ -460,14 +476,18 @@ class CoursePagePageState extends State<CourseDetailPage> {
             await CourseDatabase.instance.updateCourseProgress(newCourseProgress);
             courseProgress = newCourseProgress;
           }
-          // let's update the progressList in the landing page controller (so that the landing page get's updated)
-          LandingPageController landingPageController = Get.find();
-          landingPageController.progressList.removeWhere((element) => element.courseId == widget.courseData.courseId.toString());
-          landingPageController.progressList.add(courseProgress!);
-          landingPageController.updateUserCourses();
+          updateProgressOnLandingPage();
           await applyProgressOnLessons();
         }
       }
     }
+  }
+
+  void updateProgressOnLandingPage() {
+    // this method updates the courseProgress associated with the widget.courseData in the LandingPageController's progressList.
+    LandingPageController landingPageController = Get.find();
+    landingPageController.progressList.removeWhere((element) => element.courseId == widget.courseData.courseId.toString());
+    landingPageController.progressList.add(courseProgress!);
+    landingPageController.updateUserCourses();
   }
 }
