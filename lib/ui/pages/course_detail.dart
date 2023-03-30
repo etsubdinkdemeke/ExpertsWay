@@ -449,10 +449,11 @@ class CoursePagePageState extends State<CourseDetailPage> {
           // now we know the next lesson is locked. let's unlock it.
           if (courseProgress == null) {
             courseProgress = await CourseDatabase.instance
-                .createCourseProgressElement(CourseProgressElement(courseId: widget.courseData.courseId.toString(), lessonNumber: 2));
+                .createCourseProgressElement(CourseProgressElement(courseId: widget.courseData.courseId.toString(), lessonNumber: 2, percentage: 2/lessonData.length));
           } else {
             CourseProgressElement newCourseProgress = courseProgress!.copy(
               newLessonNumber: courseProgress!.lessonNumber + 1,
+              newPercentage: (courseProgress!.lessonNumber + 1)/lessonData.length,
             );
             await CourseDatabase.instance.updateCourseProgress(newCourseProgress);
             courseProgress = newCourseProgress;

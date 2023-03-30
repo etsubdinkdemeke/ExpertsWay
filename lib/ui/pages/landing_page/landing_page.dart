@@ -494,7 +494,7 @@ class _CardWidget extends StatelessWidget {
           ),
           if (owned) ...[
             LinearPercentIndicator(
-              percent: controller.progressList.firstWhere((element) => element.courseId == courseList[index].courseId.toString()).lessonNumber / 5,
+              percent: controller.progressList.firstWhere((element) => element.courseId == courseList[index].courseId.toString()).percentage,
               backgroundColor: Colors.grey.shade200,
               progressColor: const Color(0xff26B0FF),
               animation: true,
@@ -510,7 +510,7 @@ class _CardWidget extends StatelessWidget {
                     style: textTheme.headline6?.copyWith(fontSize: 12, fontWeight: FontWeight.w400),
                   ),
                   Text(
-                    '80%',
+                    '${(controller.progressList.firstWhere((element) => element.courseId == courseList[index].courseId.toString()).percentage * 100).round()}%',
                     style: textTheme.headline6?.copyWith(fontSize: 12, color: const Color(0xff26B0FF)),
                   ),
                 ],

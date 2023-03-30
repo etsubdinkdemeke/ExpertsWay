@@ -34,8 +34,7 @@ class Course {
 
   factory Course.fromJson(Map<String, dynamic> json) => Course(
         code: json["code"],
-        courses: List<CourseElement>.from(
-            json["courses"].map((x) => CourseElement.fromJson(x))),
+        courses: List<CourseElement>.from(json["courses"].map((x) => CourseElement.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -132,9 +131,7 @@ class CourseElement {
         icon: json[CourseElementFields.icon] ?? '',
         banner: json[CourseElementFields.banner] ?? '',
         shortVideo: json[CourseElementFields.shortVideo] ?? '',
-        lastUpdated: json[CourseElementFields.lastUpdated] == null
-            ? null
-            : DateTime.parse(json[CourseElementFields.lastUpdated]),
+        lastUpdated: json[CourseElementFields.lastUpdated] == null ? null : DateTime.parse(json[CourseElementFields.lastUpdated]),
         enabled: json[CourseElementFields.eneabled] == 1,
         isLastSeen: json[CourseElementFields.isLastSeen] as int?,
         seenCounter: json[CourseElementFields.seenCounter] as int?,
@@ -210,33 +207,34 @@ class CourseProgressFields {
     progId,
     courseId,
     lessonNumber,
+    percentage,
   ];
   static const String progId = '_id';
   static const String courseId = 'courseId';
   static const String lessonNumber = 'lessonNumber';
+  static const String percentage = 'percentage';
 }
 
 class CourseProgressElement {
   final int? progId; // TODO: CONSIDER MAKING THIS FIELD NON-NULLABLE
   final String courseId;
   final int lessonNumber;
+  final double percentage;
 
-  CourseProgressElement({
-    this.progId,
-    required this.courseId,
-    required this.lessonNumber,
-  });
+  CourseProgressElement({this.progId, required this.courseId, required this.lessonNumber, required this.percentage});
 
   CourseProgressElement.fromMap(Map<String, dynamic> map)
       : progId = map[CourseProgressFields.progId] as int?,
         courseId = map[CourseProgressFields.courseId],
-        lessonNumber = map[CourseProgressFields.lessonNumber];
+        lessonNumber = map[CourseProgressFields.lessonNumber],
+        percentage = map[CourseProgressFields.percentage];
 
   Map<String, dynamic> toJson() {
     return {
       CourseProgressFields.progId: progId,
       CourseProgressFields.courseId: courseId,
       CourseProgressFields.lessonNumber: lessonNumber,
+      CourseProgressFields.percentage: percentage,
     };
   }
 
@@ -244,11 +242,13 @@ class CourseProgressElement {
     int? newProgId,
     String? newCourseId,
     int? newLessonNumber,
+    double? newPercentage,
   }) {
     return CourseProgressElement(
       progId: newProgId ?? this.progId,
       courseId: newCourseId ?? this.courseId,
       lessonNumber: newLessonNumber ?? this.lessonNumber,
+      percentage: newPercentage ?? this.percentage,
     );
   }
 }

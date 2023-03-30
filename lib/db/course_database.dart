@@ -49,6 +49,7 @@ class CourseDatabase {
     // const dateType = 'DATE';
     const intType = 'INTEGER NOT NULL';
     const intTypeNull = 'INTEGER';
+    const realType = 'REAL NOT NULL';
     if (kDebugMode) {
       print("...createing table.....");
     }
@@ -113,7 +114,8 @@ CREATE TABLE $progress (
 CREATE TABLE $courseProgress (
       ${CourseProgressFields.progId} $idType,
       ${CourseProgressFields.courseId} $textTypeNull,
-      ${CourseProgressFields.lessonNumber} $intType
+      ${CourseProgressFields.lessonNumber} $intType,
+      ${CourseProgressFields.percentage} $realType
     )
     ''');
 
@@ -230,13 +232,14 @@ CREATE TABLE $notification (
   Future<CourseProgressElement> createCourseProgressElement(CourseProgressElement courseProgressElement) async {
     final db = await instance.database;
     final json = courseProgressElement.toJson();
-    const columns = '${CourseProgressFields.progId},${CourseProgressFields.courseId},${CourseProgressFields.lessonNumber}';
+    const columns = '${CourseProgressFields.progId},${CourseProgressFields.courseId},${CourseProgressFields.lessonNumber},${CourseProgressFields.percentage}';
     int id = await db.rawInsert(
-      'INSERT INTO $courseProgress ($columns) VALUES (?,?,?)',
+      'INSERT INTO $courseProgress ($columns) VALUES (?,?,?,?)',
       [
         json[CourseProgressFields.progId],
         json[CourseProgressFields.courseId],
         json[CourseProgressFields.lessonNumber],
+        json[CourseProgressFields.percentage],
       ],
     );
     return courseProgressElement.copy(newProgId: id);
