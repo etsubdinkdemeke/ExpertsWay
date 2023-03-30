@@ -228,12 +228,12 @@ class LandingPage extends GetView<LandingPageController> {
                                   );
                                 }),
                             const SizedBox(height: 12),
-
-                            _LanguageHeader(
-                              theme: theme,
-                              showButton: false,
-                              title: 'Your Courses',
-                            ),
+                            if (controller.userCourses.isNotEmpty)
+                              _LanguageHeader(
+                                theme: theme,
+                                showButton: false,
+                                title: 'Your Courses',
+                              ),
 
                             const SizedBox(height: 12),
 
