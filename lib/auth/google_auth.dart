@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:learncoding/analytics/analytics_service.dart';
+import 'package:expertsway/analytics/analytics_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:learncoding/main.dart' as main;
+import 'package:expertsway/main.dart' as main;
 
 class GoogleAuth {
   final FirebaseAuth _auth = FirebaseAuth.instance;

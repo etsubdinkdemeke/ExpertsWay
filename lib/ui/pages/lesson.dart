@@ -2,19 +2,19 @@
 
 import 'dart:math';
 import 'package:another_flushbar/flushbar.dart';
-import 'package:learncoding/api/shared_preference/shared_preference.dart';
-import 'package:learncoding/models/lesson.dart';
-import 'package:learncoding/models/user.dart';
+import 'package:expertsway/api/shared_preference/shared_preference.dart';
+import 'package:expertsway/models/lesson.dart';
+import 'package:expertsway/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:learncoding/utils/color.dart';
-import 'package:learncoding/utils/lesson_finish_message.dart';
+import 'package:expertsway/utils/color.dart';
+import 'package:expertsway/utils/lesson_finish_message.dart';
 import 'package:provider/provider.dart';
 import '../../db/course_database.dart';
 import '../../models/course.dart';
 import '../../models/notification.dart';
-import 'package:learncoding/ui/pages/comment.dart';
+import 'package:expertsway/ui/pages/comment.dart';
 
 import '../../theme/theme.dart';
 

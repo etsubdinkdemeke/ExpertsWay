@@ -4,12 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
-import 'package:learncoding/theme/box_icons_icons.dart';
+import 'package:expertsway/theme/box_icons_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../theme/theme.dart';
-import 'package:learncoding/theme/config.dart' as config;
+import 'package:expertsway/theme/config.dart' as config;
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});

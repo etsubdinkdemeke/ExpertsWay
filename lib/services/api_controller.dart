@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:learncoding/models/course.dart';
-import 'package:learncoding/models/lesson.dart';
-import 'package:learncoding/models/user_account.dart';
-import 'package:learncoding/utils/constants.dart';
+import 'package:expertsway/models/course.dart';
+import 'package:expertsway/models/lesson.dart';
+import 'package:expertsway/models/user_account.dart';
+import 'package:expertsway/utils/constants.dart';
 import 'package:http/http.dart' as http;
 
 import '../api/shared_preference/shared_preference.dart';

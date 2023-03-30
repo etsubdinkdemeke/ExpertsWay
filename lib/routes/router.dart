@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
-import 'package:learncoding/routes/routing_constants.dart';
-import 'package:learncoding/ui/pages/home.dart';
-import 'package:learncoding/ui/pages/undefined_screen.dart';
+import 'package:expertsway/routes/routing_constants.dart';
+import 'package:expertsway/ui/pages/home.dart';
+import 'package:expertsway/ui/pages/undefined_screen.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:learncoding/analytics/analytics_service.dart';
+import 'package:expertsway/analytics/analytics_service.dart';
 
 List<String> navStack = ["Home"];
 Route<dynamic> generateRoute(RouteSettings settings) {

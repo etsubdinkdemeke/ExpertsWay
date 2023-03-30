@@ -8,15 +8,15 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:learncoding/main.dart';
-import 'package:learncoding/ui/pages/profile_edit.dart';
-import 'package:learncoding/utils/color.dart';
+import 'package:expertsway/main.dart';
+import 'package:expertsway/ui/pages/profile_edit.dart';
+import 'package:expertsway/utils/color.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../theme/box_icons_icons.dart';
 import '../../theme/theme.dart';
-import 'package:learncoding/theme/config.dart' as config;
+import 'package:expertsway/theme/config.dart' as config;
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:learncoding/routes/routing_constants.dart';
-import 'package:learncoding/ui/pages/programming_language/controller.dart';
-import 'package:learncoding/ui/widgets/gradient_button.dart';
+import 'package:expertsway/routes/routing_constants.dart';
+import 'package:expertsway/ui/pages/programming_language/controller.dart';
+import 'package:expertsway/ui/widgets/gradient_button.dart';
 
 class ProgrammingOptions extends GetView<ProgrammingOptionsController> {
   const ProgrammingOptions({super.key});

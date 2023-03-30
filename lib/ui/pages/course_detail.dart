@@ -1,12 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
-import 'package:learncoding/models/course.dart';
-import 'package:learncoding/models/lesson.dart' as lesson;
-import 'package:learncoding/ui/pages/lesson.dart';
-import 'package:learncoding/services/api_controller.dart';
+import 'package:expertsway/models/course.dart';
+import 'package:expertsway/models/lesson.dart' as lesson;
+import 'package:expertsway/ui/pages/lesson.dart';
+import 'package:expertsway/services/api_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:learncoding/theme/config.dart' as config;
+import 'package:expertsway/theme/config.dart' as config;
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:configurable_expansion_tile_null_safety/configurable_expansion_tile_null_safety.dart';

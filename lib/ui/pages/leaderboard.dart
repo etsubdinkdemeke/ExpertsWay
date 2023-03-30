@@ -1,8 +1,8 @@
-import 'package:learncoding/theme/config.dart' as config;
-import 'package:learncoding/ui/widgets/card.dart';
-import 'package:learncoding/ui/widgets/section_header.dart';
-import 'package:learncoding/ui/widgets/stats_card.dart';
-import 'package:learncoding/ui/widgets/top_bar.dart';
+import 'package:expertsway/theme/config.dart' as config;
+import 'package:expertsway/ui/widgets/card.dart';
+import 'package:expertsway/ui/widgets/section_header.dart';
+import 'package:expertsway/ui/widgets/stats_card.dart';
+import 'package:expertsway/ui/widgets/top_bar.dart';
 import 'package:flutter/material.dart';
 
 class LeaderboardPage extends StatefulWidget {

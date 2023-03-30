@@ -1,9 +1,9 @@
 // ignore: depend_on_referenced_packages
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:learncoding/db/course_database.dart';
-import 'package:learncoding/models/course.dart';
-import 'package:learncoding/services/api_controller.dart';
+import 'package:expertsway/db/course_database.dart';
+import 'package:expertsway/models/course.dart';
+import 'package:expertsway/services/api_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LandingPageController extends GetxController {

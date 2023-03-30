@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:learncoding/models/comments_data.dart';
+import 'package:expertsway/models/comments_data.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart' as material;
 

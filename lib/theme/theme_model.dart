@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:learncoding/main.dart' as main;
+// import 'package:expertsway/main.dart' as main;
 
 // ignore: constant_identifier_names
 enum ThemeType { Light, Dark }

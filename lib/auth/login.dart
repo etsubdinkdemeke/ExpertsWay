@@ -10,7 +10,7 @@ import '../services/api_controller.dart';
 import '../ui/widgets/gradient_button.dart';
 import '../utils/color.dart';
 import 'package:get/get.dart';
-import 'package:learncoding/routes/routing_constants.dart';
+import 'package:expertsway/routes/routing_constants.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback onClickedLogIn;

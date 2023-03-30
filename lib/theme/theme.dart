@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:learncoding/theme/config.dart' as config;
+import 'package:expertsway/theme/config.dart' as config;
 import 'package:shared_preferences/shared_preferences.dart';
 
 // IMPOTANT: We are not using this themeData anywhere in the app.

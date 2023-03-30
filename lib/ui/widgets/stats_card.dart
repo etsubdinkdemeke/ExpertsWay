@@ -1,7 +1,7 @@
-import 'package:learncoding/theme/box_icons_icons.dart';
-import 'package:learncoding/theme/config.dart';
-import 'package:learncoding/ui/pages/video.dart';
-import 'package:learncoding/ui/widgets/card.dart';
+import 'package:expertsway/theme/box_icons_icons.dart';
+import 'package:expertsway/theme/config.dart';
+import 'package:expertsway/ui/pages/video.dart';
+import 'package:expertsway/ui/widgets/card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as material;
 

@@ -1,4 +1,4 @@
-import 'package:learncoding/models/user.dart';
+import 'package:expertsway/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserPreferences {

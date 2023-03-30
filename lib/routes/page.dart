@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
-import 'package:learncoding/auth/auth.dart';
-import 'package:learncoding/routes/routing_constants.dart';
-import 'package:learncoding/ui/pages/landing_page/index.dart';
-import 'package:learncoding/ui/pages/programming_language/controller.dart';
-import 'package:learncoding/ui/pages/programming_language/programing_options.dart';
-import 'package:learncoding/ui/pages/video.dart';
+import 'package:expertsway/auth/auth.dart';
+import 'package:expertsway/routes/routing_constants.dart';
+import 'package:expertsway/ui/pages/landing_page/index.dart';
+import 'package:expertsway/ui/pages/programming_language/controller.dart';
+import 'package:expertsway/ui/pages/programming_language/programing_options.dart';
+import 'package:expertsway/ui/pages/video.dart';
 
 import '../auth/verification.dart';
 

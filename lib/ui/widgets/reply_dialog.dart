@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:learncoding/models/comments_data.dart';
+import 'package:expertsway/models/comments_data.dart';
 
 TextEditingController replyController = TextEditingController();
 

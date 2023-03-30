@@ -1,12 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:learncoding/models/course.dart';
-import 'package:learncoding/services/api_controller.dart';
-import 'package:learncoding/theme/box_icons_icons.dart';
+import 'package:expertsway/models/course.dart';
+import 'package:expertsway/services/api_controller.dart';
+import 'package:expertsway/theme/box_icons_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/services.dart';
-import 'package:learncoding/utils/constants.dart';
+import 'package:expertsway/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../db/course_database.dart';
