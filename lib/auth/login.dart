@@ -248,7 +248,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       final user = await googleSignIn.signIn();
       String? name = "";
-      String? image = "";
+      String? image = "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50";
       if (user!.displayName != null) {
         name = user!.displayName;
       }

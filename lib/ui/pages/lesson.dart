@@ -10,10 +10,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:learncoding/utils/color.dart';
 import 'package:learncoding/utils/lesson_finish_message.dart';
+import 'package:provider/provider.dart';
 import '../../db/course_database.dart';
 import '../../models/course.dart';
 import '../../models/notification.dart';
 import 'package:learncoding/ui/pages/comment.dart';
+
+import '../../theme/theme.dart';
 
 class LessonPage extends StatefulWidget {
   final List<List> lessonData;
@@ -214,14 +217,18 @@ class _LessonState extends State<LessonPage> {
     nextLesson(widget.lessonData, widget.lesson, widget.lesson.section);
     // String lesson = lessonHtml[index];
     String lesson = getContent[index];
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    TextTheme textTheme = Theme.of(context).textTheme;
+    Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
+
     return WillPopScope(
       onWillPop: () {
         Navigator.of(context).pop(_isLessonFinished);
         return Future.value(true); // this is required for the page to pop.
       },
-      child: CupertinoPageScaffold(
-        backgroundColor: const Color.fromARGB(255, 250, 250, 250),
-        child: Column(
+      child: Scaffold(
+        backgroundColor: themeProvider.currentTheme == ThemeData.light() ? Colors.white : Color.fromARGB(255, 25, 32, 36),
+        body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
@@ -243,7 +250,7 @@ class _LessonState extends State<LessonPage> {
               ),
             ),
             Material(
-              color: const Color(0xfff5f6fb),
+              color: themeProvider.currentTheme == ThemeData.light() ? Colors.white : Color.fromARGB(255, 25, 32, 36),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
                 child: Row(
@@ -258,7 +265,7 @@ class _LessonState extends State<LessonPage> {
                           ),
                           side: MaterialStateBorderSide.resolveWith((states) {
                             if (states.contains(MaterialState.disabled)) {
-                              return const BorderSide(color: Colors.grey);
+                              return BorderSide(color: Color.fromARGB(64, 38, 176, 255));
                             }
                             return const BorderSide(color: Colors.blue);
                           }),
@@ -275,7 +282,10 @@ class _LessonState extends State<LessonPage> {
                                   index--;
                                 });
                               },
-                        child: const Text("Prev"),
+                        child: Text(
+                          "Prev",
+                          style: TextStyle(color: index == 0 ? Color.fromARGB(64, 38, 176, 255) : Colors.blue, fontWeight: FontWeight.w400),
+                        ),
                       ),
                     ),
                     Expanded(
@@ -389,6 +399,7 @@ class _LessonState extends State<LessonPage> {
   }
 
   Widget buildCoverImage() {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     // this mehtod builds the cover image and the texts
     // on it (displayed at the top of the course-detail screen)
     return Stack(
@@ -425,7 +436,7 @@ class _LessonState extends State<LessonPage> {
                     ),
                     const Spacer(),
                     CupertinoButton(
-                      color: Colors.white,
+                      color: themeProvider.currentTheme == ThemeData.light() ? Colors.white : const Color.fromARGB(255, 25, 32, 36),
                       padding: const EdgeInsets.all(4),
                       child: const Icon(
                         Icons.comment_outlined,
@@ -439,7 +450,7 @@ class _LessonState extends State<LessonPage> {
                     ),
                     const SizedBox(width: 5),
                     CupertinoButton(
-                      color: Colors.white,
+                      color: themeProvider.currentTheme == ThemeData.light() ? Colors.white : const Color.fromARGB(255, 25, 32, 36),
                       padding: const EdgeInsets.all(4),
                       child: const Icon(
                         Icons.bookmark_outline,
@@ -456,18 +467,19 @@ class _LessonState extends State<LessonPage> {
         ),
         SafeArea(
           child: SizedBox(
-            height: 40,
-            width: 40,
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: Material(
-                shape: const CircleBorder(),
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new),
-                  iconSize: 14,
-                  constraints: const BoxConstraints(maxHeight: 60, maxWidth: 60),
-                  onPressed: () => Navigator.pop(context, _isLessonFinished),
-                ),
+            // height: 40,
+            // width: 40,
+            child: Container(
+              margin: const EdgeInsets.only(left: 20, top: 10),
+              height: 22,
+              width: 22,
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(100)),
+              child: IconButton(
+                padding: EdgeInsets.only(left: 0),
+                icon: const Icon(Icons.arrow_back_ios_new, color: Colors.blue),
+                iconSize: 14,
+                constraints: const BoxConstraints(maxHeight: 60, maxWidth: 60),
+                onPressed: () => Navigator.pop(context, _isLessonFinished),
               ),
             ),
           ),
