@@ -30,8 +30,7 @@ class ThemeProvider extends ChangeNotifier {
   }
 
   void toggleTheme() async {
-    SharedPreferences sharedPreferennces =
-        await SharedPreferences.getInstance();
+    SharedPreferences sharedPreferennces = await SharedPreferences.getInstance();
     if (_currentTheme == ThemeData.light()) {
       _currentTheme = ThemeData.dark();
       sharedPreferennces.setBool('is_dark', true);
@@ -65,14 +64,10 @@ class Themes {
       ),
       headline5: TextStyle(
         fontSize: 16.0,
-        color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.9),
+        color: Color.fromARGB(255, 41, 40, 40).withOpacity(0.7),
         fontFamily: "Red Hat Display",
       ),
-      headline4: TextStyle(
-          fontSize: 16,
-          fontFamily: "Red Hat Display",
-          fontWeight: FontWeight.w500,
-          color: config.Colors().accentColor(1)),
+      headline4: TextStyle(fontSize: 16, fontFamily: "Red Hat Display", fontWeight: FontWeight.w500, color: config.Colors().accentColor(1)),
       headline3: TextStyle(
         fontSize: 20,
         fontFamily: "Red Hat Display",
@@ -128,12 +123,10 @@ class Themes {
       //   color: config.Colors().accentColor(1),
       // ),
     ),
-    buttonTheme:
-        const ButtonThemeData(buttonColor: Color.fromARGB(255, 182, 114, 246)),
+    buttonTheme: const ButtonThemeData(buttonColor: Color.fromARGB(255, 182, 114, 246)),
   );
   static final darkTheme = ThemeData(
-    buttonTheme:
-        const ButtonThemeData(buttonColor: Color.fromARGB(255, 75, 51, 79)),
+    buttonTheme: const ButtonThemeData(buttonColor: Color.fromARGB(255, 75, 51, 79)),
     shadowColor: Colors.transparent,
     scaffoldBackgroundColor: const Color.fromARGB(0, 38, 50, 56),
     colorScheme: const ColorScheme.dark(),
@@ -147,8 +140,7 @@ class Themes {
     hintColor: config.Colors().secondDarkColor(1),
     cardColor: const Color.fromARGB(26, 255, 255, 255),
     backgroundColor: const Color.fromARGB(26, 255, 255, 255),
-    accentTextTheme:
-        const TextTheme(headline6: TextStyle(fontFamily: "Red Hat Display")),
+    accentTextTheme: const TextTheme(headline6: TextStyle(fontFamily: "Red Hat Display")),
     textTheme: TextTheme(
       button: const TextStyle(
         fontFamily: 'Red Hat Display',
@@ -161,21 +153,9 @@ class Themes {
         color: config.Colors().accentDarkColor(1),
         fontFamily: "Red Hat Display",
       ),
-      headline4: TextStyle(
-          fontSize: 16,
-          fontFamily: "Red Hat Display",
-          fontWeight: FontWeight.w500,
-          color: config.Colors().accentDarkColor(1)),
-      headline3: const TextStyle(
-          fontSize: 20,
-          fontFamily: "Red Hat Display",
-          fontWeight: FontWeight.w500,
-          color: Colors.white),
-      headline2: const TextStyle(
-          fontSize: 24,
-          fontFamily: "Red Hat Display",
-          fontWeight: FontWeight.w500,
-          color: Colors.white),
+      headline4: TextStyle(fontSize: 16, fontFamily: "Red Hat Display", fontWeight: FontWeight.w500, color: config.Colors().accentDarkColor(1)),
+      headline3: const TextStyle(fontSize: 20, fontFamily: "Red Hat Display", fontWeight: FontWeight.w500, color: Colors.white),
+      headline2: const TextStyle(fontSize: 24, fontFamily: "Red Hat Display", fontWeight: FontWeight.w500, color: Colors.white),
       headline1: TextStyle(
         fontFamily: 'Red Hat Display',
         color: config.Colors().accentDarkColor(1),

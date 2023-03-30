@@ -10,6 +10,8 @@ import 'package:learncoding/theme/config.dart' as config;
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:configurable_expansion_tile_null_safety/configurable_expansion_tile_null_safety.dart';
+import 'package:provider/provider.dart';
+import '../../theme/theme.dart';
 
 import '../../db/course_database.dart' hide courseProgress;
 import '../../models/lesson.dart';
@@ -133,15 +135,15 @@ class CoursePagePageState extends State<CourseDetailPage> {
                     // TODO: consider color contrast issues here.
                     style: const TextStyle(
                       color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
                     ),
                   ),
                   Text(
                     // we're considering the lessons to be the "chapters"
                     "${lessonData.length} Chapters",
                     // TODO: consider color contrast issues here.
-                    style: const TextStyle(color: Colors.white, fontSize: 14),
+                    style: const TextStyle(color: Colors.white, fontSize: 15),
                   )
                 ],
               ),
@@ -150,18 +152,17 @@ class CoursePagePageState extends State<CourseDetailPage> {
         ),
         SafeArea(
           child: SizedBox(
-            height: 40,
-            width: 40,
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: Material(
-                shape: const CircleBorder(),
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new),
-                  iconSize: 14,
-                  constraints: const BoxConstraints(maxHeight: 60, maxWidth: 60),
-                  onPressed: () => Navigator.pop(context),
-                ),
+            child: Container(
+              margin: const EdgeInsets.only(left: 20, top: 10),
+              height: 22,
+              width: 22,
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(100)),
+              child: IconButton(
+                padding: EdgeInsets.only(left: 0),
+                icon: const Icon(Icons.arrow_back_ios_new, color: Colors.blue),
+                iconSize: 14,
+                constraints: const BoxConstraints(maxHeight: 60, maxWidth: 60),
+                onPressed: () => Navigator.pop(context),
               ),
             ),
           ),
@@ -172,8 +173,10 @@ class CoursePagePageState extends State<CourseDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      backgroundColor: config.Colors().secondColor(1),
+      backgroundColor: themeProvider.currentTheme == ThemeData.light() ? Colors.white : Color.fromARGB(255, 25, 32, 36),
       body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
@@ -194,37 +197,34 @@ class CoursePagePageState extends State<CourseDetailPage> {
                           height: 44,
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Row(
-                            children: const <Widget>[
+                            children: <Widget>[
                               Text(
                                 "Description",
-                                style: TextStyle(color: Color.fromARGB(255, 138, 138, 138), fontSize: 14),
+                                style: textTheme.headline1?.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
                               ),
                               Spacer(),
                             ],
                           ),
                         ),
                         Container(
-                            margin: const EdgeInsets.all(8),
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            child: Text(
-                              widget.courseData.description,
-                              textAlign: TextAlign.justify,
-                              style: const TextStyle(
-                                color: Color(0xFF343434),
-                              ),
-                            )),
+                          margin: const EdgeInsets.all(8),
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          child: Text(
+                            widget.courseData.description,
+                            textAlign: TextAlign.justify,
+                            style: textTheme.headline5?.copyWith(fontSize: 14, fontWeight: FontWeight.w400),
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16.0,
                             vertical: 8.0,
                           ),
                           child: Row(
-                            children: const <Widget>[
+                            children: <Widget>[
                               Text(
                                 "Select chapter",
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 138, 138, 138),
-                                ),
+                                style: textTheme.headline1?.copyWith(fontSize: 15, fontWeight: FontWeight.w500),
                               ),
                             ],
                           ),
@@ -249,17 +249,16 @@ class CoursePagePageState extends State<CourseDetailPage> {
                                   }
                                 }
                                 if (!snapshot.hasData) {
-                                  return const Center(
-                                      child: Text(
-                                    "There is no Course",
-                                    style: TextStyle(color: Color.fromARGB(184, 138, 138, 138)),
-                                  ));
+                                  return Center(
+                                    child:
+                                        Text("There is no Course", style: textTheme.headline1?.copyWith(fontSize: 15, fontWeight: FontWeight.w400)),
+                                  );
                                 }
                                 if (snapshot.hasError) {
-                                  return const Center(
+                                  return Center(
                                       child: Text(
                                     "Unable to get the data",
-                                    style: TextStyle(color: Color.fromARGB(184, 138, 138, 138)),
+                                    style: textTheme.headline1?.copyWith(fontSize: 15, fontWeight: FontWeight.w400),
                                   ));
                                 }
                                 if (snapshot.hasData) {
@@ -290,6 +289,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
 
   buildLessonGroups() {
     var sections = sectionList(lessonData);
+    TextTheme textTheme = Theme.of(context).textTheme;
     return Column(
       children: [
         for (int i = 0; i < sections.length; i++)
@@ -306,10 +306,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
                         contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                         title: Text(
                           sections[i],
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 17,
-                          ),
+                          style: textTheme.headline1?.copyWith(fontSize: 17, fontWeight: FontWeight.w600),
                         ),
                         trailing: const Icon(
                           Icons.keyboard_arrow_down_rounded,
@@ -335,10 +332,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
                         contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                         title: Text(
                           sections[i],
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 17,
-                          ),
+                          style: textTheme.headline1?.copyWith(fontSize: 17, fontWeight: FontWeight.w600),
                         ),
                         trailing: const Icon(
                           Icons.keyboard_arrow_up_rounded,
@@ -375,7 +369,6 @@ class CoursePagePageState extends State<CourseDetailPage> {
                                   ),
                                 ),
                               );
-                              setState(() {});
                               if (_isLessonFinished) {
                                 // we update the progress and unlock the next lesson
                                 // if the lesson on the lessonPage has been complete.
@@ -386,39 +379,41 @@ class CoursePagePageState extends State<CourseDetailPage> {
                       child: ListTile(
                         title: Text(
                           lessonsUnderSection[j][0].title,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: textTheme.headline1?.copyWith(fontSize: 17, fontWeight: FontWeight.w500),
                         ),
                         subtitle: Text(
                           lessonsUnderSection[j][0].shortDescription.isNotEmpty
                               ? lessonsUnderSection[j][0].shortDescription
                               : "Lorem ipsum is a pseudo-Latin text used in web design, typography, layout, and printing in place of English to emphasise design elements over content. It's also called placeholder (or filler) text.",
                           overflow: TextOverflow.ellipsis,
+                          style: textTheme.headline5?.copyWith(fontSize: 14, fontWeight: FontWeight.w400),
                         ),
                         trailing: (lessonsUnderSection[j][1])
-                            ? SizedBox(
-                                width: 40,
-                                child: FutureBuilder<ProgressElement?>(
-                                  future: CourseDatabase.instance.readProgress(
-                                    widget.courseData.courseId!.toString(),
-                                    lessonsUnderSection[j][0].lessonId.toString(),
-                                  ),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState == ConnectionState.done) {
-                                      if (snapshot.hasError) {
-                                        throw Exception("Error reading progress from the database");
-                                      }
-                                      return CircularPercentIndicator(
-                                        radius: 20,
-                                        lineWidth: 3,
-                                        percent: double.parse(snapshot.data?.userProgress ?? "0") / 100,
-                                        progressColor: Colors.blue,
-                                      );
-                                    }
-                                    return Container();
-                                  },
-                                ),
+                            ? Builder(
+                                builder: (_) {
+                                  // we're generating a lot of random booleans here for demonstration purposes
+                                  // all these boolean flags should be received from the database or API in the future.
+                                  // TODO: change the following code to make it work with real data
+                                  var isLessonCompleted = Random().nextBool();
+                                  if (isLessonCompleted) {
+                                    var testResult = Random().nextInt(101);
+                                    return CircleAvatar(
+                                      radius: 20,
+                                      foregroundColor: Colors.white,
+                                      backgroundColor: testResult > 60 ? Colors.green[300] : (testResult > 30 ? Colors.yellow[400] : Colors.red[300]),
+                                      child: Text(testResult.toString()),
+                                    );
+                                  } else {
+                                    var progress = Random().nextDouble(); // how much the user has progressed with the lesson
+                                    // the widget below is from a 3rd party package named 'percent indicator'. check it out on 'pub.dev'
+                                    return CircularPercentIndicator(
+                                      radius: 20,
+                                      lineWidth: 3,
+                                      percent: progress,
+                                      progressColor: Colors.blue,
+                                    );
+                                  }
+                                },
                               )
                             : CircleAvatar(
                                 radius: 16,
