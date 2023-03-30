@@ -64,18 +64,19 @@ class OnboardingState extends State<Onboarding> {
     messages.addAll([
       buildMessage(
         "Learn anytime, and anywhere",
-        "Lorem ipsum dolor sit amet consectetur"
-            " adipiscing elit Ut et massa mi. Aliquam in hendrerit.",
+        "Discover the convenience of learning on-the-go with our app. "
+          "Study at your own pace, wherever you are.",
       ),
       buildMessage(
         "Unleash Your Creativity and Compete with Style",
-        "Lorem ipsum dolor sit amet consectetur"
-            " adipiscing elit Ut et massa mi. Aliquam in hendrerit.",
+        "Get ready to take your skills to the next level! "
+          "Our app challenges you to be creative and innovative, and rewards your efforts with recognition.",
+
       ),
       buildMessage(
           "High quality lectures and unlimited questions",
-          "Lorem ipsum dolor sit amet consectetur"
-              " adipiscing elit Ut et massa mi. Aliquam in hendrerit.")
+          "Upgrade your learning with our top-notch lectures and endless practice questions. "
+              "Prepare to ace any exam and achieve your academic goals.")
     ]);
     // at the start, we show the first elements from each list
     displayedPicture = pictures[counter];
