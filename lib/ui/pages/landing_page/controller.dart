@@ -8,6 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LandingPageController extends GetxController {
   RxList<CourseElement> course = <CourseElement>[].obs;
+  RxList<CourseElement> userCourses = <CourseElement>[].obs; // these are the courses the user has started learning
+  RxList<CourseProgressElement> progressList = <CourseProgressElement>[].obs;
 
   String? profileName = '';
   String? profileImage = '';
@@ -61,9 +63,33 @@ class LandingPageController extends GetxController {
     try {
       loading.value = true;
       course.value = await CourseDatabase.instance.readAllCourse();
+      await getProgressListFromDatabase();
+      updateUserCourses();
       loading.value = false;
     } catch (e) {
       Get.log(e.toString());
+    }
+  }
+
+  Future getProgressListFromDatabase() async {
+    try {
+      loading.value = true;
+      progressList.value = await CourseDatabase.instance.readAllCourseProgress();
+      loading.value = false;
+    } catch (e) {
+      Get.log(e.toString());
+    }
+  }
+
+  void updateUserCourses() {
+    userCourses.clear();
+    for (var element in course) {
+      for (var progress in progressList) {
+        if (progress.courseId == element.courseId?.toString()) {
+          userCourses.add(element);
+          break;
+        }
+      }
     }
   }
 

@@ -41,10 +41,8 @@ class CourseDatabase {
     // const idTextType = 'TEXT PRIMARY KEY';
     const textType = 'TEXT NOT NULL';
     const textTypeUnique = 'TEXT NOT NULL UNIQUE';
-    const fkCourse =
-        'FOREIGN KEY (${LessonsElementFields.courseSlug}) REFERENCES $courseElement(${CourseElementFields.slug})';
-    const fkLesson =
-        'FOREIGN KEY (${LessonsContentFields.lessonId}) REFERENCES $lessontable(${LessonsElementFields.lesson_id})';
+    const fkCourse = 'FOREIGN KEY (${LessonsElementFields.courseSlug}) REFERENCES $courseElement(${CourseElementFields.slug})';
+    const fkLesson = 'FOREIGN KEY (${LessonsContentFields.lessonId}) REFERENCES $lessontable(${LessonsElementFields.lesson_id})';
 
     const textTypeNull = 'TEXT';
     const boolType = 'BOOLEAN NOT NULL';
@@ -164,8 +162,7 @@ CREATE TABLE $notification (
       );
 
       for (var i = 0; i < lessonElement.content.length; i++) {
-        CourseDatabase.instance.createLessonsContent(lessonElement.content[i],
-            json[LessonsElementFields.lesson_id].toString());
+        CourseDatabase.instance.createLessonsContent(lessonElement.content[i], json[LessonsElementFields.lesson_id].toString());
       }
     } on DatabaseException catch (error) {
       Get.snackbar("", "",
@@ -176,13 +173,11 @@ CREATE TABLE $notification (
           backgroundColor: const Color.fromRGBO(255, 255, 255, 0.885),
           titleText: const Text(
             'Error',
-            style: TextStyle(
-                color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           messageText: Text(
             '$error',
-            style: const TextStyle(
-                color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
+            style: const TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
           ),
           margin: const EdgeInsets.only(top: 12));
     } catch (e) {
@@ -194,13 +189,11 @@ CREATE TABLE $notification (
           backgroundColor: const Color.fromRGBO(255, 255, 255, 0.885),
           titleText: const Text(
             'Error',
-            style: TextStyle(
-                color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           messageText: Text(
             '$e',
-            style: const TextStyle(
-                color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
+            style: const TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
           ),
           margin: const EdgeInsets.only(top: 12));
     }
@@ -213,8 +206,7 @@ CREATE TABLE $notification (
     lescon.copy(id: id);
   }
 
-  Future<ProgressElement> createProgress(
-      ProgressElement progressElement) async {
+  Future<ProgressElement> createProgress(ProgressElement progressElement) async {
     final db = await instance.database;
     final json = progressElement.tojson();
     const columns =
@@ -235,12 +227,10 @@ CREATE TABLE $notification (
     return progressElement.copy(progId: id);
   }
 
-  Future<CourseProgressElement> createCourseProgressElement(
-      CourseProgressElement courseProgressElement) async {
+  Future<CourseProgressElement> createCourseProgressElement(CourseProgressElement courseProgressElement) async {
     final db = await instance.database;
     final json = courseProgressElement.toJson();
-    const columns =
-        '${CourseProgressFields.progId},${CourseProgressFields.courseId},${CourseProgressFields.lessonNumber}';
+    const columns = '${CourseProgressFields.progId},${CourseProgressFields.courseId},${CourseProgressFields.lessonNumber}';
     int id = await db.rawInsert(
       'INSERT INTO $courseProgress ($columns) VALUES (?,?,?)',
       [
@@ -252,8 +242,7 @@ CREATE TABLE $notification (
     return courseProgressElement.copy(newProgId: id);
   }
 
-  Future<void> createNotification(
-      NotificationElement notificationElement) async {
+  Future<void> createNotification(NotificationElement notificationElement) async {
     final db = await instance.database;
     try {
       final id = await db.insert(notification, notificationElement.tojson());
@@ -268,13 +257,11 @@ CREATE TABLE $notification (
           backgroundColor: const Color.fromRGBO(255, 255, 255, 0.885),
           titleText: const Text(
             'Error',
-            style: TextStyle(
-                color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           messageText: Text(
             '$error',
-            style: const TextStyle(
-                color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
+            style: const TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
           ),
           margin: const EdgeInsets.only(top: 12));
     } catch (e) {
@@ -286,13 +273,11 @@ CREATE TABLE $notification (
           backgroundColor: const Color.fromRGBO(255, 255, 255, 0.885),
           titleText: const Text(
             'Error',
-            style: TextStyle(
-                color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           messageText: Text(
             '$e',
-            style: const TextStyle(
-                color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
+            style: const TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
           ),
           margin: const EdgeInsets.only(top: 12));
     }
@@ -351,13 +336,11 @@ CREATE TABLE $notification (
           backgroundColor: const Color.fromRGBO(255, 255, 255, 0.885),
           titleText: const Text(
             'Error',
-            style: TextStyle(
-                color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           messageText: const Text(
             'Unable to read data from database',
-            style: TextStyle(
-                color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
+            style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
           ),
           margin: const EdgeInsets.only(top: 12));
       return [];
@@ -370,13 +353,11 @@ CREATE TABLE $notification (
           backgroundColor: const Color.fromRGBO(255, 255, 255, 0.885),
           titleText: const Text(
             'Error',
-            style: TextStyle(
-                color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           messageText: Text(
             '$e',
-            style: const TextStyle(
-                color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
+            style: const TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
           ),
           margin: const EdgeInsets.only(top: 12));
       return [];
@@ -423,8 +404,7 @@ CREATE TABLE $notification (
     final maps = await db.query(
       progress,
       columns: ProgressFields.progressvalue,
-      where:
-          '${ProgressFields.courseId} = ? and ${ProgressFields.lessonId} = ? ',
+      where: '${ProgressFields.courseId} = ? and ${ProgressFields.lessonId} = ? ',
       whereArgs: [course, id],
     );
     if (maps.isNotEmpty) {
@@ -432,6 +412,12 @@ CREATE TABLE $notification (
     } else {
       return null;
     }
+  }
+
+  Future<List<CourseProgressElement>> readAllCourseProgress() async {
+    final db = await instance.database;
+    final maps = await db.query(courseProgress);
+    return maps.map((e) => CourseProgressElement.fromMap(e)).toList();
   }
 
   Future<CourseProgressElement?> readCourseProgress(String courseId) async {
@@ -472,8 +458,7 @@ CREATE TABLE $notification (
   }
 
 // UPDATE DATA'
-  Future<int?> updateCourseProgress(
-      CourseProgressElement courseProgressElement) async {
+  Future<int?> updateCourseProgress(CourseProgressElement courseProgressElement) async {
     final db = await instance.database;
     int id = await db.update(
       courseProgress,
