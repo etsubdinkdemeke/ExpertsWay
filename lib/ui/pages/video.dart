@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:learncoding/models/comments_data.dart';
-import 'package:learncoding/theme/box_icons_icons.dart';
-import 'package:learncoding/ui/pages/comment.dart';
-import 'package:learncoding/ui/widgets/card.dart';
+import 'package:expertsway/models/comments_data.dart';
+import 'package:expertsway/theme/box_icons_icons.dart';
+import 'package:expertsway/ui/pages/comment.dart';
+import 'package:expertsway/ui/widgets/card.dart';
 
 class VideoPage extends StatefulWidget {
   const VideoPage({super.key});

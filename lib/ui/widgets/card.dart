@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learncoding/theme/config.dart' as config;
+import 'package:expertsway/theme/config.dart' as config;
 
 class CardWidget extends StatelessWidget {
   final bool gradient;

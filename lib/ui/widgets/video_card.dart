@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
-import 'package:learncoding/routes/routing_constants.dart';
-import 'package:learncoding/theme/box_icons_icons.dart';
-import 'package:learncoding/theme/config.dart' as config;
-import 'package:learncoding/ui/widgets/card.dart';
+import 'package:expertsway/routes/routing_constants.dart';
+import 'package:expertsway/theme/box_icons_icons.dart';
+import 'package:expertsway/theme/config.dart' as config;
+import 'package:expertsway/ui/widgets/card.dart';
 import 'package:flutter/material.dart';
 
 class VideoCard extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:learncoding/ui/widgets/header.dart';
-import 'package:learncoding/utils/color.dart';
+import 'package:expertsway/ui/widgets/header.dart';
+import 'package:expertsway/utils/color.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);

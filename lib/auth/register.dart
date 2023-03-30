@@ -342,8 +342,8 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future signin() async {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
     try {
-      final GoogleSignIn googleSignIn = GoogleSignIn();
       final user = await googleSignIn.signIn();
       String? name = "";
       String? image = "";
@@ -353,11 +353,34 @@ class _RegisterPageState extends State<RegisterPage> {
       if (user.photoUrl != null) {
         image = user.photoUrl;
       }
-      UserPreferences.setuser(image!, name!);
-      Get.toNamed(AppRoute.programmingOptions);
+
+      String res = await ApiProvider().registerUser(
+          user!.email,
+          name!,
+          name!,
+          user!.id,
+          "google");
+
+      if (res == "success") {
+        Get.toNamed(AppRoute.programmingOptions);
+      } else {
+        Flushbar(
+          flushbarPosition: FlushbarPosition.BOTTOM,
+          margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),
+          titleSize: 20,
+          messageSize: 17,
+          backgroundColor: maincolor,
+          borderRadius: BorderRadius.circular(8),
+          message: res,
+          duration: const Duration(seconds: 5),
+        ).show(context);
+      }
+      // UserPreferences.setuser(image!, name!);
+      // Get.toNamed(AppRoute.programmingOptions);
     } catch (error) {
       print("Error during login: ");
       print(error);
+      await googleSignIn.disconnect();
       // UserPreferences.setuser("https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50", "testDisplayName");
       // Get.toNamed(AppRoute.programmingOptions);
     }
@@ -377,7 +400,8 @@ class _RegisterPageState extends State<RegisterPage> {
           emailController.text,
           firstnameController.text,
           lastnameController.text,
-          passwordController.text);
+          passwordController.text,
+          "email_password");
       navigatorKey.currentState!.popUntil((rout) => rout.isFirst);
 
       if (res == "success") {

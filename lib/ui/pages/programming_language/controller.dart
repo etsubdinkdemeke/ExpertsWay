@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:learncoding/models/programming_options_model.dart';
+import 'package:expertsway/models/programming_options_model.dart';
 
 class ProgrammingOptionsController extends GetxController {
   RxList pickedLanguages = <ProgrammingOptionsModel>[].obs;

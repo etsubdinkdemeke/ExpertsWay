@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learncoding/auth/register.dart';
+import 'package:expertsway/auth/register.dart';
 
 import 'login.dart';
 

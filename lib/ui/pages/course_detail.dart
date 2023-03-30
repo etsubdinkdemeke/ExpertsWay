@@ -2,16 +2,18 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:learncoding/models/course.dart';
-import 'package:learncoding/models/lesson.dart' as lesson;
-import 'package:learncoding/ui/pages/landing_page/index.dart';
-import 'package:learncoding/ui/pages/lesson.dart';
-import 'package:learncoding/services/api_controller.dart';
+import 'package:expertsway/models/course.dart';
+import 'package:expertsway/models/lesson.dart' as lesson;
+import 'package:expertsway/ui/pages/landing_page/index.dart';
+import 'package:expertsway/ui/pages/lesson.dart';
+import 'package:expertsway/services/api_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:learncoding/theme/config.dart' as config;
+import 'package:expertsway/theme/config.dart' as config;
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:configurable_expansion_tile_null_safety/configurable_expansion_tile_null_safety.dart';
+import 'package:provider/provider.dart';
+import '../../theme/theme.dart';
 
 import '../../db/course_database.dart' hide courseProgress;
 import '../../models/lesson.dart';
@@ -135,15 +137,15 @@ class CoursePagePageState extends State<CourseDetailPage> {
                     // TODO: consider color contrast issues here.
                     style: const TextStyle(
                       color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
                     ),
                   ),
                   Text(
                     // we're considering the lessons to be the "chapters"
                     "${lessonData.length} Chapters",
                     // TODO: consider color contrast issues here.
-                    style: const TextStyle(color: Colors.white, fontSize: 14),
+                    style: const TextStyle(color: Colors.white, fontSize: 15),
                   )
                 ],
               ),
@@ -152,18 +154,17 @@ class CoursePagePageState extends State<CourseDetailPage> {
         ),
         SafeArea(
           child: SizedBox(
-            height: 40,
-            width: 40,
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: Material(
-                shape: const CircleBorder(),
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new),
-                  iconSize: 14,
-                  constraints: const BoxConstraints(maxHeight: 60, maxWidth: 60),
-                  onPressed: () => Navigator.pop(context),
-                ),
+            child: Container(
+              margin: const EdgeInsets.only(left: 20, top: 10),
+              height: 22,
+              width: 22,
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(100)),
+              child: IconButton(
+                padding: EdgeInsets.only(left: 0),
+                icon: const Icon(Icons.arrow_back_ios_new, color: Colors.blue),
+                iconSize: 14,
+                constraints: const BoxConstraints(maxHeight: 60, maxWidth: 60),
+                onPressed: () => Navigator.pop(context),
               ),
             ),
           ),
@@ -174,8 +175,10 @@ class CoursePagePageState extends State<CourseDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      backgroundColor: config.Colors().secondColor(1),
+      backgroundColor: themeProvider.currentTheme == ThemeData.light() ? Colors.white : Color.fromARGB(255, 25, 32, 36),
       body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
@@ -196,37 +199,34 @@ class CoursePagePageState extends State<CourseDetailPage> {
                           height: 44,
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Row(
-                            children: const <Widget>[
+                            children: <Widget>[
                               Text(
                                 "Description",
-                                style: TextStyle(color: Color.fromARGB(255, 138, 138, 138), fontSize: 14),
+                                style: textTheme.headline1?.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
                               ),
                               Spacer(),
                             ],
                           ),
                         ),
                         Container(
-                            margin: const EdgeInsets.all(8),
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            child: Text(
-                              widget.courseData.description,
-                              textAlign: TextAlign.justify,
-                              style: const TextStyle(
-                                color: Color(0xFF343434),
-                              ),
-                            )),
+                          margin: const EdgeInsets.all(8),
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          child: Text(
+                            widget.courseData.description,
+                            textAlign: TextAlign.justify,
+                            style: textTheme.headline5?.copyWith(fontSize: 14, fontWeight: FontWeight.w400),
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16.0,
                             vertical: 8.0,
                           ),
                           child: Row(
-                            children: const <Widget>[
+                            children: <Widget>[
                               Text(
                                 "Select chapter",
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 138, 138, 138),
-                                ),
+                                style: textTheme.headline1?.copyWith(fontSize: 15, fontWeight: FontWeight.w500),
                               ),
                             ],
                           ),
@@ -251,17 +251,16 @@ class CoursePagePageState extends State<CourseDetailPage> {
                                   }
                                 }
                                 if (!snapshot.hasData) {
-                                  return const Center(
-                                      child: Text(
-                                    "There is no Course",
-                                    style: TextStyle(color: Color.fromARGB(184, 138, 138, 138)),
-                                  ));
+                                  return Center(
+                                    child:
+                                        Text("There is no Course", style: textTheme.headline1?.copyWith(fontSize: 15, fontWeight: FontWeight.w400)),
+                                  );
                                 }
                                 if (snapshot.hasError) {
-                                  return const Center(
+                                  return Center(
                                       child: Text(
                                     "Unable to get the data",
-                                    style: TextStyle(color: Color.fromARGB(184, 138, 138, 138)),
+                                    style: textTheme.headline1?.copyWith(fontSize: 15, fontWeight: FontWeight.w400),
                                   ));
                                 }
                                 if (snapshot.hasData) {
@@ -292,6 +291,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
 
   buildLessonGroups() {
     var sections = sectionList(lessonData);
+    TextTheme textTheme = Theme.of(context).textTheme;
     return Column(
       children: [
         for (int i = 0; i < sections.length; i++)
@@ -307,10 +307,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
                         contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                         title: Text(
                           sections[i],
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 17,
-                          ),
+                          style: textTheme.headline1?.copyWith(fontSize: 17, fontWeight: FontWeight.w600),
                         ),
                         trailing: const Icon(
                           Icons.keyboard_arrow_down_rounded,
@@ -336,10 +333,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
                         contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                         title: Text(
                           sections[i],
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 17,
-                          ),
+                          style: textTheme.headline1?.copyWith(fontSize: 17, fontWeight: FontWeight.w600),
                         ),
                         trailing: const Icon(
                           Icons.keyboard_arrow_up_rounded,
@@ -404,15 +398,14 @@ class CoursePagePageState extends State<CourseDetailPage> {
                       child: ListTile(
                         title: Text(
                           lessonsUnderSection[j][0].title,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: textTheme.headline1?.copyWith(fontSize: 17, fontWeight: FontWeight.w500),
                         ),
                         subtitle: Text(
                           lessonsUnderSection[j][0].shortDescription.isNotEmpty
                               ? lessonsUnderSection[j][0].shortDescription
                               : "Lorem ipsum is a pseudo-Latin text used in web design, typography, layout, and printing in place of English to emphasise design elements over content. It's also called placeholder (or filler) text.",
                           overflow: TextOverflow.ellipsis,
+                          style: textTheme.headline5?.copyWith(fontSize: 14, fontWeight: FontWeight.w400),
                         ),
                         trailing: (lessonsUnderSection[j][1])
                             ? SizedBox(

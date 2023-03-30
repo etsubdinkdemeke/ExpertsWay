@@ -1,12 +1,12 @@
-import 'package:learncoding/ui/widgets/overlay.dart';
-import 'package:learncoding/theme/box_icons_icons.dart';
-import 'package:learncoding/theme/config.dart';
-import 'package:learncoding/ui/pages/leaderboard.dart';
-import 'package:learncoding/ui/pages/planner.dart';
-import 'package:learncoding/ui/pages/videos.dart';
-import 'package:learncoding/ui/widgets/section_header.dart';
-import 'package:learncoding/ui/widgets/top_bar.dart';
-import 'package:learncoding/ui/widgets/video_card.dart';
+import 'package:expertsway/ui/widgets/overlay.dart';
+import 'package:expertsway/theme/box_icons_icons.dart';
+import 'package:expertsway/theme/config.dart';
+import 'package:expertsway/ui/pages/leaderboard.dart';
+import 'package:expertsway/ui/pages/planner.dart';
+import 'package:expertsway/ui/pages/videos.dart';
+import 'package:expertsway/ui/widgets/section_header.dart';
+import 'package:expertsway/ui/widgets/top_bar.dart';
+import 'package:expertsway/ui/widgets/video_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as material;
 

@@ -2,8 +2,8 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:learncoding/routes/page.dart';
-import 'package:learncoding/utils/color.dart';
+import 'package:expertsway/routes/page.dart';
+import 'package:expertsway/utils/color.dart';
 import 'package:get/get.dart';
 import '../main.dart';
 import '../routes/routing_constants.dart';
@@ -49,13 +49,9 @@ class _VerificationPageState extends State<VerificationPage> {
                 padding: EdgeInsets.all(15),
                 child: Column(children: [
                   Text("We've sent you an email with \n your verification code",
-                      textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.w500)),
+                      textAlign: TextAlign.center, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500)),
                   SizedBox(height: 40),
-                  Text("Check Your Email",
-                      style:
-                          TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+                  Text("Check Your Email", style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
                 ]),
               ),
               SizedBox(height: 30),
@@ -63,11 +59,8 @@ class _VerificationPageState extends State<VerificationPage> {
               SizedBox(height: 10),
               RichText(
                   text: TextSpan(children: [
-                TextSpan(
-                    text: "Didn't receive anything,",
-                    style: TextStyle(color: Colors.black)),
-                TextSpan(
-                    text: "  send again", style: TextStyle(color: maincolor)),
+                TextSpan(text: "Didn't receive anything,", style: TextStyle(color: Colors.black)),
+                TextSpan(text: "  send again", style: TextStyle(color: maincolor)),
               ])),
               SizedBox(height: 60),
               GradientBtn(
@@ -86,10 +79,8 @@ class _VerificationPageState extends State<VerificationPage> {
   }
 
   Widget buildInput() {
-    final inputBorder = OutlineInputBorder(
-        borderSide:
-            Divider.createBorderSide(context, color: Colors.grey, width: 2),
-        borderRadius: BorderRadius.circular(10));
+    final inputBorder =
+        OutlineInputBorder(borderSide: Divider.createBorderSide(context, color: Colors.grey, width: 2), borderRadius: BorderRadius.circular(10));
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
@@ -102,19 +93,15 @@ class _VerificationPageState extends State<VerificationPage> {
             child: TextFormField(
               controller: pin1,
               cursorColor: maincolor,
+              style: TextStyle(color: Colors.grey),
               textAlign: TextAlign.center,
               autofocus: true,
               decoration: InputDecoration(
                   enabledBorder: inputBorder,
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide:
-                          const BorderSide(color: maincolor, width: 2))),
+                  focusedBorder:
+                      OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: maincolor, width: 2))),
               keyboardType: TextInputType.number,
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(1),
-                FilteringTextInputFormatter.digitsOnly
-              ],
+              inputFormatters: [LengthLimitingTextInputFormatter(1), FilteringTextInputFormatter.digitsOnly],
               onChanged: (value) {
                 if (value.length == 1) {
                   otp.insert(0, int.parse(pin1.text));
@@ -129,18 +116,14 @@ class _VerificationPageState extends State<VerificationPage> {
             child: TextFormField(
               controller: pin2,
               cursorColor: maincolor,
+              style: TextStyle(color: Colors.grey),
               textAlign: TextAlign.center,
               decoration: InputDecoration(
                   enabledBorder: inputBorder,
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide:
-                          const BorderSide(color: maincolor, width: 1))),
+                  focusedBorder:
+                      OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: maincolor, width: 2))),
               keyboardType: TextInputType.number,
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(1),
-                FilteringTextInputFormatter.digitsOnly
-              ],
+              inputFormatters: [LengthLimitingTextInputFormatter(1), FilteringTextInputFormatter.digitsOnly],
               onChanged: (value) {
                 if (value.length == 1) {
                   otp.insert(1, int.parse(pin2.text));
@@ -155,18 +138,14 @@ class _VerificationPageState extends State<VerificationPage> {
             child: TextFormField(
               controller: pin3,
               cursorColor: maincolor,
+              style: TextStyle(color: Colors.grey),
               textAlign: TextAlign.center,
               decoration: InputDecoration(
                   enabledBorder: inputBorder,
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide:
-                          const BorderSide(color: maincolor, width: 2))),
+                  focusedBorder:
+                      OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: maincolor, width: 2))),
               keyboardType: TextInputType.number,
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(1),
-                FilteringTextInputFormatter.digitsOnly
-              ],
+              inputFormatters: [LengthLimitingTextInputFormatter(1), FilteringTextInputFormatter.digitsOnly],
               onChanged: (value) {
                 if (value.length == 1) {
                   otp.insert(2, int.parse(pin3.text));
@@ -181,18 +160,14 @@ class _VerificationPageState extends State<VerificationPage> {
             child: TextFormField(
               controller: pin4,
               cursorColor: maincolor,
+              style: TextStyle(color: Colors.grey),
               textAlign: TextAlign.center,
               decoration: InputDecoration(
                   enabledBorder: inputBorder,
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide:
-                          const BorderSide(color: maincolor, width: 1))),
+                  focusedBorder:
+                      OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: maincolor, width: 2))),
               keyboardType: TextInputType.number,
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(1),
-                FilteringTextInputFormatter.digitsOnly
-              ],
+              inputFormatters: [LengthLimitingTextInputFormatter(1), FilteringTextInputFormatter.digitsOnly],
               onChanged: (value) {
                 if (value.length == 1) {
                   otp.insert(3, int.parse(pin4.text));
@@ -205,23 +180,19 @@ class _VerificationPageState extends State<VerificationPage> {
             height: 57,
             width: 54,
             child: TextFormField(
-              controller: pin4,
+              controller: pin5,
               cursorColor: maincolor,
               textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey),
               decoration: InputDecoration(
                   enabledBorder: inputBorder,
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide:
-                          const BorderSide(color: maincolor, width: 1))),
+                  focusedBorder:
+                      OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: maincolor, width: 2))),
               keyboardType: TextInputType.number,
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(1),
-                FilteringTextInputFormatter.digitsOnly
-              ],
+              inputFormatters: [LengthLimitingTextInputFormatter(1), FilteringTextInputFormatter.digitsOnly],
               onChanged: (value) {
                 if (value.length == 1) {
-                  otp.insert(3, int.parse(pin4.text));
+                  otp.insert(4, int.parse(pin5.text));
                   FocusScope.of(context).nextFocus();
                 }
               },
@@ -259,6 +230,8 @@ class _VerificationPageState extends State<VerificationPage> {
           duration: const Duration(seconds: 5),
         ).show(context);
       }
+    } else {
+      return null;
     }
   }
 }

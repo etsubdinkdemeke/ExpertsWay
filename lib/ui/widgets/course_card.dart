@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
-import 'package:learncoding/models/course.dart';
-import 'package:learncoding/ui/pages/course_detail.dart';
-import 'package:learncoding/utils/color.dart';
+import 'package:expertsway/models/course.dart';
+import 'package:expertsway/ui/pages/course_detail.dart';
+import 'package:expertsway/utils/color.dart';
 import 'card.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:learncoding/models/comments_data.dart';
-import 'package:learncoding/ui/widgets/add_comment_textformfield.dart';
-import 'package:learncoding/ui/widgets/comment_box.dart';
+import 'package:expertsway/models/comments_data.dart';
+import 'package:expertsway/ui/widgets/add_comment_textformfield.dart';
+import 'package:expertsway/ui/widgets/comment_box.dart';
 import 'package:provider/provider.dart';
 
 // import 'package:flutter/src/widgets/framework.dart';

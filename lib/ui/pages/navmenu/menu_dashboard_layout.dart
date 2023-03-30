@@ -1,7 +1,7 @@
-import 'package:learncoding/theme/config.dart' as config;
-import 'package:learncoding/ui/pages/home.dart';
+import 'package:expertsway/theme/config.dart' as config;
+import 'package:expertsway/ui/pages/home.dart';
 import 'package:flutter/material.dart';
-import 'package:learncoding/ui/pages/navmenu/dashboard.dart';
+import 'package:expertsway/ui/pages/navmenu/dashboard.dart';
 
 import 'menu.dart';
 
