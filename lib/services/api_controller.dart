@@ -94,9 +94,7 @@ class ApiProvider {
           if (userInfo['image'] != null) {
             image = userInfo['image'];
           }
-          UserPreferences.setuser(
-              image!, userInfo['username']!, userInfo['first_name'],
-              userInfo['last_name']);
+          UserPreferences.setuser(image!, userInfo['username']!, userInfo['first_name'], userInfo['last_name']);
         }
       } else {
         var temp = jsonDecode(response.body.toString());
@@ -203,6 +201,32 @@ class ApiProvider {
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: jsonEncode(<String, dynamic>{"email": email, "password": newpass, "code": code}));
+      if (response.statusCode == 200) {
+        res = "success";
+      } else {
+        var temp = jsonDecode(response.body.toString());
+        String message = temp['message'];
+        res = message;
+      }
+    } on Exception catch (e) {
+      print(e.toString());
+      // res = "Some error is occured";
+    }
+
+    return res;
+  }
+
+  Future<String> resendActivation(
+    String email,
+  ) async {
+    String res = "Some error is occured";
+    http.Response? response;
+    try {
+      response = await http.post(Uri.parse(AppUrl.resendActivation),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{"email": email}));
       if (response.statusCode == 200) {
         res = "success";
       } else {
