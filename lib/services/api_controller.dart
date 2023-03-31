@@ -62,7 +62,7 @@ class ApiProvider {
       //     UserAccount(registed_with: register_with, email: email, firstname: firstname, lastname: lastname, password: password);
 
       String password_param = "password";
-      String first_name_param = "last_name";
+      String first_name_param = "first_name";
       String last_name_param = "last_name";
       if (register_with == "google") {
         password_param = "google_user_id";
