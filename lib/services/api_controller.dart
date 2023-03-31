@@ -54,12 +54,7 @@ class ApiProvider {
     }
   }
 
-  Future<String> registerUser(
-    String email,
-    String firstname,
-    String lastname,
-    String password, String register_with
-  ) async {
+  Future<String> registerUser(String email, String firstname, String lastname, String password, String register_with) async {
     String res = "Some error is occured";
     http.Response? response;
     try {
@@ -67,9 +62,9 @@ class ApiProvider {
       //     UserAccount(registed_with: register_with, email: email, firstname: firstname, lastname: lastname, password: password);
 
       String password_param = "password";
-      String first_name_param = "last_name";
+      String first_name_param = "first_name";
       String last_name_param = "last_name";
-      if(register_with == "google") {
+      if (register_with == "google") {
         password_param = "google_user_id";
         first_name_param = "given_name";
         last_name_param = "family_name";
@@ -79,7 +74,7 @@ class ApiProvider {
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: jsonEncode(<String, dynamic>{
-            "registed_with": register_with,//"email_password",
+            "registed_with": register_with, //"email_password",
             "email": email,
             first_name_param: firstname,
             last_name_param: lastname,
@@ -148,7 +143,6 @@ class ApiProvider {
         }
 
         UserPreferences.setuser(image!, userInfo['username']!, userInfo['first_name'], userInfo['last_name']);
-
       } else {
         var temp = jsonDecode(response.body.toString());
         String message = temp['message'];
@@ -156,6 +150,54 @@ class ApiProvider {
       }
     } on Exception catch (e) {
       res = "Some error is occured";
+    }
+
+    return res;
+  }
+
+  Future<String> sendInstraction(String email) async {
+    String res = "Some error is occured";
+    http.Response? response;
+    try {
+      response = await http.post(Uri.parse(AppUrl.sendInstraction),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{"user_login": email}));
+      if (response.statusCode == 200) {
+        res = "success";
+      } else {
+        var temp = jsonDecode(response.body.toString());
+        String message = temp['message'];
+        res = message;
+      }
+    } on Exception catch (e) {
+      print(e.toString());
+      // res = "Some error is occured";
+    }
+
+    return res;
+  }
+
+  Future<String> setnewpassword(String email, String newpass, int code) async {
+    String res = "Some error is occured";
+    http.Response? response;
+    try {
+      response = await http.post(Uri.parse(AppUrl.setnewpassword),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{"email": email, "password": newpass, "code": code}));
+      if (response.statusCode == 200) {
+        res = "success";
+      } else {
+        var temp = jsonDecode(response.body.toString());
+        String message = temp['message'];
+        res = message;
+      }
+    } on Exception catch (e) {
+      print(e.toString());
+      // res = "Some error is occured";
     }
 
     return res;

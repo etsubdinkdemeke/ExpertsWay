@@ -6,4 +6,6 @@ class AppRoute {
   static const String programmingOptions = '/programming_options';
   static const String authPage = '/auth';
   static const String verificationPage = '/verification';
+  static const String resetpasswordPage = '/resetpassword';
+  static const String changepasswordPage = '/changepassword';
 }

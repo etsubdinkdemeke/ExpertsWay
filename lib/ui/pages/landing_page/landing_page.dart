@@ -574,7 +574,7 @@ class _DrawerHeader extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(100),
@@ -590,6 +590,7 @@ class _DrawerHeader extends StatelessWidget {
                     width: 60,
                   ),
           ),
+          SizedBox(width: 10),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -598,14 +599,13 @@ class _DrawerHeader extends StatelessWidget {
                 controller.profileName ?? '',
                 style: textTheme.headline1?.copyWith(fontSize: 19, fontWeight: FontWeight.w400),
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               Text(
                 'Student',
                 style: textTheme.headline2?.copyWith(fontSize: 16, fontWeight: FontWeight.w400),
               ),
             ],
           ),
-          
         ],
       ),
     );

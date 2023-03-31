@@ -40,9 +40,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    final inputBorder = OutlineInputBorder(
-        borderSide: Divider.createBorderSide(context),
-        borderRadius: BorderRadius.circular(10));
+    final inputBorder = OutlineInputBorder(borderSide: Divider.createBorderSide(context), borderRadius: BorderRadius.circular(10));
 
     return CupertinoPageScaffold(
       child: Material(
@@ -86,15 +84,13 @@ class _RegisterPageState extends State<RegisterPage> {
                           height: 15,
                         ),
                         Material(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                           elevation: 4,
                           shadowColor: Colors.black,
                           child: TextFormField(
                               controller: firstnameController,
                               decoration: InputDecoration(
-                                prefixIcon:
-                                    const Icon(Icons.account_circle_outlined),
+                                prefixIcon: const Icon(Icons.account_circle_outlined),
                                 hintText: "First name",
                                 hintStyle: const TextStyle(fontSize: 14),
                                 filled: true,
@@ -106,24 +102,19 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
-                              validator: (value) =>
-                                  value != null && value.isEmpty
-                                      ? 'Enter a first name'
-                                      : null),
+                              validator: (value) => value != null && value.isEmpty ? 'Enter a first name' : null),
                         ),
                         const SizedBox(
                           height: 20,
                         ),
                         Material(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                           elevation: 4,
                           shadowColor: Colors.black,
                           child: TextFormField(
                               controller: lastnameController,
                               decoration: InputDecoration(
-                                prefixIcon:
-                                    const Icon(Icons.account_circle_outlined),
+                                prefixIcon: const Icon(Icons.account_circle_outlined),
                                 hintText: "Last name",
                                 hintStyle: const TextStyle(fontSize: 14),
                                 filled: true,
@@ -135,17 +126,13 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
-                              validator: (value) =>
-                                  value != null && value.isEmpty
-                                      ? 'Enter a last name'
-                                      : null),
+                              validator: (value) => value != null && value.isEmpty ? 'Enter a last name' : null),
                         ),
                         const SizedBox(
                           height: 20,
                         ),
                         Material(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                           elevation: 4,
                           shadowColor: Colors.black,
                           child: TextFormField(
@@ -163,18 +150,13 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               keyboardType: TextInputType.emailAddress,
                               textInputAction: TextInputAction.next,
-                              validator: (value) =>
-                                  value != null && !value.contains('@') ||
-                                          !value!.contains('.')
-                                      ? 'Enter a valid Email'
-                                      : null),
+                              validator: (value) => value != null && !value.contains('@') || !value!.contains('.') ? 'Enter a valid Email' : null),
                         ),
                         const SizedBox(
                           height: 20,
                         ),
                         Material(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                             elevation: 4,
                             shadowColor: Colors.black,
                             child: TextFormField(
@@ -187,10 +169,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       isPressed = !isPressed;
                                     });
                                   },
-                                  icon: isPressed
-                                      ? const Icon(Icons.visibility_outlined)
-                                      : const Icon(
-                                          Icons.visibility_off_outlined),
+                                  icon: isPressed ? const Icon(Icons.visibility_outlined) : const Icon(Icons.visibility_off_outlined),
                                 ),
                                 hintText: "Password",
                                 hintStyle: const TextStyle(fontSize: 14),
@@ -208,7 +187,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 if (value != null && value.isEmpty) {
                                   return 'Entre a password';
                                 } else if (value!.length < 8) {
-                                  return 'passwprd length can\'t be lessthan 8';
+                                  return 'password length can\'t be lessthan 8';
                                 }
                               },
                             )),
@@ -218,8 +197,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Checkbox(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                                 activeColor: maincolor,
                                 value: checkPolicy,
                                 onChanged: (onChanged) {
@@ -232,10 +210,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 "By continuing you accept our Privacy Policy and Terms of Use",
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 3,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 16,
-                                    color: Color.fromARGB(255, 165, 165, 165)),
+                                style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16, color: Color.fromARGB(255, 165, 165, 165)),
                               ),
                             ),
                           ],
@@ -274,10 +249,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       const Text(
                         "Or",
-                        style: TextStyle(
-                            color: Colors.grey,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 17),
+                        style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600, fontSize: 17),
                       ),
                       const SizedBox(
                         width: 10,
@@ -305,10 +277,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
-                                border: Border.all(
-                                    width: 2,
-                                    color: const Color.fromARGB(
-                                        208, 178, 178, 178))),
+                                border: Border.all(width: 2, color: const Color.fromARGB(208, 178, 178, 178))),
                             child: Image.asset("assets/images/google.png")),
                       )
                     ],
@@ -319,18 +288,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 RichText(
                   text: TextSpan(children: [
-                    const TextSpan(
-                        text: "Already have an account?",
-                        style: TextStyle(
-                            fontSize: 17, fontWeight: FontWeight.w400)),
+                    const TextSpan(text: "Already have an account?", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w400)),
                     TextSpan(
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = widget.onClickedRegister,
+                        recognizer: TapGestureRecognizer()..onTap = widget.onClickedRegister,
                         text: " Login",
-                        style: const TextStyle(
-                            color: maincolor,
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700))
+                        style: const TextStyle(color: maincolor, fontSize: 17, fontWeight: FontWeight.w700))
                   ]),
                 )
               ],
@@ -341,7 +303,8 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Future signin() async {
+
+Future signin() async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
     try {
       final user = await googleSignIn.signIn();
@@ -386,7 +349,7 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-   Future register() async {
+  Future register() async {
     final form = formkey.currentState!;
     if (form.validate()) {
       showDialog(
@@ -396,17 +359,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: CircularProgressIndicator(color: maincolor),
               ));
 
-      String res = await ApiProvider().registerUser(
-          emailController.text,
-          firstnameController.text,
-          lastnameController.text,
-          passwordController.text,
-          "email_password");
+      String res = await ApiProvider().registerUser(emailController.text, firstnameController.text, lastnameController.text, passwordController.text,'email_password');
       navigatorKey.currentState!.popUntil((rout) => rout.isFirst);
 
       if (res == "success") {
-       Get.toNamed('/verification',
-            arguments: {'email': emailController.value.text});
+        Get.toNamed('/verification', arguments: {'email': emailController.value.text, 'isResetPass': false});
       } else {
         Flushbar(
           flushbarPosition: FlushbarPosition.BOTTOM,
@@ -421,4 +378,5 @@ class _RegisterPageState extends State<RegisterPage> {
       }
     }
   }
-  }
+}
+

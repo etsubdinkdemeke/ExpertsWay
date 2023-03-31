@@ -8,6 +8,8 @@ class AppUrl {
   static var userregisterUrl = '$baseUrl/wp/v2/users/register';
   static var activateaccount = '$baseUrl/wp/v2/users/activate';
   static var loginUrl = '$baseUrl/wp/v2/users/login';
+  static var sendInstraction = '$baseUrl/wp/v2/users/lostpassword';
+  static var setnewpassword = '$baseUrl/wp/v2/users/set-new-password';
 }
 
 class Constant {

@@ -6,11 +6,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../api/shared_preference/shared_preference.dart';
 import '../main.dart';
+import '../routes/routing_constants.dart';
 import '../services/api_controller.dart';
 import '../ui/widgets/gradient_button.dart';
 import '../utils/color.dart';
 import 'package:get/get.dart';
-import 'package:expertsway/routes/routing_constants.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback onClickedLogIn;
@@ -138,21 +138,24 @@ class _LoginPageState extends State<LoginPage> {
                               if (value != null && value.isEmpty) {
                                 return 'Entre a password';
                               } else if (value!.length < 8) {
-                                return 'passwprd length can\'t be lessthan 8';
+                                return 'password length can\'t be lessthan 8';
                               }
                             },
                           ),
                         ),
                         const SizedBox(height: 20),
-                        const Align(
+                        Align(
                           alignment: Alignment.center,
-                          child: Text(
-                            "Forgot your password?",
-                            style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 17,
-                                color: Color.fromARGB(255, 165, 165, 165)),
+                          child: InkWell(
+                            onTap: () => Get.toNamed('/resetpassword'),
+                            child: const Text(
+                              "Forgot your password?",
+                              style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 17,
+                                  color: Color.fromARGB(255, 165, 165, 165)),
+                            ),
                           ),
                         ),
                       ],
@@ -256,12 +259,7 @@ class _LoginPageState extends State<LoginPage> {
         image = user.photoUrl;
       }
 
-      String res = await ApiProvider().registerUser(
-          user!.email,
-          name!,
-          name!,
-          user!.id,
-      "google");
+      String res = await ApiProvider().registerUser(user!.email, name!, name!, user!.id, "google");
 
       if (res == "success") {
         Get.toNamed(AppRoute.programmingOptions);
@@ -298,7 +296,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: CircularProgressIndicator(color: maincolor),
               ));
 
-      String res = await ApiProvider().loginUser(emailController.text, passwordController.text, "email_password");
+      String res = await ApiProvider().loginUser(emailController.text, passwordController.text, 'email_password');
       navigatorKey.currentState!.popUntil((rout) => rout.isFirst);
 
       if (res == "success") {
