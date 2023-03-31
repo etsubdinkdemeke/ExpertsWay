@@ -219,6 +219,7 @@ class _VerificationPageState extends State<VerificationPage> {
       if (res == "success") {
         Get.toNamed(AppRoute.programmingOptions);
       } else {
+        Get.toNamed(AppRoute.verificationPage, arguments: {'email': widget.email});
         Flushbar(
           flushbarPosition: FlushbarPosition.BOTTOM,
           margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),

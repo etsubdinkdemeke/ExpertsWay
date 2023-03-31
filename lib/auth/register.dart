@@ -303,8 +303,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-
-Future signin() async {
+  Future signin() async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
     try {
       final user = await googleSignIn.signIn();
@@ -317,12 +316,7 @@ Future signin() async {
         image = user.photoUrl;
       }
 
-      String res = await ApiProvider().registerUser(
-          user!.email,
-          name!,
-          name!,
-          user!.id,
-          "google");
+      String res = await ApiProvider().registerUser(user!.email, name!, name!, user!.id, "google");
 
       if (res == "success") {
         Get.toNamed(AppRoute.programmingOptions);
@@ -359,11 +353,12 @@ Future signin() async {
                 child: CircularProgressIndicator(color: maincolor),
               ));
 
-      String res = await ApiProvider().registerUser(emailController.text, firstnameController.text, lastnameController.text, passwordController.text,'email_password');
+      String res = await ApiProvider()
+          .registerUser(emailController.text, firstnameController.text, lastnameController.text, passwordController.text, 'email_password');
       navigatorKey.currentState!.popUntil((rout) => rout.isFirst);
 
       if (res == "success") {
-        Get.toNamed('/verification', arguments: {'email': emailController.value.text, 'isResetPass': false});
+        Get.toNamed(AppRoute.verificationPage, arguments: {'email': emailController.value.text, 'isResetPass': false});
       } else {
         Flushbar(
           flushbarPosition: FlushbarPosition.BOTTOM,
@@ -379,4 +374,3 @@ Future signin() async {
     }
   }
 }
-
