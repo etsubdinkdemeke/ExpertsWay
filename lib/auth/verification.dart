@@ -27,6 +27,8 @@ class _VerificationPageState extends State<VerificationPage> {
   final TextEditingController pin5 = TextEditingController();
   bool issent = false;
   final List<int> otp = [];
+
+  bool timeEnded = false;
   @override
   void dispose() {
     super.dispose();
@@ -57,14 +59,14 @@ class _VerificationPageState extends State<VerificationPage> {
               ),
               SizedBox(height: 30),
               buildInput(),
-              SizedBox(height: 10),
               Center(
-                child: Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                  Text("Didn't receive anything,", style: TextStyle(color: Colors.black)),
-                  InkWell(onTap: resendActivation, child: Text("  send again", style: TextStyle(color: maincolor))),
-                ]),
-              ),
-              SizedBox(height: 60),
+                  child: timeEnded
+                      ? Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                          const Text("Didn't receive anything,", style: TextStyle(color: Colors.black)),
+                          InkWell(onTap: resendActivation, child: const Text("  send again", style: TextStyle(color: maincolor))),
+                        ])
+                      : buildTimer()),
+              const SizedBox(height: 30),
               GradientBtn(
                 onPressed: verify,
                 btnName: 'Verify',
@@ -77,6 +79,37 @@ class _VerificationPageState extends State<VerificationPage> {
           ),
         ),
       )),
+    );
+  }
+
+  Column buildTimer() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text("We sent your code to ${widget.email}"),
+        SizedBox(
+          height: 5,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text("The code will expire in"),
+            TweenAnimationBuilder(
+              tween: Tween(begin: 60.0, end: 0),
+              duration: const Duration(seconds: 60),
+              builder: (context, value, child) => Text(
+                " 00:${(value as double).toInt()}",
+                style: const TextStyle(color: maincolor),
+              ),
+              onEnd: () {
+                setState(() {
+                  timeEnded = true;
+                });
+              },
+            ),
+          ],
+        )
+      ],
     );
   }
 
