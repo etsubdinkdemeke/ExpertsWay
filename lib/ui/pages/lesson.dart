@@ -2,18 +2,19 @@
 
 import 'dart:math';
 import 'package:another_flushbar/flushbar.dart';
+import 'package:get/get.dart';
 import 'package:learncoding/api/shared_preference/shared_preference.dart';
 import 'package:learncoding/models/lesson.dart';
 import 'package:learncoding/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:learncoding/ui/pages/comment/comment.dart';
 import 'package:learncoding/utils/color.dart';
 import 'package:learncoding/utils/lesson_finish_message.dart';
 import '../../db/course_database.dart';
 import '../../models/course.dart';
 import '../../models/notification.dart';
-import 'package:learncoding/ui/pages/comment.dart';
 
 class LessonPage extends StatefulWidget {
   final List<List> lessonData;
@@ -222,7 +223,7 @@ class _LessonState extends State<LessonPage> {
     return WillPopScope(
       onWillPop: () {
         Navigator.of(context).pop(_isLessonFinished);
-        return Future.value(true);  // this is required for the page to pop.
+        return Future.value(true); // this is required for the page to pop.
       },
       child: CupertinoPageScaffold(
         backgroundColor: const Color.fromARGB(255, 250, 250, 250),
@@ -448,10 +449,9 @@ class _LessonState extends State<LessonPage> {
                         color: Colors.blue,
                         size: 20,
                       ),
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const CommentSection()),
+                      onPressed: () => Get.bottomSheet(
+                        const MyWidgetComment(),
+                        isScrollControlled: true,
                       ),
                     ),
                     const SizedBox(width: 5),

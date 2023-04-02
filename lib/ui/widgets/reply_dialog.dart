@@ -41,7 +41,7 @@ Widget replyDialog(
                         if (kDebugMode) {
                           print(replyController.text);
                         }
-                        data.addReply(replyController.text, commentIndex);
+                        // data.addReply(replyController.text, commentIndex);
                         Navigator.pop(context);
                       },
                       child: const Text("Reply")),

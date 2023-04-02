@@ -63,16 +63,16 @@ class AddCommentTextFormField extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(6))),
                 onPressed: () {
-                  data.addComment(Comment(
-                    date: "8",
-                    firstName: "Nardos Tamirat",
-                    imageUrl: "assets/images/p2.jpg",
-                    like: 1,
-                    liked: false,
-                    disLike: 3,
-                    reply: [],
-                    message: commentController.text,
-                  ));
+                  // data.addComment(Comment(
+                  //   date: "8",
+                  //   firstName: "Nardos Tamirat",
+                  //   imageUrl: "assets/images/p2.jpg",
+                  //   like: 1,
+                  //   liked: false,
+                  //   disLike: 3,
+                  //   reply: [],
+                  //   message: commentController.text,
+                  // ));
                 },
                 child: const Text("Post"))
           ],

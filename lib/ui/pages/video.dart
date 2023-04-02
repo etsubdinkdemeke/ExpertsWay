@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:learncoding/models/comments_data.dart';
 import 'package:learncoding/theme/box_icons_icons.dart';
-import 'package:learncoding/ui/pages/comment.dart';
+import 'package:learncoding/ui/pages/comment/comment.dart';
 import 'package:learncoding/ui/widgets/card.dart';
 
 class VideoPage extends StatefulWidget {
@@ -141,7 +141,7 @@ class VideoPageState extends State<VideoPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        const CommentSection()),
+                                        const MyWidgetComment()),
                               ),
                               child: Row(
                                 children: [
