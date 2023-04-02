@@ -157,6 +157,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       if (res == "success") {
         Get.toNamed(AppRoute.changepasswordPage, arguments: {'email': emailController.text});
       } else {
+        Get.toNamed(AppRoute.forgotpasswordPage);
+
         Flushbar(
           flushbarPosition: FlushbarPosition.BOTTOM,
           margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),

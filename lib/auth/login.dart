@@ -147,7 +147,7 @@ class _LoginPageState extends State<LoginPage> {
                         Align(
                           alignment: Alignment.center,
                           child: InkWell(
-                            onTap: () => Get.toNamed('/resetpassword'),
+                            onTap: () => Get.toNamed(AppRoute.forgotpasswordPage),
                             child: const Text(
                               "Forgot your password?",
                               style: TextStyle(

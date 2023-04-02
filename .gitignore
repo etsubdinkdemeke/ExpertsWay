@@ -46,3 +46,5 @@ app.*.map.json
 
 # I don't want to push my prettier config file
 .prettierrc
+
+/android/local.properties

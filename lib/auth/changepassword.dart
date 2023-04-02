@@ -1,4 +1,5 @@
 import 'package:another_flushbar/flushbar.dart';
+import 'package:expertsway/routes/routing_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -225,8 +226,9 @@ class _ChangePasswordState extends State<ChangePassword> {
       );
       navigatorKey.currentState!.popUntil((rout) => rout.isFirst);
       if (res == "success") {
-        Get.offAllNamed('/auth');
+        Get.offAllNamed(AppRoute.authPage);
       } else {
+        Get.toNamed(AppRoute.changepasswordPage);
         Flushbar(
           flushbarPosition: FlushbarPosition.BOTTOM,
           margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),

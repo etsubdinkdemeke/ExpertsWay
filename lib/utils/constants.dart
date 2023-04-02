@@ -10,6 +10,7 @@ class AppUrl {
   static var loginUrl = '$baseUrl/wp/v2/users/login';
   static var sendInstraction = '$baseUrl/wp/v2/users/lostpassword';
   static var setnewpassword = '$baseUrl/wp/v2/users/set-new-password';
+  static var resendActivation = '$baseUrl/wp/v2/users/resend_activate';
   static var lessonCompleteProgressUpdate = '$baseUrl/ds_lc/v1/lesson/completed';
 }
 

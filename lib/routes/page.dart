@@ -27,6 +27,6 @@ final pages = [
       })),
   GetPage(name: AppRoute.authPage, page: () => const AuthPage()),
   GetPage(name: AppRoute.verificationPage, page: () => VerificationPage(email: email)),
-  GetPage(name: AppRoute.resetpasswordPage, page: () => const ForgotPassword()),
-  GetPage(name: AppRoute.changepasswordPage, page: () =>  ChangePassword(email:email)),
+  GetPage(name: AppRoute.forgotpasswordPage, page: () => const ForgotPassword()),
+  GetPage(name: AppRoute.changepasswordPage, page: () => ChangePassword(email: email)),
 ];

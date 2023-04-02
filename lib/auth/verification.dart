@@ -1,5 +1,6 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:expertsway/routes/page.dart';
@@ -24,7 +25,7 @@ class _VerificationPageState extends State<VerificationPage> {
   final TextEditingController pin3 = TextEditingController();
   final TextEditingController pin4 = TextEditingController();
   final TextEditingController pin5 = TextEditingController();
-
+  bool issent = false;
   final List<int> otp = [];
   @override
   void dispose() {
@@ -57,11 +58,12 @@ class _VerificationPageState extends State<VerificationPage> {
               SizedBox(height: 30),
               buildInput(),
               SizedBox(height: 10),
-              RichText(
-                  text: TextSpan(children: [
-                TextSpan(text: "Didn't receive anything,", style: TextStyle(color: Colors.black)),
-                TextSpan(text: "  send again", style: TextStyle(color: maincolor)),
-              ])),
+              Center(
+                child: Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                  Text("Didn't receive anything,", style: TextStyle(color: Colors.black)),
+                  InkWell(onTap: resendActivation, child: Text("  send again", style: TextStyle(color: maincolor))),
+                ]),
+              ),
               SizedBox(height: 60),
               GradientBtn(
                 onPressed: verify,
@@ -219,6 +221,7 @@ class _VerificationPageState extends State<VerificationPage> {
       if (res == "success") {
         Get.toNamed(AppRoute.programmingOptions);
       } else {
+        Get.toNamed(AppRoute.verificationPage, arguments: {'email': widget.email});
         Flushbar(
           flushbarPosition: FlushbarPosition.BOTTOM,
           margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),
@@ -232,6 +235,43 @@ class _VerificationPageState extends State<VerificationPage> {
       }
     } else {
       return null;
+    }
+  }
+
+  Future resendActivation() async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(color: maincolor),
+            ));
+    String res = await ApiProvider().resendActivation(widget.email);
+    navigatorKey.currentState!.popUntil((rout) => rout.isFirst);
+
+    if (res == "success") {
+      Get.toNamed(AppRoute.verificationPage, arguments: {'email': widget.email});
+      Flushbar(
+        flushbarPosition: FlushbarPosition.BOTTOM,
+        margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),
+        titleSize: 20,
+        messageSize: 17,
+        backgroundColor: maincolor,
+        borderRadius: BorderRadius.circular(8),
+        message: 'sent, check your email !!',
+        duration: const Duration(seconds: 3),
+      ).show(context);
+    } else {
+      Get.toNamed(AppRoute.verificationPage, arguments: {'email': widget.email});
+      Flushbar(
+        flushbarPosition: FlushbarPosition.BOTTOM,
+        margin: const EdgeInsets.fromLTRB(10, 20, 10, 5),
+        titleSize: 20,
+        messageSize: 17,
+        backgroundColor: maincolor,
+        borderRadius: BorderRadius.circular(8),
+        message: res,
+        duration: const Duration(seconds: 5),
+      ).show(context);
     }
   }
 }

@@ -59,6 +59,10 @@ class ApiProvider {
   Future<String> registerUser(String email, String firstname, String lastname, String password, String register_with) async {
     String res = "Some error is occured";
     http.Response? response;
+    print("successlly registertedasdf");
+    print("register_with");
+    print(register_with);
+
     try {
       // UserAccount userAccount =
       //     UserAccount(registed_with: register_with, email: email, firstname: firstname, lastname: lastname, password: password);
@@ -85,6 +89,15 @@ class ApiProvider {
 
       if (response.statusCode == 200) {
         res = "success";
+
+        if (register_with == "google") {
+          var userInfo = jsonDecode(response.body.toString());
+          String? image = "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50";
+          if (userInfo['image'] != null) {
+            image = userInfo['image'];
+          }
+          UserPreferences.setuser(image!, userInfo['username']!, userInfo['first_name'], userInfo['last_name']);
+        }
       } else {
         var temp = jsonDecode(response.body.toString());
         String message = temp['message'];
@@ -190,6 +203,32 @@ class ApiProvider {
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: jsonEncode(<String, dynamic>{"email": email, "password": newpass, "code": code}));
+      if (response.statusCode == 200) {
+        res = "success";
+      } else {
+        var temp = jsonDecode(response.body.toString());
+        String message = temp['message'];
+        res = message;
+      }
+    } on Exception catch (e) {
+      print(e.toString());
+      // res = "Some error is occured";
+    }
+
+    return res;
+  }
+
+  Future<String> resendActivation(
+    String email,
+  ) async {
+    String res = "Some error is occured";
+    http.Response? response;
+    try {
+      response = await http.post(Uri.parse(AppUrl.resendActivation),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{"email": email}));
       if (response.statusCode == 200) {
         res = "success";
       } else {
