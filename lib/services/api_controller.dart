@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:expertsway/models/course.dart';
 import 'package:expertsway/models/lesson.dart';
 import 'package:expertsway/models/user_account.dart';
+import 'package:expertsway/routes/routing_constants.dart';
 import 'package:expertsway/utils/constants.dart';
 import 'package:http/http.dart' as http;
 
@@ -201,5 +203,19 @@ class ApiProvider {
     }
 
     return res;
+  }
+
+  Future<void> lessonCompleteUpdate(String lessonSlug) async {
+    try {
+      var response = await http.post(Uri.parse("${AppUrl.lessonCompleteProgressUpdate}/$lessonSlug"), headers: {
+        'username': AppUrl.username,
+        'password': AppUrl.password,
+        'login_with': 'google',
+      });
+      print("${response.statusCode} -- ${response.body} -- slug: $lessonSlug");
+    } on HttpException catch (e) {
+      // TODO: do the appropriate error handling here instead of just rethrowing the error.
+      rethrow;
+    }
   }
 }
