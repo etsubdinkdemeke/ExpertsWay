@@ -1,5 +1,6 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:convert';
-import 'dart:ffi';
 
 Lesson lessonFromJson(dynamic str) => Lesson.fromJson(str);
 
@@ -21,6 +22,7 @@ class Lesson {
 
   Map<String, dynamic> toJson() => {
         "code": code,
+        // ignore: unnecessary_null_comparison
         "lessons": lessons == null
             ? []
             : List<dynamic>.from(lessons.map((x) => x!.toJson())),
@@ -38,13 +40,13 @@ class LessonsElementFields {
     publishedDate,
   ];
 
-  static final String lesson_id = 'lesson_id';
-  static final String slug = 'slug';
-  static final String title = 'title';
-  static final String shortDescription = 'short_description';
-  static final String section = 'section';
-  static final String courseSlug = 'course_slug';
-  static final String publishedDate = 'published_date';
+  static const String lesson_id = 'lesson_id';
+  static const String slug = 'slug';
+  static const String title = 'title';
+  static const String shortDescription = 'short_description';
+  static const String section = 'section';
+  static const String courseSlug = 'course_slug';
+  static const String publishedDate = 'published_date';
 }
 
 class LessonElement {
@@ -99,7 +101,8 @@ class LessonElement {
         lessonId: json[LessonsElementFields.lesson_id] as int,
         slug: json[LessonsElementFields.slug] as String? ?? '',
         title: json[LessonsElementFields.title] as String? ?? '',
-        shortDescription: json[LessonsElementFields.shortDescription] as String? ?? '',
+        shortDescription:
+            json[LessonsElementFields.shortDescription] as String? ?? '',
         section: json[LessonsElementFields.section] as String? ?? '',
         courseSlug: json[LessonsElementFields.courseSlug] as String? ?? '',
         content: json["content"] == null
@@ -134,9 +137,9 @@ class LessonsContentFields {
     lessonId,
     content,
   ];
-  static final String id = '_id';
-  static final String lessonId = 'lessonId';
-  static final String content = 'content';
+  static const String id = '_id';
+  static const String lessonId = 'lessonId';
+  static const String content = 'content';
 }
 
 class LessonContent {
@@ -180,12 +183,12 @@ class ProgressFields {
     pageNum,
     userProgress,
   ];
-  static final String progId = '_id';
-  static final String courseId = 'courseId';
-  static final String lessonId = 'lessonId';
-  static final String contentId = 'contentId';
-  static final String pageNum = 'pageNum';
-  static final String userProgress = 'userProgress';
+  static const String progId = '_id';
+  static const String courseId = 'courseId';
+  static const String lessonId = 'lessonId';
+  static const String contentId = 'contentId';
+  static const String pageNum = 'pageNum';
+  static const String userProgress = 'userProgress';
 }
 
 class ProgressElement {

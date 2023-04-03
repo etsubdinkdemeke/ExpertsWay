@@ -1,4 +1,4 @@
-import 'package:learncoding/auth/google_auth.dart';
+import 'package:expertsway/auth/google_auth.dart';
 
 var gAuth = GoogleAuth();
 

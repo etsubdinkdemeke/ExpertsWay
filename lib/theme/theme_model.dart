@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:learncoding/theme/theme.dart';
-// import 'package:learncoding/main.dart' as main;
+// import 'package:expertsway/main.dart' as main;
 
+// ignore: constant_identifier_names
 enum ThemeType { Light, Dark }
 
 class ThemeModel extends ChangeNotifier {
-  ThemeData currentTheme = kLightTheme;
+  ThemeData currentTheme = ThemeType.Light as ThemeData;
   ThemeType themeType = ThemeType.Dark;
 
   ThemeModel(this.currentTheme, this.themeType);

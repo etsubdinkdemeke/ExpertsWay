@@ -1,4 +1,4 @@
-name: learncoding
+name: expertsway
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -33,11 +33,13 @@ dependencies:
   another_flushbar: ^1.12.29
   cached_network_image: ^3.2.3
   cloud_firestore: ^4.0.1
-  intl: ^0.17.0
+  configurable_expansion_tile_null_safety: ^3.1.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   dio: ^4.0.6
+
+  double_back_to_close_app: ^2.1.0
   firebase_analytics: ^10.0.1
   firebase_auth: ^4.2.10
   firebase_core_platform_interface: 4.5.3
@@ -47,21 +49,35 @@ dependencies:
   flutter_calendar_carousel: ^2.4.0
   flutter_html: ^2.2.1
   flutter_slidable: ^2.0.0
+
+  flutter_staggered_grid_view: ^0.6.2
   flutter_svg: ^0.23.0+1
   font_awesome_flutter: ^10.3.0
+
+  get: ^4.6.5
   google_sign_in: ^5.4.2
+  intl: ^0.17.0
+
+  page_transition: ^2.0.9
+
+  path: ^1.8.2
   percent_indicator: ^4.2.2
   provider: ^6.0.4
   shared_preferences: ^2.0.15
-  youtube_player_flutter: ^8.1.2
+  sqflite: ^2.2.2
+  timeago: ^3.2.2
+  youtube_player_flutter: ^8.1.2     
+  flutter_launcher_icons: ^0.11.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
-  get: ^4.6.5
-  sqflite: ^2.2.2
-  timeago: ^3.2.2
+  http: ^0.13.5
+flutter_icons:    
+  android: true
+  ios: true
+  image_path: "assets/images/logo.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.
@@ -77,6 +93,7 @@ flutter:
     - assets/images/Capture.PNG
     - assets/images/p1.jpg
     - assets/images/p2.jpg
+    - assets/images/drawer_icon_white.png
 
   fonts:
     - family: Poppins

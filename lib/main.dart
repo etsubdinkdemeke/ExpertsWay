@@ -1,21 +1,23 @@
-import 'package:learncoding/api/google_signin_api.dart';
-import 'package:learncoding/ui/pages/help.dart';
-import 'package:learncoding/ui/pages/navmenu/dashboard.dart';
-import 'package:learncoding/ui/pages/navmenu/menu_dashboard_layout.dart';
-import 'package:learncoding/ui/pages/onboarding1.dart';
-import 'package:learncoding/ui/pages/profile.dart';
-import 'package:learncoding/ui/pages/setting.dart';
-import 'package:learncoding/ui/pages/undefinedScreen.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:expertsway/db/course_database.dart';
+import 'package:expertsway/models/course.dart';
+import 'package:expertsway/routes/page.dart';
+import 'package:expertsway/theme/theme.dart';
+import 'package:expertsway/ui/pages/navmenu/menu_dashboard_layout.dart';
+import 'package:expertsway/ui/pages/onboarding1.dart';
+import 'package:expertsway/ui/pages/setting.dart';
+import 'package:expertsway/ui/pages/undefined_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:learncoding/global/globals.dart' as globals;
-import 'package:learncoding/routes/router.dart' as router;
+import 'package:expertsway/global/globals.dart' as globals;
+import 'package:expertsway/routes/router.dart' as router;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:page_transition/page_transition.dart';
+
+import 'auth/verification.dart';
 
 String? name;
 String? image;
@@ -23,24 +25,34 @@ late SharedPreferences prefs;
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  SharedPreferences sharedPreferennces = await SharedPreferences.getInstance();
+  final isDark = sharedPreferennces.getBool('is_dark') ?? false;
   // await Firebase.initializeApp();
+
   SharedPreferences.getInstance().then((prefs) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
         .then((value) => runApp(
               RestartWidget(
-                child: MyApp(),
+                child: MyApp(isDark: isDark),
               ),
             ));
   });
 }
 
 class MyApp extends StatefulWidget {
+  final bool isDark;
+  const MyApp({
+    super.key,
+    required this.isDark,
+  });
+
   @override
-  _MyAppState createState() => _MyAppState();
+  MyAppState createState() => MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+final navigatorKey = GlobalKey<NavigatorState>();
+
+class MyAppState extends State<MyApp> {
   void getLoginStatus() async {
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -59,46 +71,55 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     getLoginStatus();
-    MenuDashboardLayout();
+    const MenuDashboardLayout();
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
-    return GetCupertinoApp(
-        localizationsDelegates: [
-          DefaultMaterialLocalizations.delegate,
-          DefaultCupertinoLocalizations.delegate,
-          DefaultWidgetsLocalizations.delegate,
-        ],
-        onGenerateRoute: router.generateRoute,
-        onUnknownRoute: (settings) => CupertinoPageRoute(
-            builder: (context) => UndefinedScreen(
-                  name: settings.name,
-                )),
-        // theme: Provider.of<ThemeModel>(context).currentTheme,
-        debugShowCheckedModeBanner: false,
-        // home: Settings(),
-        // home: Profile(),
-        // home: name == null ? Onboarding() : MenuDashboardLayout(),
-        home: SplashScreen());
-  }
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+      create: (context) => ThemeProvider(widget.isDark),
+      builder: (context, _) {
+        final themeProvider = Provider.of<ThemeProvider>(context);
+        final settings = context.read<ThemeProvider>();
+        return GetMaterialApp(
+          navigatorKey: navigatorKey,
+          localizationsDelegates: const [
+            DefaultMaterialLocalizations.delegate,
+            DefaultCupertinoLocalizations.delegate,
+            DefaultWidgetsLocalizations.delegate,
+          ],
+          themeMode: themeProvider.currentTheme == ThemeData.light()
+              ? ThemeMode.light
+              : ThemeMode.dark,
+          theme: Themes.lightTheme,
+          darkTheme: Themes.darkTheme,
+          onGenerateRoute: router.generateRoute,
+          onUnknownRoute: (settings) => CupertinoPageRoute(
+              builder: (context) => UndefinedScreen(
+                    name: settings.name,
+                  )),
+          // theme: Provider.of<ThemeModel>(context).currentTheme,
+          debugShowCheckedModeBanner: false,
+          getPages: pages,
+          home: const SplashScreen(),
+        );
+      });
 }
 
 class RestartWidget extends StatefulWidget {
-  RestartWidget({this.child});
+  const RestartWidget({this.child, super.key});
 
   final Widget? child;
 
   static void restartApp(BuildContext context) {
-    context.findAncestorStateOfType<_RestartWidgetState>()!.restartApp();
+    context.findAncestorStateOfType<RestartWidgetState>()!.restartApp();
   }
 
   @override
-  _RestartWidgetState createState() => _RestartWidgetState();
+  RestartWidgetState createState() => RestartWidgetState();
 }
 
-class _RestartWidgetState extends State<RestartWidget> {
+class RestartWidgetState extends State<RestartWidget> {
   Key key = UniqueKey();
 
   void restartApp() {
@@ -121,14 +142,23 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSplashScreen(
+    // final text = Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
+    //     ? 'DarkTheme'
+    //     : 'LightTheme';
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
+    return Scaffold(
+      body: AnimatedSplashScreen(
         splash: Image.asset('assets/images/splash.png'),
         duration: 3000,
         splashIconSize: 350,
         splashTransition: SplashTransition.slideTransition,
-        animationDuration: Duration(milliseconds: 1500),
-        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        animationDuration: const Duration(milliseconds: 1500),
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         pageTransitionType: PageTransitionType.fade,
-        nextScreen: name == null ? Onboarding() : MenuDashboardLayout());
+        nextScreen:
+            name == null ? const Onboarding() : const MenuDashboardLayout(),
+      ),
+    );
   }
 }

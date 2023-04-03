@@ -1,18 +1,18 @@
-import 'package:learncoding/api/shared_preference/shared_preference.dart';
-import 'package:learncoding/theme/box_icons_icons.dart';
-import 'package:learncoding/ui/pages/navmenu/menu_dashboard_layout.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:learncoding/api/google_signin_api.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+
+import '../../auth/auth.dart';
+import '../../theme/theme.dart';
 
 class Onboarding extends StatefulWidget {
+  const Onboarding({super.key});
+
   @override
-  _OnboardingState createState() => _OnboardingState();
+  OnboardingState createState() => OnboardingState();
 }
 
-class _OnboardingState extends State<Onboarding> {
+class OnboardingState extends State<Onboarding> {
   final PageController controller = PageController(initialPage: 0);
 
   int counter = 0; // a counter to track which "page" we're at
@@ -64,18 +64,19 @@ class _OnboardingState extends State<Onboarding> {
     messages.addAll([
       buildMessage(
         "Learn anytime, and anywhere",
-        "Lorem ipsum dolor sit amet consectetur"
-            " adipiscing elit Ut et massa mi. Aliquam in hendrerit.",
+        "Discover the convenience of learning on-the-go with our app. "
+          "Study at your own pace, wherever you are.",
       ),
       buildMessage(
         "Unleash Your Creativity and Compete with Style",
-        "Lorem ipsum dolor sit amet consectetur"
-            " adipiscing elit Ut et massa mi. Aliquam in hendrerit.",
+        "Get ready to take your skills to the next level! "
+          "Our app challenges you to be creative and innovative, and rewards your efforts with recognition.",
+
       ),
       buildMessage(
           "High quality lectures and unlimited questions",
-          "Lorem ipsum dolor sit amet consectetur"
-              " adipiscing elit Ut et massa mi. Aliquam in hendrerit.")
+          "Upgrade your learning with our top-notch lectures and endless practice questions. "
+              "Prepare to ace any exam and achieve your academic goals.")
     ]);
     // at the start, we show the first elements from each list
     displayedPicture = pictures[counter];
@@ -84,6 +85,10 @@ class _OnboardingState extends State<Onboarding> {
   }
 
   Widget buildMessage(String mainMessage, String subMessage) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    TextTheme textTheme = Theme.of(context).textTheme;
+    Color scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
+
     return SizedBox(
       key: UniqueKey(),
       height: 150,
@@ -94,21 +99,16 @@ class _OnboardingState extends State<Onboarding> {
             Text(
               mainMessage,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
-              ),
+              style: textTheme.bodyText2
+                  ?.copyWith(fontSize: 24, fontWeight: FontWeight.w600),
             ),
             const Spacer(),
             Text(
               subMessage,
               overflow: TextOverflow.fade,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 13,
-              ),
+              style: textTheme.bodyText2
+                  ?.copyWith(fontSize: 15, fontWeight: FontWeight.w400),
             ),
           ],
         ),
@@ -135,9 +135,7 @@ class _OnboardingState extends State<Onboarding> {
           child: Center(
             child: Text(
               label,
-              style: const TextStyle(
-                color: Colors.white,
-              ),
+              style: const TextStyle(color: Colors.white, fontSize: 18),
             ),
           ),
         ),
@@ -175,22 +173,23 @@ class _OnboardingState extends State<Onboarding> {
   }
 
   Future signin() async {
-    try {
-      final user = await GoogleSignInApi.login();
-      String? name = user!.displayName;
-      String? image = user.photoUrl;
+    // try {
+    //   final user = await GoogleSignInApi.login();
+    //   String? name = user!.displayName;
+    //   String? image = user.photoUrl;
 
-      // SharedPreferences pref = await SharedPreferences.getInstance();
-      UserPreferences.setuser(image!, name!);
-    } catch (error) {
-      // console.error("Error during login: ", error);
-      UserPreferences.setuser(
-          "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
-          "testDisplayName");
-    }
+    //   // SharedPreferences pref = await SharedPreferences.getInstance();
+    //   UserPreferences.setuser(image!, name!);
+    // } catch (error) {
+    //   // console.error("Error during login: ", error);
+    //   UserPreferences.setuser(
+    //       "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+    //       "testDisplayName");
+    // }
 
+    // ignore: use_build_context_synchronously
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => (MenuDashboardLayout())));
+        MaterialPageRoute(builder: (context) => (const AuthPage())));
   }
 
   @override
@@ -198,8 +197,12 @@ class _OnboardingState extends State<Onboarding> {
     // we will maintain the same layout-forming column but switch the
     // contained widgets in order to show the 3 different "pages"
     createWidgets();
-    return CupertinoPageScaffold(
-      child: Column(
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    return Scaffold(
+      backgroundColor: themeProvider.currentTheme == ThemeData.light()
+          ? Colors.white
+          : const Color.fromARGB(255, 25, 32, 36),
+      body: Column(
         children: <Widget>[
           const Spacer(flex: 3),
           AnimatedSwitcher(
