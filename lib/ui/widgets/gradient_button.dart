@@ -63,7 +63,7 @@ class GradientBtn extends StatelessWidget {
           children: [
             if (!defaultBtn)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 child: CachedNetworkImage(
                   imageUrl: iconUrl,
                   height: 20,
@@ -71,7 +71,7 @@ class GradientBtn extends StatelessWidget {
                 ),
               ),
             Padding(
-                padding: const EdgeInsets.only(right: 18),
+                padding: const EdgeInsets.only(right: 0),
                 child: Text(
                   btnName,
                   style: TextStyle(

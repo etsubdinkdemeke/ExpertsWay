@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:expertsway/models/comments_data.dart';
 import 'package:expertsway/theme/box_icons_icons.dart';
-import 'package:expertsway/ui/pages/comment.dart';
 import 'package:expertsway/ui/widgets/card.dart';
 
 class VideoPage extends StatefulWidget {
@@ -137,12 +136,12 @@ class VideoPageState extends State<VideoPage> {
                             // height: 60,
                             // color: material.Colors.cyan,
                             child: GestureDetector(
-                              onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const CommentSection()),
-                              ),
+                              // onTap: () => Navigator.push(
+                                // context,
+                                // MaterialPageRoute(
+                                //     builder: (context) =>
+                                        // const MyWidgetComment()),
+                              // ),
                               child: Row(
                                 children: [
                                   const SizedBox(

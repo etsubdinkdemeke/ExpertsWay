@@ -389,6 +389,7 @@ class CoursePagePageState extends State<CourseDetailPage> {
                               );
                               setState(() {});
                               if (_isLessonFinished) {
+                                ApiProvider().lessonCompleteUpdate(lessonsUnderSection[j][0].slug);
                                 // we update the progress and unlock the next lesson
                                 // if the lesson on the lessonPage has been complete.
                                 unlockNextLesson(lessonsUnderSection[j]);

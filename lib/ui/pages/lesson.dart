@@ -5,16 +5,22 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:expertsway/api/shared_preference/shared_preference.dart';
 import 'package:expertsway/models/lesson.dart';
 import 'package:expertsway/models/user.dart';
+import 'package:get/get.dart';
+import 'package:expertsway/api/shared_preference/shared_preference.dart';
+import 'package:expertsway/models/lesson.dart';
+import 'package:expertsway/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:expertsway/utils/color.dart';
 import 'package:expertsway/utils/lesson_finish_message.dart';
 import 'package:provider/provider.dart';
+import 'package:expertsway/ui/pages/comment/comment.dart';
+import 'package:expertsway/utils/color.dart';
+import 'package:expertsway/utils/lesson_finish_message.dart';
 import '../../db/course_database.dart';
 import '../../models/course.dart';
 import '../../models/notification.dart';
-import 'package:expertsway/ui/pages/comment.dart';
 
 import '../../theme/theme.dart';
 
@@ -116,6 +122,9 @@ class _LessonState extends State<LessonPage> {
     if (progressElement != null) {
       setState(() {
         index = progressElement!.pageNum;
+        if (index == getContent.length - 1) {
+          _isLessonFinished = true;
+        }
       });
     } else {
       setState(() {
@@ -436,16 +445,16 @@ class _LessonState extends State<LessonPage> {
                     ),
                     const Spacer(),
                     CupertinoButton(
-                      color: themeProvider.currentTheme == ThemeData.light() ? Colors.white : const Color.fromARGB(255, 25, 32, 36),
+                      color: Colors.white,
                       padding: const EdgeInsets.all(4),
                       child: const Icon(
                         Icons.comment_outlined,
                         color: Colors.blue,
                         size: 20,
                       ),
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const CommentSection()),
+                      onPressed: () => Get.bottomSheet(
+                        const MyWidgetComment(),
+                        isScrollControlled: true,
                       ),
                     ),
                     const SizedBox(width: 5),
