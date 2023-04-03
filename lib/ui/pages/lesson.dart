@@ -116,6 +116,9 @@ class _LessonState extends State<LessonPage> {
     if (progressElement != null) {
       setState(() {
         index = progressElement!.pageNum;
+        if (index == getContent.length - 1) {
+          _isLessonFinished = true;
+        }
       });
     } else {
       setState(() {
