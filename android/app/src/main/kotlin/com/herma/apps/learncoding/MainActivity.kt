@@ -1,4 +1,4 @@
-package com.herma.apps.learncoding
+package com.herma.apps.expertsway
 
 import io.flutter.embedding.android.FlutterActivity
 

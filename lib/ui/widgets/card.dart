@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
-
-import 'package:learncoding/theme/config.dart';
-import 'package:flutter/material.dart' as material;
+import 'package:flutter/material.dart';
+import 'package:expertsway/theme/config.dart' as config;
 
 class CardWidget extends StatelessWidget {
   final bool gradient;
@@ -12,8 +10,10 @@ class CardWidget extends StatelessWidget {
   final Widget child;
   final int? duration;
   final Border? border;
-  final func;
-  CardWidget({
+  final BorderRadius? borderRadius;
+  final Function()? func;
+  const CardWidget({
+    super.key,
     required this.gradient,
     required this.button,
     this.color,
@@ -23,11 +23,12 @@ class CardWidget extends StatelessWidget {
     this.duration,
     this.func,
     this.border,
+    this.borderRadius, // an optional field for setting the border-radius
   });
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: material.BoxDecoration(
+      decoration: const BoxDecoration(
         boxShadow: [
           BoxShadow(
             blurRadius: 25,
@@ -39,36 +40,37 @@ class CardWidget extends StatelessWidget {
       child: ClipPath(
         clipper: ShapeBorderClipper(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            // if borderRadius is not passed to the constructor, we use a default value of 10
+            borderRadius: borderRadius ?? BorderRadius.circular(10),
           ),
         ),
-        child: material.AnimatedContainer(
+        child: AnimatedContainer(
           duration: Duration(milliseconds: duration ?? 500),
           width: width,
           height: height,
           decoration: BoxDecoration(
             border: border ??
                 Border.all(
-                  color: material.Colors.white,
+                  color: Colors.white,
                   width: 0,
                 ),
             // borderRadius: BorderRadius.circular(10),
-            color: color ?? Colors().mainColor(1),
+            color: color ?? config.Colors().mainColor(1),
             gradient: gradient
-                ? Colors().waves
+                ? config.Colors().waves
                 : LinearGradient(colors: [
-                    color ?? Colors().mainColor(1),
-                    color ?? Colors().mainColor(1)
+                    color ?? config.Colors().mainColor(1),
+                    color ?? config.Colors().mainColor(1)
                   ]),
           ),
           child: button
               ? ClipRRect(
-                  borderRadius: material.BorderRadius.circular(10),
-                  child: material.MaterialButton(
-                    padding: material.EdgeInsets.zero,
+                  borderRadius: BorderRadius.circular(10),
+                  child: MaterialButton(
+                    padding: EdgeInsets.zero,
                     elevation: 0,
-                    child: child,
                     onPressed: func,
+                    child: child,
                   ),
                 )
               : child,

@@ -1,584 +1,487 @@
-import 'package:learncoding/models/course.dart';
-import 'package:learncoding/models/lesson.dart' as lesson;
-import 'package:learncoding/ui/pages/lesson.dart';
-import 'package:learncoding/services/api_controller.dart';
-import 'package:learncoding/theme/box_icons_icons.dart';
-import 'package:learncoding/ui/widgets/card.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:learncoding/theme/config.dart' as config;
-import 'package:flutter/material.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'dart:math';
 
-import '../../db/course_database.dart';
+import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
+import 'package:expertsway/models/course.dart';
+import 'package:expertsway/models/lesson.dart' as lesson;
+import 'package:expertsway/ui/pages/landing_page/index.dart';
+import 'package:expertsway/ui/pages/lesson.dart';
+import 'package:expertsway/services/api_controller.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:expertsway/theme/config.dart' as config;
+import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:configurable_expansion_tile_null_safety/configurable_expansion_tile_null_safety.dart';
+import 'package:provider/provider.dart';
+import '../../theme/theme.dart';
+
+import '../../db/course_database.dart' hide courseProgress;
 import '../../models/lesson.dart';
 import '../../utils/color.dart';
 
 class CourseDetailPage extends StatefulWidget {
   final CourseElement courseData;
+
   const CourseDetailPage({
     Key? key,
     required this.courseData,
   }) : super(key: key);
 
   @override
-  _CoursePagePageState createState() => _CoursePagePageState();
+  CoursePagePageState createState() => CoursePagePageState();
 }
 
-class _CoursePagePageState extends State<CourseDetailPage> {
-  late List<LessonElement> lessonData = [];
+class CoursePagePageState extends State<CourseDetailPage> {
+  late List<List> lessonData = [];
   late List<LessonContent> lessoncontent = [];
+  CourseProgressElement? courseProgress;
   bool isLoading = false;
-
-  late YoutubePlayerController _controller;
-  late PlayerState _playerState;
-  late YoutubeMetaData _videoMetaData;
-  bool _muted = false;
-  bool _isPlayerReady = false;
 
   @override
   void initState() {
     super.initState();
-    String url = widget.courseData.shortVideo;
-    _controller = YoutubePlayerController(
-      initialVideoId: YoutubePlayer.convertUrlToId(url)!,
-      flags: const YoutubePlayerFlags(
-        controlsVisibleAtStart: true,
-        autoPlay: false,
-      ),
-    )..addListener(listener);
     refreshLesson();
   }
 
   Future refreshLesson() async {
     setState(() => isLoading = true);
-
-    lessonData =
-        await CourseDatabase.instance.readLesson(widget.courseData.slug);
-
-    print("....lesson length ...." + lessonData.length.toString());
+    var lessonDataUnprocessed = await CourseDatabase.instance.readLesson(widget.courseData.slug);
+    // we temporarily set all lessons as locked. if there is a progress on this
+    // course, some of the lessons will be unlocked later when the progress is read from database.
+    lessonData = lessonDataUnprocessed.map((e) => [e, false]).toList();
+    lessonData[0][1] = true; // even if there's no progress, we want the first lesson open.
+    if (kDebugMode) {
+      print("....lesson length ....${lessonData.length}");
+    }
+    // here we're reading the progress and applying it on the lessons if it exists
+    // (applying it on lessons means setting some lessons locked and some unlocked based on the progress)
+    CourseDatabase.instance.readCourseProgress(widget.courseData.courseId.toString()).then((value) {
+      courseProgress = value;
+      applyProgressOnLessons();
+    });
     setState(() => isLoading = false);
   }
 
-  void listener() {
-    if (_isPlayerReady && mounted && !_controller.value.isFullScreen) {
-      setState(() {
-        _playerState = _controller.value.playerState;
-        _videoMetaData = _controller.metadata;
-      });
+  Future applyProgressOnLessons() async {
+    // here we're applying it on the lessons if it exists
+    // (applying it on lessons means setting some locked and some unlocked based on the progress)
+    if (courseProgress != null) {
+      for (int i = 0; i < courseProgress!.lessonNumber; i++) {
+        lessonData[i][1] = true;
+      }
+      setState(() {});
     }
   }
 
   @override
   void deactivate() {
-    _controller.pause();
     super.deactivate();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 
-  List sectionList(lessonData) {
-    var seen = [];
-    for (var lesson in lessonData) {
-      seen.add(lesson.section);
+  List<String> sectionList(List<List> lessonData) {
+    var seen = <String>[];
+    for (var element in lessonData) {
+      seen.add(element[0].section as String);
     }
     final sectionList = seen.toSet().toList();
     return sectionList;
   }
 
-  List lessonList(lessonData, section) {
-    var seen = [];
-    for (var lesson in lessonData) {
-      if (lesson.section == section) {
-        seen.add(lesson.title);
+  List<List> lessonList(List<List> lessonData, String section) {
+    var seen = <List>[];
+    for (var element in lessonData) {
+      if (element[0].section == section) {
+        seen.add(element);
       }
     }
     return seen;
   }
 
-  Widget buildVideoPlayer() {
-    return SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.4,
-        child: YoutubePlayerBuilder(
-          player: YoutubePlayer(
-            controlsTimeOut: const Duration(seconds: 3),
+  Widget buildCoverImage() {
+    // this mehtod builds the cover image and the texts
+    // on it (displayed at the top of the course-detail screen)
+    return Stack(
+      // we use this stack to display the course name and chapters on top of the cover image.
+      children: <Widget>[
+        SizedBox(
+          width: MediaQuery.of(context).size.width,
+          // height: MediaQuery.of(context).size.height * 0.4,
+
+          // ignore: unnecessary_null_comparison
+          child: widget.courseData != null
+              ? Image.network(
+                  widget.courseData.banner,
+                  fit: BoxFit.cover,
+                )
+              : Image.asset(
+                  "assets/images/logo.png",
+                  fit: BoxFit.cover,
+                ), // TODO: replace this url with real course specific data
+        ),
+        Positioned(
+          bottom: 5,
+          child: SizedBox(
             width: MediaQuery.of(context).size.width,
-            controller: _controller,
-            showVideoProgressIndicator: true,
-            progressIndicatorColor: Colors.blueAccent,
-            bottomActions: [
-              IconButton(
-                icon: Icon(_muted ? Icons.volume_off : Icons.volume_up),
-                color: _muted ? Colors.grey : Colors.blue,
-                onPressed: _isPlayerReady
-                    ? () {
-                        _muted ? _controller.unMute() : _controller.mute();
-                        setState(() {
-                          _muted = !_muted;
-                        });
-                      }
-                    : null,
-              ),
-              FullScreenButton(
-                controller: _controller,
-                color: Colors.blueAccent,
-              ),
-            ],
-            onReady: () {
-              _isPlayerReady = true;
-              _controller.addListener(listener);
-            },
-            onEnded: (data) {},
-          ),
-          builder: (BuildContext, player) {
-            return Scaffold(
-                body: Container(
-              child: player,
-            ));
-          },
-        ));
-  }
-
-  Widget buildlesson() {
-    return FutureBuilder<lesson.Lesson>(
-        future: ApiProvider().retrieveLessons(widget.courseData.slug),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final lessonData = snapshot.data!.lessons;
-            List sections = sectionList(lessonData);
-            return Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(8, 8, 8, 10),
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: const Text(
-                    "Lessons",
-                    style: TextStyle(
-                        color: Color(0xFF343434),
-                        fontFamily: 'Red Hat Display',
-                        fontSize: 24),
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.865,
-                  margin: const EdgeInsets.only(bottom: 70),
-                  foregroundDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: const Color.fromARGB(255, 215, 214, 214),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    widget.courseData.name,
+                    // TODO: consider color contrast issues here.
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
                     ),
                   ),
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: sections.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            buildLessonList(lessonData, sections[index]),
-                            index < sections.length
-                                ? const Divider(
-                                    color: Color.fromARGB(255, 215, 214, 214),
-                                    thickness: 1,
-                                    height: 1,
-                                  )
-                                : Container()
-                          ],
-                        );
-                      }),
-                ),
-              ],
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        });
-  }
-
-  List lessonListId(lessonData, section) {
-    var Id = [];
-    for (var lesson in lessonData) {
-      if (lesson.section == section) {
-        Id.add(lesson.lessonId);
-      }
-    }
-    return Id;
-  }
-
-  Widget buildLessonList(lessonData, section) {
-    return Material(
-      color: config.Colors().secondColor(1),
-      child: Theme(
-        data: Theme.of(context).copyWith(
-          dividerColor: const Color.fromARGB(0, 208, 57, 57),
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          iconTheme: const IconThemeData(
-            color: Color.fromARGB(255, 172, 172, 172),
-            size: 35,
-          ),
-        ),
-        child: ExpansionTile(
-          title: Flexible(
-            child: Text(
-              section,
-              style: const TextStyle(
-                fontFamily: 'Red Hat Display',
-                fontSize: 18.0,
-                fontWeight: FontWeight.w500,
-                color: Color.fromARGB(255, 121, 121, 123),
+                  Text(
+                    // we're considering the lessons to be the "chapters"
+                    "${lessonData.length} Chapters",
+                    // TODO: consider color contrast issues here.
+                    style: const TextStyle(color: Colors.white, fontSize: 15),
+                  )
+                ],
               ),
             ),
           ),
-          tilePadding: const EdgeInsets.fromLTRB(15, 1, 10, 1),
-          iconColor: const Color.fromARGB(255, 172, 172, 172),
-          collapsedIconColor: const Color.fromARGB(255, 172, 172, 172),
-          children: <Widget>[
-            const Divider(
-              color: Color.fromARGB(255, 215, 214, 214),
-              thickness: 1,
-              height: 1,
-            ),
-            const SizedBox(height: 10),
-            ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                itemCount: null == lessonData
-                    ? 0
-                    : lessonList(lessonData, section).length,
-                itemBuilder: (context, index) {
-                  List lessonTitle = lessonList(lessonData, section);
-                  return Container(
-                    padding: const EdgeInsets.fromLTRB(17, 0, 15, 0),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Icon(Icons.check_circle_outlined,
-                                size: 25,
-                                color: index <= 2 ? Colors.blue : Colors.grey),
-                            const SizedBox(
-                              width: 17,
-                            ),
-                            GestureDetector(
-                              child: Text(
-                                lessonTitle[index],
-                                style: TextStyle(
-                                  color: index == 2 ? Colors.blue : Colors.grey,
-                                  fontFamily: 'Red Hat Display',
-                                  fontSize: 17.0,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              onTap: () async {
-                                List lessonIds =
-                                    lessonListId(lessonData, section);
-
-                                lessoncontent = await CourseDatabase.instance
-                                    .readLessonContets(lessonIds[index]);
-                                if (lessoncontent.isNotEmpty) {
-                                  Navigator.push(
-                                    context,
-                                    CupertinoPageRoute(
-                                      builder: (context) => LessonPage(
-                                        lessonData: lessonData,
-                                        contents: lessoncontent,
-                                        section: section.toString(),
-                                        lesson: lessonTitle[index].toString(),
-                                      ),
-                                    ),
-                                  );
-                                }
-                              },
-                            )
-                          ],
-                        ),
-                        Container(
-                            padding: const EdgeInsets.only(left: 12),
-                            alignment: Alignment.topLeft,
-                            child: index < lessonTitle.length - 1
-                                ? Container(
-                                    height: 30,
-                                    width: 1,
-                                    color: Colors.grey,
-                                  )
-                                : Container())
-                      ],
-                    ),
-                  );
-                }),
-            const SizedBox(height: 10),
-          ],
         ),
-      ),
+        SafeArea(
+          child: SizedBox(
+            child: Container(
+              margin: const EdgeInsets.only(left: 20, top: 10),
+              height: 22,
+              width: 22,
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(100)),
+              child: IconButton(
+                padding: EdgeInsets.only(left: 0),
+                icon: const Icon(Icons.arrow_back_ios_new, color: Colors.blue),
+                iconSize: 14,
+                constraints: const BoxConstraints(maxHeight: 60, maxWidth: 60),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
-  }
-
-  Widget buildLessonCard() {
-    List sections = sectionList(lessonData);
-
-    return ListView.builder(
-        shrinkWrap: true,
-        padding: EdgeInsets.all(0),
-        itemCount: sections.length,
-        itemBuilder: (context, index) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              buildLessonList(lessonData, sections[index]),
-              index < sections.length
-                  ? const Divider(
-                      color: Color.fromARGB(255, 215, 214, 214),
-                      thickness: 1,
-                      height: 1,
-                    )
-                  : Container()
-            ],
-          );
-        });
   }
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      backgroundColor: config.Colors().secondColor(1),
-      navigationBar: CupertinoNavigationBar(
-        previousPageTitle: "Back",
-        backgroundColor: Colors.white,
-        trailing: CupertinoButton(
-          padding: const EdgeInsets.all(0),
-          child: const Icon(BoxIcons.bx_share_alt),
-          onPressed: () {},
-        ),
-      ),
-      child: Stack(
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    TextTheme textTheme = Theme.of(context).textTheme;
+    return Scaffold(
+      backgroundColor: themeProvider.currentTheme == ThemeData.light() ? Colors.white : Color.fromARGB(255, 25, 32, 36),
+      body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
           SizedBox(
-              height: MediaQuery.of(context).size.height + 60,
-              child: SingleChildScrollView(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: <Widget>[
-                    Column(
+            height: MediaQuery.of(context).size.height + 60,
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  buildCoverImage(),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        buildVideoPlayer(),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
+                        const SizedBox(height: 4),
+                        Container(
+                          height: 44,
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
                             children: <Widget>[
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(24, 10, 8, 8.0),
-                                child: Row(
-                                  children: <Widget>[
-                                    Container(
-                                      width: 4,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(500),
-                                          color: const Color(0xFF343434)),
-                                      child: const Text(""),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Center(
-                                        child: Text(
-                                          widget.courseData.name,
-                                          style: const TextStyle(
-                                              color: Color(0xFF343434),
-                                              fontFamily: 'Red Hat Display',
-                                              fontSize: 24),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
+                              Text(
+                                "Description",
+                                style: textTheme.headline1?.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
-                                child: Row(
-                                  children: const <Widget>[
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 8.0),
-                                      child: Icon(BoxIcons.bx_bar_chart_alt_2,
-                                          size: 20, color: Color(0xFFADADAD)),
-                                    ),
-                                    Text(
-                                      "Beginner",
-                                      style: TextStyle(
-                                          color: Color(0xFFADADAD),
-                                          fontFamily: 'Red Hat Display',
-                                          fontSize: 14),
-                                    ),
-                                    Spacer(),
-                                    Text(
-                                      "12 mins",
-                                      style: TextStyle(
-                                          color: Color(0xFFADADAD),
-                                          fontFamily: 'Red Hat Display',
-                                          fontSize: 14),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 8.0),
-                                      child: Icon(BoxIcons.bx_timer,
-                                          size: 20, color: Color(0xFFADADAD)),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                  margin: const EdgeInsets.all(8),
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.9,
-                                  child: Text(
-                                    widget.courseData.description,
-                                    textAlign: TextAlign.justify,
-                                    style: const TextStyle(
-                                      color: Color(0xFF343434),
-                                      fontFamily: 'Red Hat Display',
-                                      fontSize: 16,
-                                    ),
-                                  ))
+                              Spacer(),
                             ],
                           ),
                         ),
-                        lessonData.isEmpty
-                            ? FutureBuilder<Lesson>(
-                                future: ApiProvider()
-                                    .retrieveLessons(widget.courseData.slug),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    {
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          color: maincolor,
-                                        ),
-                                      );
-                                    }
-                                  }
-                                  if (!snapshot.hasData) {
-                                    return const Center(
-                                        child: Text(
-                                      "There is no Course",
-                                      style: TextStyle(
-                                          color: Color.fromARGB(
-                                              184, 138, 138, 138)),
-                                    ));
-                                  }
-                                  if (snapshot.hasError) {
-                                    return const Center(
-                                        child: Text(
-                                      "Unabel to get the data",
-                                      style: TextStyle(
-                                          color: Color.fromARGB(
-                                              184, 138, 138, 138)),
-                                    ));
-                                  }
-                                  if (snapshot.hasData) {
-                                    for (var i = 0;
-                                        i < snapshot.data!.lessons.length;
-                                        i++) {
-                                      final lessonData =
-                                          snapshot.data!.lessons[i];
-                                      CourseDatabase.instance
-                                          .createLessons(lessonData!);
-                                    }
-
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
-                                      refreshLesson();
-                                    });
-                                  }
-
-                                  return Container();
-                                })
-                            : buildLessonCard(),
+                        Container(
+                          margin: const EdgeInsets.all(8),
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          child: Text(
+                            widget.courseData.description,
+                            textAlign: TextAlign.justify,
+                            style: textTheme.headline5?.copyWith(fontSize: 14, fontWeight: FontWeight.w400),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 8.0,
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                "Select chapter",
+                                style: textTheme.headline1?.copyWith(fontSize: 15, fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
-                    Positioned(
-                        right: 30,
-                        top: MediaQuery.of(context).size.height * 0.365,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [
-                                  Color(0xFFABDCFF),
-                                  Color(0xFF0396FF),
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                    blurRadius: 25,
-                                    color: const Color(0xFF03A9F4)
-                                        .withOpacity(0.4),
-                                    offset: const Offset(0, 4))
-                              ],
-                              borderRadius: BorderRadius.circular(500)),
-                          child: FloatingActionButton(
-                              heroTag: "video",
-                              elevation: 0,
-                              highlightElevation: 0,
-                              backgroundColor: Colors.transparent,
-                              child: Icon(
-                                  _controller.value.isPlaying
-                                      ? BoxIcons.bx_pause
-                                      : BoxIcons.bx_play,
-                                  size: 40),
-                              onPressed: () {
-                                setState(() {
-                                  _controller.value.isPlaying
-                                      ? _controller.pause()
-                                      : _controller.play();
-                                });
-                              }),
-                        )),
-                  ],
-                ),
-              )),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            child: CardWidget(
-              button: true,
-              gradient: true,
-              height: 60,
-              width: MediaQuery.of(context).size.width,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const <Widget>[
-                  Text(
-                    "Attempt Test",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Red Hat Display',
-                        fontSize: 18),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(BoxIcons.bx_pencil, color: Colors.white),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Builder(builder: (context) {
+                      return lessonData.isEmpty
+                          ? FutureBuilder<Lesson>(
+                              future: ApiProvider().retrieveLessons(widget.courseData.slug),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  {
+                                    return const Center(
+                                      child: CircularProgressIndicator(
+                                        color: maincolor,
+                                      ),
+                                    );
+                                  }
+                                }
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                    child:
+                                        Text("There is no Course", style: textTheme.headline1?.copyWith(fontSize: 15, fontWeight: FontWeight.w400)),
+                                  );
+                                }
+                                if (snapshot.hasError) {
+                                  return Center(
+                                      child: Text(
+                                    "Unable to get the data",
+                                    style: textTheme.headline1?.copyWith(fontSize: 15, fontWeight: FontWeight.w400),
+                                  ));
+                                }
+                                if (snapshot.hasData) {
+                                  for (var i = 0; i < snapshot.data!.lessons.length; i++) {
+                                    final fetchedLesson = snapshot.data!.lessons[i];
+                                    CourseDatabase.instance.createLessons(fetchedLesson!);
+                                  }
+
+                                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                                    refreshLesson();
+                                  });
+                                }
+
+                                return Container();
+                              })
+                          : buildLessonGroups();
+                      // buildUniformLessonList();
+                    }),
                   ),
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
+  }
+
+  buildLessonGroups() {
+    var sections = sectionList(lessonData);
+    TextTheme textTheme = Theme.of(context).textTheme;
+    return Column(
+      children: [
+        for (int i = 0; i < sections.length; i++)
+          Builder(builder: (context) {
+            var lessonsUnderSection = lessonList(lessonData, sections[i]);
+            return ConfigurableExpansionTile(
+              header: Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                        title: Text(
+                          sections[i],
+                          style: textTheme.headline1?.copyWith(fontSize: 17, fontWeight: FontWeight.w600),
+                        ),
+                        trailing: const Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          size: 30,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Container(
+                        color: Colors.grey[300],
+                        width: MediaQuery.of(context).size.width - 36,
+                        height: 1,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              headerExpanded: Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                        title: Text(
+                          sections[i],
+                          style: textTheme.headline1?.copyWith(fontSize: 17, fontWeight: FontWeight.w600),
+                        ),
+                        trailing: const Icon(
+                          Icons.keyboard_arrow_up_rounded,
+                          size: 30,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Container(
+                        decoration: BoxDecoration(color: Colors.blue, borderRadius: BorderRadius.circular(10)),
+                        width: MediaQuery.of(context).size.width - 36,
+                        height: 4,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              childrenBody: Column(
+                children: [
+                  for (int j = 0; j < lessonsUnderSection.length; j++)
+                    GestureDetector(
+                      onTap: (lessonsUnderSection[j][1]) // only the very first lesson will be unlocked
+                          ? () async {
+                              var lessonContents = await CourseDatabase.instance.readLessonContets(lessonsUnderSection[j][0].lessonId);
+                              // if we're on the very first lesson, we want to record a progress. This is a special case to mark
+                              // that the user has started learning this course. We can't wait for the lesson page to pop with the lesson complete. that's why.
+                              if (i == 0 && j == 0 && courseProgress == null) {
+                                // write a courseProgress with the lesson number 1
+                                CourseDatabase.instance
+                                    .createCourseProgressElement(
+                                  CourseProgressElement(
+                                    courseId: widget.courseData.courseId.toString(),
+                                    lessonNumber: 1,
+                                    percentage: 1 / lessonData.length,
+                                  ),
+                                )
+                                    .then((value) {
+                                  courseProgress = value;
+                                  updateProgressOnLandingPage();
+                                });
+                              }
+                              // the LessonPage should return a boolean when it pops. (true if the lesson has been complete)
+                              // ignore: use_build_context_synchronously
+                              var _isLessonFinished = await Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (context) => LessonPage(
+                                    lessonData: lessonData,
+                                    lesson: lessonsUnderSection[j][0],
+                                    contents: lessonContents,
+                                    courseData: widget.courseData,
+                                  ),
+                                ),
+                              );
+                              setState(() {});
+                              if (_isLessonFinished) {
+                                ApiProvider().lessonCompleteUpdate(lessonsUnderSection[j][0].slug);
+                                // we update the progress and unlock the next lesson
+                                // if the lesson on the lessonPage has been complete.
+                                unlockNextLesson(lessonsUnderSection[j]);
+                              }
+                            }
+                          : null,
+                      child: ListTile(
+                        title: Text(
+                          lessonsUnderSection[j][0].title,
+                          style: textTheme.headline1?.copyWith(fontSize: 17, fontWeight: FontWeight.w500),
+                        ),
+                        subtitle: Text(
+                          lessonsUnderSection[j][0].shortDescription.isNotEmpty
+                              ? lessonsUnderSection[j][0].shortDescription
+                              : "Lorem ipsum is a pseudo-Latin text used in web design, typography, layout, and printing in place of English to emphasise design elements over content. It's also called placeholder (or filler) text.",
+                          overflow: TextOverflow.ellipsis,
+                          style: textTheme.headline5?.copyWith(fontSize: 14, fontWeight: FontWeight.w400),
+                        ),
+                        trailing: (lessonsUnderSection[j][1])
+                            ? SizedBox(
+                                width: 40,
+                                child: FutureBuilder<ProgressElement?>(
+                                  future: CourseDatabase.instance.readProgress(
+                                    widget.courseData.courseId!.toString(),
+                                    lessonsUnderSection[j][0].lessonId.toString(),
+                                  ),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.done) {
+                                      if (snapshot.hasError) {
+                                        throw Exception("Error reading progress from the database");
+                                      }
+                                      return CircularPercentIndicator(
+                                        radius: 20,
+                                        lineWidth: 3,
+                                        percent: double.parse(snapshot.data?.userProgress ?? "0") / 100,
+                                        progressColor: Colors.blue,
+                                      );
+                                    }
+                                    return Container();
+                                  },
+                                ),
+                              )
+                            : CircleAvatar(
+                                radius: 16,
+                                backgroundColor: Colors.blue[50],
+                                child: const Icon(
+                                  Icons.lock_outline,
+                                  color: Colors.blue,
+                                  size: 18,
+                                ),
+                              ),
+                      ),
+                    ),
+                ],
+              ),
+            );
+          }),
+      ],
+    );
+  }
+
+  void unlockNextLesson(List lessonEntry) async {
+    /// we check if the next lesson is locked. if so, we unlock it by incrementing
+    /// the lessonNumber in the course progress
+    for (int i = 0; i < lessonData.length - 1; i++) {
+      if (lessonData[i][0].lessonId == lessonEntry[0].lessonId) {
+        var nextLessonEntry = lessonData[i + 1];
+        if (nextLessonEntry[1] == false) {
+          // now we know the next lesson is locked. let's unlock it.
+          if (courseProgress == null) {
+            courseProgress = await CourseDatabase.instance.createCourseProgressElement(
+                CourseProgressElement(courseId: widget.courseData.courseId.toString(), lessonNumber: 2, percentage: 2 / lessonData.length));
+          } else {
+            CourseProgressElement newCourseProgress = courseProgress!.copy(
+              newLessonNumber: courseProgress!.lessonNumber + 1,
+              newPercentage: (courseProgress!.lessonNumber + 1) / lessonData.length,
+            );
+            await CourseDatabase.instance.updateCourseProgress(newCourseProgress);
+            courseProgress = newCourseProgress;
+          }
+          updateProgressOnLandingPage();
+          await applyProgressOnLessons();
+        }
+      }
+    }
+  }
+
+  void updateProgressOnLandingPage() {
+    // this method updates the courseProgress associated with the widget.courseData in the LandingPageController's progressList.
+    LandingPageController landingPageController = Get.find();
+    landingPageController.progressList.removeWhere((element) => element.courseId == widget.courseData.courseId.toString());
+    landingPageController.progressList.add(courseProgress!);
+    landingPageController.updateUserCourses();
   }
 }

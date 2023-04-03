@@ -1,12 +1,13 @@
-import 'package:learncoding/theme/box_icons_icons.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:expertsway/theme/box_icons_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:learncoding/ui/widgets/topBar.dart';
+import 'package:expertsway/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../help.dart';
 import '../profile.dart';
 import '../setting.dart';
+import '../notification.dart' as n;
+
 String? name;
 String? image;
 
@@ -15,25 +16,25 @@ class Menu extends StatefulWidget {
   final Animation<double>? menuAnimation;
   final int? selectedIndex;
   final Function onMenuItemClicked;
+  // ignore: prefer_typing_uninitialized_variables
   final onMenuTap;
 
-  const Menu(
-      {Key? key,
-      required this.onMenuTap,
-      this.slideAnimation,
-      this.menuAnimation,
-      this.selectedIndex,
-      required this.onMenuItemClicked,
-      })
-      : super(key: key);
+  const Menu({
+    Key? key,
+    required this.onMenuTap,
+    this.slideAnimation,
+    this.menuAnimation,
+    this.selectedIndex,
+    required this.onMenuItemClicked,
+  }) : super(key: key);
 
   @override
   State<Menu> createState() => _MenuState();
 }
 
 class _MenuState extends State<Menu> {
-   
-   void initState() {
+  @override
+  void initState() {
     super.initState();
     getValue();
   }
@@ -55,7 +56,7 @@ class _MenuState extends State<Menu> {
             width: MediaQuery.of(context).size.width * 0.33,
             height: MediaQuery.of(context).size.height * 0.67,
             decoration: BoxDecoration(
-              color: Color(0x80FFFFFF),
+              color: const Color(0x80FFFFFF),
               borderRadius: BorderRadius.circular(10),
             ),
           ),
@@ -65,7 +66,7 @@ class _MenuState extends State<Menu> {
           child: Container(
             width: MediaQuery.of(context).size.width,
             height: 135,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage("assets/images/navwave.png"),
                   fit: BoxFit.fitWidth),
@@ -77,7 +78,7 @@ class _MenuState extends State<Menu> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 28, 10, 0),
               child: IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.close,
                   color: Colors.white,
                 ),
@@ -98,60 +99,61 @@ class _MenuState extends State<Menu> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     GestureDetector(
-                    onTap: () {
-                    // Navigate to the Help page when the user taps the widget
-                    Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Profile()),
-                    );
-                    },
-                    child: Row(
-                      children: <Widget>[
-                        CircleAvatar(
-                          radius: 30,
-                           backgroundImage: NetworkImage(image!),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                name!,
-                                maxLines: 1,
-                                overflow: TextOverflow.fade,
-                                style: TextStyle(
-                                  fontFamily: "Red Hat Display",
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 24,
-                                ),
-                              ),
-                              Text(
-                                "Student",
-                                maxLines: 1,
-                                overflow: TextOverflow.fade,
-                                style: TextStyle(
-                                  fontFamily: "Red Hat Display",
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
+                      onTap: () {
+                        // Navigate to the Help page when the user taps the widget
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Profile()),
+                        );
+                      },
+                      child: Row(
+                        children: <Widget>[
+                          CircleAvatar(
+                            radius: 30,
+                            backgroundImage: CachedNetworkImageProvider(
+                              image ?? Constant.imagePlaceholder,
+                            ),
                           ),
-                        )
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  name ?? '',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.fade,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 24,
+                                  ),
+                                ),
+                                const Text(
+                                  "Student",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.fade,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                    ),
-                    Spacer(
+                    const Spacer(
                       flex: 3,
                     ),
                     Row(
-                      children: <Widget>[
+                      children: const [
                         Padding(
-                          padding: const EdgeInsets.only(right: 20.0),
+                          padding: EdgeInsets.only(right: 20.0),
                           child: Icon(
                             BoxIcons.bx_home_circle,
                             color: Colors.white,
@@ -162,7 +164,6 @@ class _MenuState extends State<Menu> {
                           maxLines: 1,
                           overflow: TextOverflow.fade,
                           style: TextStyle(
-                            fontFamily: "Red Hat Display",
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
@@ -170,11 +171,11 @@ class _MenuState extends State<Menu> {
                         ),
                       ],
                     ),
-                    Spacer(flex: 2),
+                    const Spacer(flex: 2),
                     Row(
-                      children: <Widget>[
+                      children: const <Widget>[
                         Padding(
-                          padding: const EdgeInsets.only(right: 20.0),
+                          padding: EdgeInsets.only(right: 20.0),
                           child: Icon(
                             BoxIcons.bx_edit,
                             color: Colors.white,
@@ -185,7 +186,6 @@ class _MenuState extends State<Menu> {
                           maxLines: 1,
                           overflow: TextOverflow.fade,
                           style: TextStyle(
-                            fontFamily: "Red Hat Display",
                             color: Colors.white,
                             fontWeight: FontWeight.normal,
                             fontSize: 20,
@@ -193,11 +193,11 @@ class _MenuState extends State<Menu> {
                         ),
                       ],
                     ),
-                    Spacer(flex: 2),
+                    const Spacer(flex: 2),
                     Row(
-                      children: <Widget>[
+                      children: const <Widget>[
                         Padding(
-                          padding: const EdgeInsets.only(right: 20.0),
+                          padding: EdgeInsets.only(right: 20.0),
                           child: Icon(
                             BoxIcons.bx_book_alt,
                             color: Colors.white,
@@ -208,7 +208,6 @@ class _MenuState extends State<Menu> {
                           maxLines: 1,
                           overflow: TextOverflow.fade,
                           style: TextStyle(
-                            fontFamily: "Red Hat Display",
                             color: Colors.white,
                             fontWeight: FontWeight.normal,
                             fontSize: 20,
@@ -216,11 +215,11 @@ class _MenuState extends State<Menu> {
                         ),
                       ],
                     ),
-                    Spacer(flex: 2),
+                    const Spacer(flex: 2),
                     Row(
-                      children: <Widget>[
+                      children: const <Widget>[
                         Padding(
-                          padding: const EdgeInsets.only(right: 20.0),
+                          padding: EdgeInsets.only(right: 20.0),
                           child: Icon(
                             BoxIcons.bx_chat,
                             color: Colors.white,
@@ -231,7 +230,6 @@ class _MenuState extends State<Menu> {
                           maxLines: 1,
                           overflow: TextOverflow.fade,
                           style: TextStyle(
-                            fontFamily: "Red Hat Display",
                             color: Colors.white,
                             fontWeight: FontWeight.normal,
                             fontSize: 20,
@@ -239,11 +237,11 @@ class _MenuState extends State<Menu> {
                         ),
                       ],
                     ),
-                    Spacer(flex: 2),
+                    const Spacer(flex: 2),
                     Row(
-                      children: <Widget>[
+                      children: const <Widget>[
                         Padding(
-                          padding: const EdgeInsets.only(right: 20.0),
+                          padding: EdgeInsets.only(right: 20.0),
                           child: Icon(
                             BoxIcons.bx_calendar,
                             color: Colors.white,
@@ -254,7 +252,6 @@ class _MenuState extends State<Menu> {
                           maxLines: 1,
                           overflow: TextOverflow.fade,
                           style: TextStyle(
-                            fontFamily: "Red Hat Display",
                             color: Colors.white,
                             fontWeight: FontWeight.normal,
                             fontSize: 20,
@@ -262,7 +259,7 @@ class _MenuState extends State<Menu> {
                         ),
                       ],
                     ),
-                    Spacer(flex: 2),
+                    const Spacer(flex: 2),
                     SizedBox(
                       height: 1,
                       width: 200,
@@ -270,51 +267,52 @@ class _MenuState extends State<Menu> {
                         color: Colors.white54,
                       ),
                     ),
-                    Spacer(flex: 2),
-                        GestureDetector(
-                        onTap: () {
-                        // Navigate to the Help page when the user taps the widget
-                        Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Settings()),
-                        );
-                        },
-                        child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(right: 20.0),
-                          child: Icon(
-                            BoxIcons.bx_cog,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          "Settings",
-                          maxLines: 1,
-                          overflow: TextOverflow.fade,
-                          style: TextStyle(
-                            fontFamily: "Red Hat Display",
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ],
-                        ),
-                        ),
-                    Spacer(flex: 2),
+                    const Spacer(flex: 2),
                     GestureDetector(
                       onTap: () {
                         // Navigate to the Help page when the user taps the widget
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Help()),
+                          MaterialPageRoute(
+                              builder: (context) => const Settings()),
                         );
                       },
                       child: Row(
-                        children: <Widget>[
+                        children: const <Widget>[
                           Padding(
-                            padding: const EdgeInsets.only(right: 20.0),
+                            padding: EdgeInsets.only(right: 20.0),
+                            child: Icon(
+                              BoxIcons.bx_cog,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            "Settings",
+                            maxLines: 1,
+                            overflow: TextOverflow.fade,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Spacer(flex: 2),
+                    GestureDetector(
+                      onTap: () {
+                        // Navigate to the Help page when the user taps the widget
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const n.Notification()),
+                        );
+                      },
+                      child: Row(
+                        children: const <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(right: 20.0),
                             child: Icon(
                               BoxIcons.bx_help_circle,
                               color: Colors.white,
@@ -325,7 +323,6 @@ class _MenuState extends State<Menu> {
                             maxLines: 1,
                             overflow: TextOverflow.fade,
                             style: TextStyle(
-                              fontFamily: "Red Hat Display",
                               color: Colors.white,
                               fontWeight: FontWeight.normal,
                               fontSize: 20,
@@ -334,7 +331,7 @@ class _MenuState extends State<Menu> {
                         ],
                       ),
                     ),
-                    Spacer(flex: 5),
+                    const Spacer(flex: 5),
                   ],
                 ),
               ),

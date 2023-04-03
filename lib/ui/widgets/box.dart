@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learncoding/utils/color.dart';
+import 'package:expertsway/utils/color.dart';
 
 class Box extends StatelessWidget {
   final IconData icon;

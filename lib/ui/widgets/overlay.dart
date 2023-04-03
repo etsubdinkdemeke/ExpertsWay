@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:learncoding/theme/box_icons_icons.dart';
-import 'package:learncoding/ui/widgets/card.dart';
+import 'package:expertsway/theme/box_icons_icons.dart';
+import 'package:expertsway/ui/widgets/card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
@@ -13,13 +13,13 @@ class OverlayWidget extends StatelessWidget {
     var today = DateFormat().add_yMMMMd().format(DateTime.now());
     var strDay = today.split(" ")[1].replaceFirst(',', '');
     if (strDay == '1') {
-      strDay = strDay + "st";
+      strDay = "${strDay}st";
     } else if (strDay == '2') {
-      strDay = strDay + "nd";
+      strDay = "${strDay}nd";
     } else if (strDay == '3') {
-      strDay = strDay + "rd";
+      strDay = "${strDay}rd";
     } else {
-      strDay = strDay + "th";
+      strDay = "${strDay}th";
     }
     var strMonth = today.split(" ")[0];
     var strYear = today.split(" ")[2];
@@ -34,10 +34,10 @@ class OverlayWidget extends StatelessWidget {
   ];
   final List times = ['5pm-6pm', '6pm-7pm', '7pm-8pm', '8pm-9pm'];
   final List colors = [
-    Color(0xFFFF0000),
-    Color(0xFF0000FF),
-    Color(0xFFFFFF00),
-    Color(0xFF00FF00)
+    const Color(0xFFFF0000),
+    const Color(0xFF0000FF),
+    const Color(0xFFFFFF00),
+    const Color(0xFF00FF00)
   ];
 
   @override
@@ -47,7 +47,7 @@ class OverlayWidget extends StatelessWidget {
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        color: Color(0xFFEDEDED).withOpacity(0.65),
+        color: const Color(0xFFEDEDED).withOpacity(0.65),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -55,24 +55,22 @@ class OverlayWidget extends StatelessWidget {
             Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 48.0, horizontal: 10),
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Text(
+                    const Text(
                       "Today",
                       style: TextStyle(
-                          fontFamily: 'Red Hat Display',
                           fontSize: 24,
                           color: Color(0xFF343434),
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
                       getStrToday(),
-                      style: TextStyle(
-                          fontFamily: 'Red Hat Display',
+                      style: const TextStyle(
                           fontSize: 24,
                           color: Color(0xFF343434),
                           fontWeight: FontWeight.bold),
@@ -81,11 +79,11 @@ class OverlayWidget extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.8,
               child: ListView.builder(
-                physics: ScrollPhysics(),
+                physics: const ScrollPhysics(),
                 itemCount: 5,
                 itemBuilder: (context, index) {
                   return index == 4
@@ -95,28 +93,26 @@ class OverlayWidget extends StatelessWidget {
                           child: CardWidget(
                             gradient: true,
                             button: true,
+                            height: 80,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
+                              children: const <Widget>[
                                 Padding(
-                                    padding: const EdgeInsets.all(8),
+                                    padding: EdgeInsets.all(8),
                                     child: Icon(
                                       BoxIcons.bx_plus,
                                       color: Color(0xFFFFFFFF),
                                     )),
                                 Padding(
-                                  padding: const EdgeInsets.all(8),
+                                  padding: EdgeInsets.all(8),
                                   child: Text(
                                     "Add reminder",
                                     style: TextStyle(
-                                        fontFamily: 'Red Hat Display',
-                                        fontSize: 18,
-                                        color: Color(0xFFFFFFFF)),
+                                        fontSize: 18, color: Color(0xFFFFFFFF)),
                                   ),
                                 ),
                               ],
                             ),
-                            height: 80,
                           ),
                         )
                       : Padding(
@@ -125,6 +121,7 @@ class OverlayWidget extends StatelessWidget {
                           child: CardWidget(
                             gradient: false,
                             button: false,
+                            height: 80,
                             child: Row(
                               children: <Widget>[
                                 Column(
@@ -136,8 +133,7 @@ class OverlayWidget extends StatelessWidget {
                                           const EdgeInsets.fromLTRB(8, 8, 8, 2),
                                       child: Text(
                                         "${names[index]}.",
-                                        style: TextStyle(
-                                            fontFamily: 'Red Hat Display',
+                                        style: const TextStyle(
                                             fontSize: 18,
                                             color: Color(0xFF585858)),
                                       ),
@@ -147,36 +143,34 @@ class OverlayWidget extends StatelessWidget {
                                           const EdgeInsets.fromLTRB(8, 2, 8, 8),
                                       child: Text(
                                         "${times[index]}",
-                                        style: TextStyle(
-                                            fontFamily: 'Red Hat Display',
+                                        style: const TextStyle(
                                             fontSize: 14,
                                             color: Color(0xFF585858)),
                                       ),
                                     ),
                                   ],
                                 ),
-                                Spacer(),
+                                const Spacer(),
                                 Container(
                                     width:
                                         MediaQuery.of(context).size.width * 0.3,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
+                                        borderRadius: const BorderRadius.only(
                                             topLeft: Radius.elliptical(10, 50),
                                             bottomLeft:
                                                 Radius.elliptical(10, 50)),
                                         gradient: LinearGradient(
                                             colors: [
-                                              Color(0xFFFFFFFF),
+                                              const Color(0xFFFFFFFF),
                                               colors[index]
                                             ],
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight)),
-                                    child: SizedBox(
+                                    child: const SizedBox(
                                       height: 80,
                                     ))
                               ],
                             ),
-                            height: 80,
                           ),
                         );
                 },
