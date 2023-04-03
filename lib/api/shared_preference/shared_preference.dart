@@ -21,6 +21,20 @@ class UserPreferences {
   }
 }
 
+class LanguageOptionPreferences {
+  static Future<bool> setLanguage(List<String> language) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList("languages", language);
+    return true;
+  }
+
+  static Future<List<String>?> getLanguage(List<String>? language) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? language = prefs.getStringList("languages");
+    return language;
+  }
+}
+
 class NotificationPreferences {
   static Future<bool> setNotif(String date, String message, bool read) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();

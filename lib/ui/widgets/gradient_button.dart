@@ -41,18 +41,21 @@ class GradientBtn extends StatelessWidget {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-                color: themeProvider.currentTheme == ThemeData.light()
-                    ? Colors.grey.shade300
-                    : Colors.transparent,
+                color: themeProvider.currentTheme == ThemeData.light() ? Colors.grey.shade300 : Colors.transparent,
                 spreadRadius: 1,
                 blurRadius: 6,
                 offset: const Offset(2, 8))
           ],
-          color: isPcked ? color : color,
-          gradient: isPcked
-              ? null
-              : const LinearGradient(
-                  colors: [Color(0xff2686FF), Color(0xff26B0FF)]),
+          color: isPcked
+              ? themeProvider.currentTheme == ThemeData.light()
+                  ? Colors.white
+                  : Color.fromARGB(26, 255, 255, 255)
+              : defaultBtn
+                  ? null
+                  : themeProvider.currentTheme == ThemeData.light()
+                      ? Colors.blue
+                      : Colors.blue,
+          gradient: defaultBtn ? const LinearGradient(colors: [Color(0xff2686FF), Color(0xff26B0FF)]) : null,
           borderRadius: BorderRadius.circular(borderRadius),
         ),
         child: Row(
@@ -60,8 +63,7 @@ class GradientBtn extends StatelessWidget {
           children: [
             if (!defaultBtn)
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                 child: CachedNetworkImage(
                   imageUrl: iconUrl,
                   height: 20,
@@ -69,14 +71,20 @@ class GradientBtn extends StatelessWidget {
                 ),
               ),
             Padding(
-              padding: const EdgeInsets.only(right: 18),
-              child: Text(
-                btnName,
-                style: textTheme.bodyText2?.copyWith(
-                    fontSize: defaultBtn ? 15 : null,
-                    fontWeight: FontWeight.w400),
-              ),
-            ),
+                padding: const EdgeInsets.only(right: 18),
+                child: Text(
+                  btnName,
+                  style: TextStyle(
+                      fontSize: defaultBtn ? 15 : null,
+                      fontWeight: FontWeight.w400,
+                      color: !isPcked
+                          ? themeProvider.currentTheme == ThemeData.light()
+                              ? Colors.white
+                              : Colors.grey[900]
+                          : themeProvider.currentTheme == ThemeData.light()
+                              ? Colors.grey[900]
+                              : Colors.white),
+                )),
           ],
         ),
       ),
