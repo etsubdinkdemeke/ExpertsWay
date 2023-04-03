@@ -10,7 +10,7 @@ class Comment {
   late final int like;
   late final bool liked;
   late final int disLike;
-  late final List<String> reply;
+  late final List<Comment> reply;
   late final String message;
 
   Comment({
@@ -186,20 +186,20 @@ class Com extends ChangeNotifier {
     ),
   ];
 
-  void addComment(Comment com) {
-    comments.insert(0, com);
-    notifyListeners();
-  }
+  // void addComment(Comment com) {
+  //   comments.insert(0, com);
+  //   notifyListeners();
+  // }
 
-  void addReply(String reply, int index) {
-    comments[index].reply.add(reply);
-    notifyListeners();
-  }
+  // void addReply(String reply, int index) {
+  //   comments[index].reply.add(reply);
+  //   notifyListeners();
+  // }
 
-  void likeComment(int index) {
-    comments[index].liked = !comments[index].liked;
-    notifyListeners();
-  }
+  // void likeComment(int index) {
+  //   comments[index].liked = !comments[index].liked;
+  //   notifyListeners();
+  // }
 }
 
 List<Comment> comments = [
